@@ -1,0 +1,729 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlserver"
+}
+
+// Better Auth tables
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions    Session[]
+  accounts    Account[]
+  members     Member[]
+  invitations Invitation[]
+  emissionConversionConfigs EmissionConversionConfig[]
+  carlists           Carlist[]
+  carlistVehicleAdds CarlistVehicle[]
+  vehicleDocuments   VehicleDocument[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+
+  userId               String
+  user                 User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activeOrganizationId String?
+
+  @@index([userId])
+  @@index([activeOrganizationId])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String    @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@map("verifications")
+}
+
+// Organization plugin tables (Organization = Tenant)
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  logo      String?
+  metadata  String?
+  createdAt DateTime @default(now())
+
+  // Custom fields for Greenfleet multi-tenancy
+  isActive Boolean @default(true)
+  isDemo   Boolean @default(false)
+
+  members        Member[]
+  invitations    Invitation[]
+  tenantFeatures TenantFeature[]
+
+  @@map("organizations")
+}
+
+model Member {
+  id             String   @id @default(cuid())
+  userId         String
+  organizationId String
+  role           String
+  createdAt      DateTime @default(now())
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@map("members")
+}
+
+model Invitation {
+  id             String   @id @default(cuid())
+  email          String
+  inviterId      String
+  organizationId String
+  role           String
+  status         String
+  expiresAt      DateTime
+  createdAt      DateTime @default(now())
+
+  inviter      User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("invitations")
+}
+
+// Feature toggle per tenant
+model TenantFeature {
+  id         String   @id @default(cuid())
+  tenantId   String   @map("tenant_id")
+  featureKey String   @map("feature_key")
+  enabled    Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, featureKey])
+  @@index([tenantId], map: "idx_tenant_features_tenant_id")
+  @@map("tenant_features")
+}
+
+// Catalogo Veicoli Globale (no tenantId — condiviso tra tutti i tenant)
+// Note: SQL Server does not support Prisma enums.
+// FuelType and Co2Standard are enforced via TypeScript enums in src/types/vehicle.ts
+
+model CatalogVehicle {
+  id                   String    @id @default(cuid())
+  codiceInfocarData    String?   @unique @map("codice_infocardata")
+  marca                String
+  modello              String
+  allestimento         String?
+  carrozzeria          String?
+  normativa            String?
+  capacitaSerbatoioL   Float?    @map("capacita_serbatoio_l")
+  isHybrid             Boolean   @default(false) @map("is_hybrid")
+  source               String    @default("INFOCARDATA")
+  imageUrl             String?   @map("image_url")
+  codiceAllestimento   String?   @map("codice_allestimento")
+  annoImmatricolazione Int?      @map("anno_immatricolazione")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  lastSyncAt           DateTime? @map("last_sync_at")
+
+  engines        Engine[]
+  tenantVehicles TenantVehicle[]
+  carlistEntries CarlistVehicle[]
+
+  @@index([marca, modello])
+  @@index([codiceInfocarData])
+  @@map("catalog_vehicles")
+}
+
+model Engine {
+  id                String   @id @default(cuid())
+  catalogVehicleId  String   @map("catalog_vehicle_id")
+  nucmot            String?
+  fuelType          String   @map("fuel_type")
+  cilindrata        Int?
+  potenzaKw         Float?   @map("potenza_kw")
+  potenzaCv         Float?   @map("potenza_cv")
+  co2GKm            Float?   @map("co2_g_km")
+  co2Standard            String   @default("WLTP") @map("co2_standard")
+  co2GKmWltp             Float?   @map("co2_g_km_wltp")
+  co2GKmNedc             Float?   @map("co2_g_km_nedc")
+  co2GKmWltpIsCalculated Boolean  @default(false) @map("co2_g_km_wltp_is_calculated")
+  co2GKmNedcIsCalculated Boolean  @default(false) @map("co2_g_km_nedc_is_calculated")
+  conversionConfigId     String?  @map("conversion_config_id")
+  consumptionL100Km      Float?   @map("consumption_l_100km")
+  consumptionUnit   String   @default("L/100KM") @map("consumption_unit")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  catalogVehicle   CatalogVehicle            @relation(fields: [catalogVehicleId], references: [id], onDelete: Cascade)
+  conversionConfig EmissionConversionConfig? @relation(fields: [conversionConfigId], references: [id])
+
+  @@index([catalogVehicleId])
+  @@index([fuelType])
+  @@map("engines")
+}
+
+// Configurazione conversione emissioni WLTP <-> NEDC (globale, non tenant-scoped)
+model EmissionConversionConfig {
+  id               String   @id @default(cuid())
+  name             String
+  nedcToWltpFactor Float    @map("nedc_to_wltp_factor")
+  wltpToNedcFactor Float    @map("wltp_to_nedc_factor")
+  isDefault        Boolean  @default(false) @map("is_default")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  createdById      String   @map("created_by_id")
+
+  createdBy User     @relation(fields: [createdById], references: [id])
+  engines   Engine[]
+
+  @@map("emission_conversion_configs")
+}
+
+// Fasce Car List (tenant-scoped) — categorie di veicolo assegnabili ai dipendenti
+model CarTier {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  name        String   @db.NVarChar(100)  // es. "FASCIA 1", "FASCIA 2"
+  description String?  @db.NVarChar(500)
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  employees Employee[]
+
+  @@unique([tenantId, name], map: "uq_car_tier_tenant_name")
+  @@index([tenantId], map: "idx_car_tiers_tenant_id")
+  @@map("CarTiers")
+}
+
+// Dipendenti (tenant-scoped)
+model Employee {
+  id           String   @id @default(cuid())
+  tenantId     String   @map("tenant_id")
+  firstName    String   @map("first_name")
+  lastName     String   @map("last_name")
+  email        String?
+  phone        String?
+  fiscalCode   String?  @map("fiscal_code")
+  employeeCode String?  @map("employee_code")  // Codice Identificativo (es. "000001")
+  workLocation String?  @map("work_location")   // Sede di Lavoro
+  carTierId    String?  @map("car_tier_id")
+  isPool       Boolean  @default(false) @map("is_pool")
+  type         String   @default("employee") @map("type") // "employee" | "pool"
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  carTier            CarTier?           @relation(fields: [carTierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenantVehicles     TenantVehicle[]
+  vehicleAssignments VehicleAssignment[]
+  fuelCards          FuelCard[]
+
+  @@index([tenantId], map: "idx_employees_tenant_id")
+  // Note: SQL Server treats multiple NULLs as duplicates in UNIQUE constraints.
+  // Uniqueness for fiscalCode/employeeCode is enforced at application level instead.
+  @@index([tenantId, fiscalCode], map: "idx_employees_tenant_fiscal_code")
+  @@index([tenantId, employeeCode], map: "idx_employees_tenant_employee_code")
+  @@map("employees")
+}
+
+// Veicoli operativi del tenant (flotta aziendale)
+model TenantVehicle {
+  id                 String   @id @default(cuid())
+  tenantId           String   @map("tenant_id")
+  catalogVehicleId   String   @map("catalog_vehicle_id")
+  licensePlate       String   @map("license_plate")
+  registrationDate   DateTime @map("registration_date")
+  status             String   @default("ACTIVE") @map("status") // ACTIVE, INACTIVE, DISPOSED
+  assignedEmployeeId String?  @map("assigned_employee_id")
+  notes              String?
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  vin            String?  @map("vin")              // Numero di telaio (VIN)
+  fringeBenefit  Float?   @map("fringe_benefit")   // Fringe benefit mensile
+
+  catalogVehicle   CatalogVehicle    @relation(fields: [catalogVehicleId], references: [id])
+  assignedEmployee Employee?         @relation(fields: [assignedEmployeeId], references: [id])
+  assignments      VehicleAssignment[]
+  contracts        Contract[]
+  plateHistory     LicensePlateHistory[]
+  fuelRecords      FuelRecord[]
+  kmReadings       KmReading[]
+  documents        VehicleDocument[]
+  fuelCards        FuelCard[]
+
+  @@unique([tenantId, licensePlate])
+  @@index([tenantId], map: "idx_tenant_vehicles_tenant_id")
+  @@index([catalogVehicleId], map: "idx_tenant_vehicles_catalog_vehicle_id")
+  @@map("tenant_vehicles")
+}
+
+// Assegnazioni veicolo-dipendente (tenant-scoped)
+model VehicleAssignment {
+  id         String    @id @default(cuid())
+  tenantId   String    @map("tenant_id")
+  vehicleId  String    @map("vehicle_id")
+  employeeId String    @map("employee_id")
+  startDate  DateTime  @map("start_date")
+  endDate    DateTime? @map("end_date")
+  notes      String?
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  vehicle  TenantVehicle @relation(fields: [vehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  employee Employee      @relation(fields: [employeeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tenantId], map: "idx_vehicle_assignments_tenant_id")
+  @@index([vehicleId], map: "idx_vehicle_assignments_vehicle_id")
+  @@index([employeeId], map: "idx_vehicle_assignments_employee_id")
+  @@map("vehicle_assignments")
+}
+
+// Contratti veicoli (STI - Single Table Inheritance, tenant-scoped)
+model Contract {
+  id        String   @id @default(cuid())
+  tenantId  String   @map("tenant_id")
+  vehicleId String   @map("vehicle_id")
+  type      String   @map("type") // PROPRIETARIO, BREVE_TERMINE, LUNGO_TERMINE, LEASING_FINANZIARIO
+  status    String   @default("ACTIVE") @map("status") // ACTIVE, CLOSED
+  notes     String?
+  closedAt  DateTime? @map("closed_at")
+
+  // Campi generali contratto
+  contractNumber String?  @map("contract_number")
+  supplierId     String?  @map("supplier_id")
+  durationMonths Int?     @map("duration_months")
+  totalKm        Int?     @map("total_km")
+  financialRate  Float?   @map("financial_rate")   // Canone finanziario
+  serviceRate    Float?   @map("service_rate")     // Canone servizi
+  ownershipTax   Float?   @map("ownership_tax")    // Tassa di possesso
+  taxRecurrence  String?  @map("tax_recurrence")   // Ricorrenza tassa
+  allocationCode String?  @map("allocation_code")  // Codice allocazione
+
+  // Proprietario fields
+  purchaseDate  DateTime? @map("purchase_date")
+  purchasePrice Float?    @map("purchase_price")
+  residualValue Float?    @map("residual_value")
+
+  // Shared fields (Breve/Lungo Termine + Leasing)
+  supplier  String?
+  startDate DateTime? @map("start_date")
+  endDate   DateTime? @map("end_date")
+
+  // Breve Termine
+  dailyRate  Float? @map("daily_rate")
+  includedKm Int?   @map("included_km")
+
+  // Lungo Termine + Leasing shared
+  monthlyRate Float? @map("monthly_rate")
+
+  // Lungo Termine specific
+  franchiseKm      Int?    @map("franchise_km")
+  extraKmPenalty   Float?  @map("extra_km_penalty")
+  includedServices String? @map("included_services")
+
+  // Leasing Finanziario specific
+  leasingCompany String? @map("leasing_company")
+  buybackValue   Float?  @map("buyback_value")
+  maxDiscount    Float?  @map("max_discount")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  vehicle     TenantVehicle @relation(fields: [vehicleId], references: [id])
+  supplierRef Supplier?     @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tenantId], map: "idx_contracts_tenant_id")
+  @@index([vehicleId], map: "idx_contracts_vehicle_id")
+  @@index([type], map: "idx_contracts_type")
+  @@index([status], map: "idx_contracts_status")
+  @@index([supplierId], map: "idx_contracts_supplier_id")
+  @@map("contracts")
+}
+
+// Fornitori (tenant-scoped) — NLT, carburante, ecc.
+model Supplier {
+  id           String   @id @default(cuid())
+  tenantId     String   @map("tenant_id")
+  type         String   // "NLT" | "CARBURANTE" | "ALTRO"
+  name         String   @db.NVarChar(200)
+  vatNumber    String?  @map("vat_number") @db.NVarChar(20)
+  address      String?  @db.NVarChar(500)
+  pec          String?  @db.NVarChar(100)
+  contactName  String?  @map("contact_name") @db.NVarChar(100)
+  contactPhone String?  @map("contact_phone") @db.NVarChar(50)
+  contactEmail String?  @map("contact_email") @db.NVarChar(100)
+  notes        String?  @db.NVarChar(1000)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  contracts Contract[]
+  fuelCards  FuelCard[]
+
+  @@unique([tenantId, vatNumber], map: "uq_supplier_tenant_vat")
+  @@index([tenantId], map: "idx_suppliers_tenant_id")
+  @@map("Suppliers")
+}
+
+// Carte carburante (tenant-scoped)
+model FuelCard {
+  id                 String    @id @default(cuid())
+  tenantId           String    @map("tenant_id")
+  cardNumber         String    @map("card_number") @db.NVarChar(50)
+  issuer             String    @db.NVarChar(100)   // Societa emittente
+  supplierId         String?   @map("supplier_id")
+  expiryDate         DateTime? @map("expiry_date")
+  status             String    @default("ACTIVE")  // "ACTIVE" | "EXPIRED" | "SUSPENDED"
+  assignmentType     String    @map("assignment_type") // "VEHICLE" | "EMPLOYEE" | "JOLLY"
+  assignedVehicleId  String?   @map("assigned_vehicle_id")
+  assignedEmployeeId String?   @map("assigned_employee_id")
+  notes              String?   @db.NVarChar(500)
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  supplier         Supplier?      @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  assignedVehicle  TenantVehicle? @relation(fields: [assignedVehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  assignedEmployee Employee?      @relation(fields: [assignedEmployeeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([tenantId, cardNumber], map: "uq_fuel_card_tenant_number")
+  @@index([tenantId], map: "idx_fuel_cards_tenant_id")
+  @@index([status], map: "idx_fuel_cards_status")
+  @@index([assignedVehicleId], map: "idx_fuel_cards_vehicle_id")
+  @@index([assignedEmployeeId], map: "idx_fuel_cards_employee_id")
+  @@map("FuelCards")
+}
+
+// Storico targhe veicolo (tenant-scoped)
+model LicensePlateHistory {
+  id          String    @id @default(cuid())
+  tenantId    String    @map("tenant_id")
+  vehicleId   String    @map("vehicle_id")
+  plateNumber String    @map("plate_number")
+  startDate   DateTime  @map("start_date")
+  endDate     DateTime? @map("end_date")
+  notes       String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  vehicle TenantVehicle @relation(fields: [vehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tenantId], map: "idx_license_plate_history_tenant_id")
+  @@index([vehicleId], map: "idx_license_plate_history_vehicle_id")
+  @@index([plateNumber], map: "idx_license_plate_history_plate_number")
+  @@map("license_plate_history")
+}
+
+// Rifornimenti carburante (tenant-scoped)
+model FuelRecord {
+  id             String   @id @default(cuid())
+  tenantId       String   @map("tenant_id")
+  vehicleId      String   @map("vehicle_id")
+  userId         String   @map("user_id")
+  date           DateTime
+  fuelType       String   @map("fuel_type") // BENZINA, DIESEL, GPL, etc. from FuelType enum in TypeScript
+  quantityLiters Float    @map("quantity_liters")
+  quantityKwh    Float?   @map("quantity_kwh") // kWh per veicoli elettrici/ibridi (scope 2)
+  amountEur      Float    @map("amount_eur")
+  odometerKm     Int      @map("odometer_km")
+  notes          String?
+  source         String   @default("MANUAL") // MANUAL, IMPORT_CSV
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  vehicle TenantVehicle @relation(fields: [vehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tenantId], map: "idx_fuel_records_tenant_id")
+  @@index([vehicleId, date], map: "idx_fuel_records_vehicle_date")
+  @@index([vehicleId, odometerKm], map: "idx_fuel_records_vehicle_km")
+  @@map("FuelRecords")
+}
+
+// Audit trail per dati emission-impacting (tenant-scoped)
+// LEGACY — kept for backward compatibility with existing data
+model AuditEntry {
+  id         String   @id @default(cuid())
+  tenantId   String   @map("tenant_id")
+  userId     String   @map("user_id")
+  action     String   // e.g. "fuel_record.created", "fuel_record.updated"
+  entityType String   @map("entity_type") // e.g. "FuelRecord"
+  entityId   String   @map("entity_id")
+  changes    String   // JSON string of {field, old, new}[]
+  source     String?  // e.g. "MANUAL", "IMPORT_CSV"
+  timestamp  DateTime @default(now())
+
+  @@index([tenantId], map: "idx_audit_entries_tenant_id")
+  @@index([entityType, entityId], map: "idx_audit_entries_entity")
+  @@index([timestamp], map: "idx_audit_entries_timestamp")
+  @@map("AuditEntries")
+}
+
+/// @audit Tabella immutabile — solo INSERT consentito
+// Audit trail completo con dettagli utente e metadati (tenant-scoped)
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String   // formato "entity.action" es. "fuel_record.created"
+  entityType String   @map("entity_type") // es. "Vehicle", "FuelRecord", "KmReading"
+  entityId   String   @map("entity_id")
+  tenantId   String   @map("tenant_id")
+  userId     String   @map("user_id")
+  userName   String   @map("user_name") // denormalizzato per leggibilita
+  timestamp  DateTime @default(now())
+  changes    String   // JSON: { field: string, old: unknown, new: unknown }[]
+  metadata   String?  // JSON opzionale: { source, ipAddress, ... }
+
+  @@index([tenantId, timestamp], map: "idx_audit_logs_tenant_timestamp")
+  @@index([entityType, entityId], map: "idx_audit_logs_entity")
+  @@index([userId, timestamp], map: "idx_audit_logs_user_timestamp")
+  @@map("AuditLogs")
+}
+
+// Metriche giornaliere per-tenant (tenant-scoped)
+model TenantMetrics {
+  id              String   @id @default(cuid())
+  tenantId        String   @map("tenant_id")
+  date            DateTime // giorno di riferimento (aggregazione giornaliera)
+  queryCount      Int      @default(0) @map("query_count")
+  storageBytes    BigInt   @default(0) @map("storage_bytes")
+  activeUsers     Int      @default(0) @map("active_users")
+  vehicleCount    Int      @default(0) @map("vehicle_count")
+  fuelRecordCount Int      @default(0) @map("fuel_record_count")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@unique([tenantId, date], map: "uq_tenant_metrics_tenant_date")
+  @@index([tenantId, date], map: "idx_tenant_metrics_tenant_date")
+  @@map("TenantMetrics")
+}
+
+// Carlist — raggruppamenti veicoli (tenant-scoped)
+model Carlist {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  name        String   @db.NVarChar(100)
+  description String?  @db.NVarChar(500)
+  createdBy   String   @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  vehicles        CarlistVehicle[]
+  creator         User              @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  emissionTargets EmissionTarget[]
+
+  @@unique([tenantId, name], map: "uq_carlist_tenant_name")
+  @@index([tenantId], map: "idx_carlist_tenant_id")
+  @@map("Carlists")
+}
+
+// Relazione N:M esplicita Carlist-CatalogVehicle (traccia addedAt, addedBy)
+model CarlistVehicle {
+  id               String   @id @default(cuid())
+  carlistId        String   @map("carlist_id")
+  catalogVehicleId String   @map("catalog_vehicle_id")
+  addedAt          DateTime @default(now()) @map("added_at")
+  addedBy          String   @map("added_by")
+
+  carlist        Carlist        @relation(fields: [carlistId], references: [id], onDelete: Cascade)
+  catalogVehicle CatalogVehicle @relation(fields: [catalogVehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  adder          User           @relation(fields: [addedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([carlistId, catalogVehicleId], map: "uq_carlist_catalog_vehicle")
+  @@index([carlistId], map: "idx_carlist_vehicle_carlist_id")
+  @@index([catalogVehicleId], map: "idx_carlist_vehicle_catalog_vehicle_id")
+  @@map("CarlistVehicles")
+}
+
+// Documenti veicolo (tenant-scoped)
+model VehicleDocument {
+  id            String   @id @default(cuid())
+  tenantId      String   @map("tenant_id")
+  vehicleId     String   @map("vehicle_id")
+  documentType  String   @map("document_type") // ASSICURAZIONE, REVISIONE, BOLLO, CARTA_CIRCOLAZIONE, ALTRO
+  description   String?
+  expiryDate    DateTime @map("expiry_date")
+  fileName      String   @map("file_name")
+  fileUrl       String   @map("file_url")
+  fileMimeType  String   @map("file_mime_type")
+  fileSize      Int      @map("file_size")
+  createdBy     String   @map("created_by")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  vehicle TenantVehicle @relation(fields: [vehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creator User          @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tenantId], map: "idx_vehicle_documents_tenant_id")
+  @@index([vehicleId], map: "idx_vehicle_documents_vehicle_id")
+  @@index([expiryDate], map: "idx_vehicle_documents_expiry_date")
+  @@map("VehicleDocuments")
+}
+
+// Rilevazioni chilometriche dedicate (tenant-scoped)
+model KmReading {
+  id         String   @id @default(cuid())
+  tenantId   String   @map("tenant_id")
+  vehicleId  String   @map("vehicle_id")
+  userId     String   @map("user_id")
+  date       DateTime
+  odometerKm Int      @map("odometer_km")
+  notes      String?
+  source     String   @default("MANUAL")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  vehicle TenantVehicle @relation(fields: [vehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tenantId], map: "idx_km_readings_tenant_id")
+  @@index([vehicleId, date], map: "idx_km_readings_vehicle_date")
+  @@index([vehicleId, odometerKm], map: "idx_km_readings_vehicle_km")
+  @@map("KmReadings")
+}
+
+// Macro Tipi Carburante — raggruppamento admin-managed (globale, no tenantId)
+// Scope 1 = termico (combustione), Scope 2 = elettrico
+model MacroFuelType {
+  id        String   @id @default(cuid())
+  name      String   @unique @db.NVarChar(100)
+  scope     Int      // 1 = termico, 2 = elettrico
+  unit      String   @db.NVarChar(10) // "L", "kg", "kWh", "Nm3", "UA"
+  color     String   @default("#6366f1") @map("color") @db.NVarChar(9)
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  fuelTypeMappings FuelTypeMacroMapping[]
+  emissionFactors  EmissionFactor[]
+
+  @@index([scope], map: "idx_macro_fuel_types_scope")
+  @@map("MacroFuelTypes")
+}
+
+// Mappatura FuelType veicolo → MacroFuelType (globale)
+// Ibridi hanno DUE righe (scope 1 + scope 2)
+model FuelTypeMacroMapping {
+  id              String @id @default(cuid())
+  vehicleFuelType String @map("vehicle_fuel_type")
+  macroFuelTypeId String @map("macro_fuel_type_id")
+  scope           Int    // 1 o 2
+  description     String @default("") @map("description") @db.NVarChar(100)
+
+  macroFuelType MacroFuelType @relation(fields: [macroFuelTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([vehicleFuelType, scope], map: "uq_fuel_type_macro_mapping_fuel_scope")
+  @@index([vehicleFuelType], map: "idx_fuel_type_macro_mapping_fuel_type")
+  @@index([macroFuelTypeId], map: "idx_fuel_type_macro_mapping_macro_id")
+  @@map("FuelTypeMacroMappings")
+}
+
+// Potenziali di Riscaldamento Globale (GWP) per gas Kyoto (globale)
+model GwpConfig {
+  id        String   @id @default(cuid())
+  gasName   String   @map("gas_name") @db.NVarChar(10) // CO2, CH4, N2O, HFC, PFC, SF6, NF3
+  gwpValue  Float    @map("gwp_value")
+  source    String   @db.NVarChar(100) // "IPCC AR5", "IPCC AR6"
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([gasName, source], map: "uq_gwp_config_gas_source")
+  @@index([isActive], map: "idx_gwp_config_active")
+  @@map("GwpConfigs")
+}
+
+// Fattori di emissione per-gas per MacroFuelType (globale, no tenantId)
+// 7 gas Kyoto: CO2, CH4, N2O, HFC, PFC, SF6, NF3
+model EmissionFactor {
+  id              String   @id @default(cuid())
+  macroFuelTypeId String?  @map("macro_fuel_type_id")
+  co2             Float    @default(0) // kg CO2 per unita (L o kWh)
+  ch4             Float    @default(0) // kg CH4 per unita
+  n2o             Float    @default(0) // kg N2O per unita
+  hfc             Float    @default(0) // kg HFC per unita
+  pfc             Float    @default(0) // kg PFC per unita
+  sf6             Float    @default(0) // kg SF6 per unita
+  nf3             Float    @default(0) // kg NF3 per unita
+  source          String   @db.NVarChar(100)
+  effectiveDate   DateTime @map("effective_date")
+  createdBy       String   @map("created_by")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Colonne legacy (nullable dopo migrazione)
+  fuelType String? @map("fuel_type")
+  value    Float?
+
+  macroFuelType MacroFuelType? @relation(fields: [macroFuelTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([fuelType, effectiveDate], map: "idx_emission_factors_fuel_type_date")
+  @@index([macroFuelTypeId, effectiveDate], map: "idx_emission_factors_macro_date")
+  @@map("EmissionFactors")
+}
+
+// Target emissioni per flotta/carlist (tenant-scoped)
+model EmissionTarget {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  scope       String   // "Fleet" or "Carlist" — TypeScript string union, NOT Prisma enum
+  carlistId   String?  @map("carlist_id")
+  targetValue Float    @map("target_value") // kgCO2e obiettivo
+  period      String   // "Annual" or "Monthly" — TypeScript string union
+  startDate   DateTime @map("start_date")
+  endDate     DateTime @map("end_date")
+  description String?  @db.NVarChar(500)
+  createdBy   String   @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  carlist     Carlist? @relation(fields: [carlistId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tenantId, scope, period], map: "idx_emission_targets_tenant_scope_period")
+  @@index([carlistId], map: "idx_emission_targets_carlist")
+  @@map("EmissionTargets")
+}

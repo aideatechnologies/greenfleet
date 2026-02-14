@@ -1,26 +1,332 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* Greenfleet semantic colors */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  /* Greenfleet primary-soft */
+  --color-primary-soft: var(--primary-soft);
+
+  /* Greenfleet chart colors */
+  --color-chart-theoretical: var(--chart-theoretical);
+  --color-chart-actual: var(--chart-actual);
+  --color-fuel-diesel: var(--fuel-diesel);
+  --color-fuel-benzina: var(--fuel-benzina);
+  --color-fuel-elettrico: var(--fuel-elettrico);
+  --color-fuel-gpl: var(--fuel-gpl);
+  --color-fuel-metano: var(--fuel-metano);
+  --color-fuel-ibrido: var(--fuel-ibrido);
+  --color-fuel-ibrido-benzina: var(--fuel-ibrido-benzina);
+  --color-fuel-ibrido-diesel: var(--fuel-ibrido-diesel);
+  --color-fuel-idrogeno: var(--fuel-idrogeno);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ------------------------------------------------------------ */
+/* Light mode (Greenfleet palette)                              */
+/* ------------------------------------------------------------ */
+
+:root {
+  --radius: 0.625rem;
+
+  /* Core surfaces */
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(222 47% 11%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(222 47% 11%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(222 47% 11%);
+
+  /* Primary — Teal 600 */
+  --primary: hsl(168 76% 28%);
+  --primary-foreground: hsl(0 0% 100%);
+  --primary-soft: hsl(168 76% 28% / 0.1);
+
+  /* Secondary */
+  --secondary: hsl(210 40% 96%);
+  --secondary-foreground: hsl(222 47% 11%);
+
+  /* Muted */
+  --muted: hsl(210 40% 96%);
+  --muted-foreground: hsl(215 16% 47%);
+
+  /* Accent */
+  --accent: hsl(210 40% 96%);
+  --accent-foreground: hsl(222 47% 11%);
+
+  /* Semantic status colors */
+  --success: hsl(152 69% 40%);
+  --success-foreground: hsl(0 0% 100%);
+  --warning: hsl(38 92% 50%);
+  --warning-foreground: hsl(0 0% 100%);
+  --destructive: hsl(0 72% 51%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --info: hsl(217 91% 60%);
+  --info-foreground: hsl(0 0% 100%);
+
+  /* Borders & inputs */
+  --border: hsl(214 32% 91%);
+  --input: hsl(214 32% 91%);
+  --ring: hsl(168 76% 28%);
+
+  /* Chart colors — generic */
+  --chart-1: hsl(168 76% 28%);
+  --chart-2: hsl(152 69% 40%);
+  --chart-3: hsl(217 91% 60%);
+  --chart-4: hsl(38 92% 50%);
+  --chart-5: hsl(0 72% 51%);
+
+  /* Chart colors — Greenfleet emissions */
+  --chart-theoretical: hsl(168 65% 45%);
+  --chart-actual: hsl(215 16% 47%);
+
+  /* Fuel type colors */
+  --fuel-diesel: hsl(30 70% 35%);
+  --fuel-benzina: hsl(152 69% 40%);
+  --fuel-elettrico: hsl(217 91% 60%);
+  --fuel-gpl: hsl(25 95% 53%);
+  --fuel-metano: hsl(280 60% 55%);
+  --fuel-ibrido: hsl(168 65% 45%);
+  --fuel-ibrido-benzina: hsl(150 60% 42%);
+  --fuel-ibrido-diesel: hsl(180 50% 38%);
+  --fuel-idrogeno: hsl(195 80% 50%);
+
+  /* Sidebar */
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(222 47% 11%);
+  --sidebar-primary: hsl(168 76% 28%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(210 40% 96%);
+  --sidebar-accent-foreground: hsl(222 47% 11%);
+  --sidebar-border: hsl(214 32% 91%);
+  --sidebar-ring: hsl(168 76% 28%);
+}
+
+/* ------------------------------------------------------------ */
+/* Dark mode                                                    */
+/* ------------------------------------------------------------ */
+
+.dark {
+  /* Core surfaces */
+  --background: hsl(222 47% 8%);
+  --foreground: hsl(210 40% 96%);
+  --card: hsl(222 47% 11%);
+  --card-foreground: hsl(210 40% 96%);
+  --popover: hsl(222 47% 11%);
+  --popover-foreground: hsl(210 40% 96%);
+
+  /* Primary — slightly brighter for dark bg contrast */
+  --primary: hsl(168 70% 38%);
+  --primary-foreground: hsl(0 0% 100%);
+  --primary-soft: hsl(168 70% 38% / 0.15);
+
+  /* Secondary */
+  --secondary: hsl(215 25% 15%);
+  --secondary-foreground: hsl(210 40% 96%);
+
+  /* Muted */
+  --muted: hsl(215 25% 15%);
+  --muted-foreground: hsl(215 16% 65%);
+
+  /* Accent */
+  --accent: hsl(215 25% 15%);
+  --accent-foreground: hsl(210 40% 96%);
+
+  /* Semantic status colors (unchanged or slightly adjusted for dark) */
+  --success: hsl(152 69% 40%);
+  --success-foreground: hsl(0 0% 100%);
+  --warning: hsl(38 92% 50%);
+  --warning-foreground: hsl(0 0% 100%);
+  --destructive: hsl(0 72% 55%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --info: hsl(217 91% 60%);
+  --info-foreground: hsl(0 0% 100%);
+
+  /* Borders & inputs */
+  --border: hsl(215 25% 20%);
+  --input: hsl(215 25% 22%);
+  --ring: hsl(168 70% 38%);
+
+  /* Chart colors */
+  --chart-1: hsl(168 70% 38%);
+  --chart-2: hsl(152 69% 40%);
+  --chart-3: hsl(217 91% 60%);
+  --chart-4: hsl(38 92% 50%);
+  --chart-5: hsl(0 72% 55%);
+
+  /* Chart colors — Greenfleet emissions */
+  --chart-theoretical: hsl(168 65% 50%);
+  --chart-actual: hsl(215 16% 55%);
+
+  /* Fuel type colors */
+  --fuel-diesel: hsl(30 70% 45%);
+  --fuel-benzina: hsl(152 69% 45%);
+  --fuel-elettrico: hsl(217 91% 65%);
+  --fuel-gpl: hsl(25 95% 58%);
+  --fuel-metano: hsl(280 60% 60%);
+  --fuel-ibrido: hsl(168 65% 50%);
+  --fuel-ibrido-benzina: hsl(150 60% 48%);
+  --fuel-ibrido-diesel: hsl(180 50% 44%);
+  --fuel-idrogeno: hsl(195 80% 55%);
+
+  /* Sidebar */
+  --sidebar: hsl(222 47% 10%);
+  --sidebar-foreground: hsl(210 40% 96%);
+  --sidebar-primary: hsl(168 70% 38%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(215 25% 15%);
+  --sidebar-accent-foreground: hsl(210 40% 96%);
+  --sidebar-border: hsl(215 25% 20%);
+  --sidebar-ring: hsl(168 70% 38%);
+}
+
+/* ------------------------------------------------------------ */
+/* Base layer                                                   */
+/* ------------------------------------------------------------ */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Tabular nums for data-heavy elements */
+  table,
+  [data-tabular-nums] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Skip link for accessibility */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none;
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Touch targets for coarse pointers */
+  @media (pointer: coarse) {
+    button,
+    a,
+    [role="button"],
+    input[type="checkbox"],
+    input[type="radio"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ------------------------------------------------------------ */
+/* Typographic scale utilities                                  */
+/* ------------------------------------------------------------ */
+
+@layer utilities {
+  .text-hero {
+    font-size: 2.25rem;
+    line-height: 1.1;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .text-h1 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .text-h2 {
+    font-size: 1.375rem;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .text-h3 {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  .text-body {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .text-small {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .text-mono {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    font-weight: 500;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 }
