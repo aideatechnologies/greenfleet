@@ -19,7 +19,7 @@ export async function getPresets(
   });
 
   return rows.map((r) => ({
-    id: r.id,
+    id: Number(r.id),
     name: r.name,
     filters: JSON.parse(r.filters),
   }));
@@ -46,7 +46,7 @@ export async function createPreset(
   });
 
   return {
-    id: row.id,
+    id: Number(row.id),
     name: row.name,
     filters: JSON.parse(row.filters),
   };
@@ -71,7 +71,7 @@ export async function updatePreset(
   });
 
   return {
-    id: row.id,
+    id: Number(row.id),
     name: row.name,
     filters: JSON.parse(row.filters),
   };

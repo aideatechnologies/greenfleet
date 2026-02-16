@@ -41,7 +41,7 @@ export function CarlistDetailHeader({
           </Button>
           <CarlistForm
             mode="edit"
-            carlistId={carlist.id}
+            carlistId={Number(carlist.id)}
             defaultValues={{
               name: carlist.name,
               description: carlist.description ?? "",

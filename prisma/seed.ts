@@ -281,17 +281,17 @@ async function main() {
     scope: number;
     description: string;
   }> = [
-    { vehicleFuelType: "BENZINA", macroFuelTypeId: benzina.id, scope: 1, description: "Benzina" },
-    { vehicleFuelType: "DIESEL", macroFuelTypeId: gasolio.id, scope: 1, description: "Diesel" },
-    { vehicleFuelType: "GPL", macroFuelTypeId: gpl.id, scope: 1, description: "GPL" },
-    { vehicleFuelType: "METANO", macroFuelTypeId: metano.id, scope: 1, description: "Metano" },
-    { vehicleFuelType: "IBRIDO_BENZINA", macroFuelTypeId: benzina.id, scope: 1, description: "Ibrido Benzina" },
-    { vehicleFuelType: "IBRIDO_BENZINA", macroFuelTypeId: elettricita.id, scope: 2, description: "Ibrido Benzina" },
-    { vehicleFuelType: "IBRIDO_DIESEL", macroFuelTypeId: gasolio.id, scope: 1, description: "Ibrido Diesel" },
-    { vehicleFuelType: "IBRIDO_DIESEL", macroFuelTypeId: elettricita.id, scope: 2, description: "Ibrido Diesel" },
-    { vehicleFuelType: "IDROGENO", macroFuelTypeId: idrogeno.id, scope: 1, description: "Idrogeno" },
-    { vehicleFuelType: "BIFUEL_BENZINA_GPL", macroFuelTypeId: benzina.id, scope: 1, description: "Bifuel Benzina/GPL" },
-    { vehicleFuelType: "BIFUEL_BENZINA_METANO", macroFuelTypeId: benzina.id, scope: 1, description: "Bifuel Benzina/Metano" },
+    { vehicleFuelType: "BENZINA", macroFuelTypeId: Number(benzina.id), scope: 1, description: "Benzina" },
+    { vehicleFuelType: "DIESEL", macroFuelTypeId: Number(gasolio.id), scope: 1, description: "Diesel" },
+    { vehicleFuelType: "GPL", macroFuelTypeId: Number(gpl.id), scope: 1, description: "GPL" },
+    { vehicleFuelType: "METANO", macroFuelTypeId: Number(metano.id), scope: 1, description: "Metano" },
+    { vehicleFuelType: "IBRIDO_BENZINA", macroFuelTypeId: Number(benzina.id), scope: 1, description: "Ibrido Benzina" },
+    { vehicleFuelType: "IBRIDO_BENZINA", macroFuelTypeId: Number(elettricita.id), scope: 2, description: "Ibrido Benzina" },
+    { vehicleFuelType: "IBRIDO_DIESEL", macroFuelTypeId: Number(gasolio.id), scope: 1, description: "Ibrido Diesel" },
+    { vehicleFuelType: "IBRIDO_DIESEL", macroFuelTypeId: Number(elettricita.id), scope: 2, description: "Ibrido Diesel" },
+    { vehicleFuelType: "IDROGENO", macroFuelTypeId: Number(idrogeno.id), scope: 1, description: "Idrogeno" },
+    { vehicleFuelType: "BIFUEL_BENZINA_GPL", macroFuelTypeId: Number(benzina.id), scope: 1, description: "Bifuel Benzina/GPL" },
+    { vehicleFuelType: "BIFUEL_BENZINA_METANO", macroFuelTypeId: Number(benzina.id), scope: 1, description: "Bifuel Benzina/Metano" },
   ];
 
   for (const mapping of fuelTypeMappingsData) {

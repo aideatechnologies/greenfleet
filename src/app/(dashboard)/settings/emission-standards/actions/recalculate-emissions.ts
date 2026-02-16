@@ -91,7 +91,7 @@ export async function recalculateEmissions(): Promise<
             co2GKmWltp: wltpInput,
             co2GKmNedc: nedcInput,
             co2Standard: engine.co2Standard as "WLTP" | "NEDC",
-            conversionConfigId: engine.conversionConfigId,
+            conversionConfigId: engine.conversionConfigId as unknown as number | null,
           };
 
           const result = await calculateMissingStandard(input);

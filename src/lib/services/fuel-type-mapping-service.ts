@@ -12,7 +12,7 @@ import type {
 export async function getFuelTypeMappings(
   prisma: PrismaClient
 ): Promise<(FuelTypeMacroMapping & { macroFuelType: { id: number; name: string; scope: number; unit: string } })[]> {
-  return prisma.fuelTypeMacroMapping.findMany({
+  const rows = await prisma.fuelTypeMacroMapping.findMany({
     include: {
       macroFuelType: {
         select: { id: true, name: true, scope: true, unit: true },
@@ -20,6 +20,7 @@ export async function getFuelTypeMappings(
     },
     orderBy: { vehicleFuelType: "asc" },
   });
+  return rows as unknown as (FuelTypeMacroMapping & { macroFuelType: { id: number; name: string; scope: number; unit: string } })[];
 }
 
 // ---------------------------------------------------------------------------
@@ -30,7 +31,7 @@ export async function getMappingsForFuelType(
   prisma: PrismaClient,
   vehicleFuelType: string
 ): Promise<(FuelTypeMacroMapping & { macroFuelType: { id: number; name: string; scope: number; unit: string } })[]> {
-  return prisma.fuelTypeMacroMapping.findMany({
+  const rows = await prisma.fuelTypeMacroMapping.findMany({
     where: { vehicleFuelType },
     include: {
       macroFuelType: {
@@ -39,6 +40,7 @@ export async function getMappingsForFuelType(
     },
     orderBy: { scope: "asc" },
   });
+  return rows as unknown as (FuelTypeMacroMapping & { macroFuelType: { id: number; name: string; scope: number; unit: string } })[];
 }
 
 // ---------------------------------------------------------------------------

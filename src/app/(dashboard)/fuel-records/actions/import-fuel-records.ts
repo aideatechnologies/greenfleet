@@ -206,7 +206,7 @@ export async function getTenantVehiclePlatesAction(): Promise<
 
     return {
       success: true,
-      data: vehicles as { id: number; licensePlate: string }[],
+      data: vehicles as unknown as { id: number; licensePlate: string }[],
     };
   } catch {
     return {

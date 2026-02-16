@@ -36,7 +36,8 @@ export default async function GwpConfigPage() {
         </div>
       </div>
 
-      <GwpConfigTable gwpConfigs={gwpConfigs} canEdit={canEdit} />
+      {/* bigint→number at runtime via Prisma extension */}
+      <GwpConfigTable gwpConfigs={gwpConfigs as any} canEdit={canEdit} />
     </div>
   );
 }

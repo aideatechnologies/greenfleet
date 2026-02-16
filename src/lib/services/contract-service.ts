@@ -439,7 +439,7 @@ export async function getContractStatusOverview(
     if (!contract) {
       return {
         vehicle: {
-          id: v.id,
+          id: Number(v.id),
           licensePlate: v.licensePlate,
           make: v.catalogVehicle.marca,
           model: v.catalogVehicle.modello,
@@ -455,14 +455,14 @@ export async function getContractStatusOverview(
 
     return {
       vehicle: {
-        id: v.id,
+        id: Number(v.id),
         licensePlate: v.licensePlate,
         make: v.catalogVehicle.marca,
         model: v.catalogVehicle.modello,
         trim: v.catalogVehicle.allestimento ?? undefined,
       },
       activeContract: {
-        id: contract.id,
+        id: Number(contract.id),
         type: contract.type as ContractType,
         startDate: contract.startDate,
         endDate: contract.endDate,
@@ -470,7 +470,7 @@ export async function getContractStatusOverview(
           ?? contract.leasingCompany
           ?? contract.supplier
           ?? null,
-        supplierId: contract.supplierId,
+        supplierId: contract.supplierId != null ? Number(contract.supplierId) : null,
         monthlyRate: contract.monthlyRate,
         dailyRate: contract.dailyRate,
         purchasePrice: contract.purchasePrice,

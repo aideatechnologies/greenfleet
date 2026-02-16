@@ -185,7 +185,7 @@ export function TenantVehicleTable({
         header: "Veicolo",
         cell: ({ row }) => {
           const isUncataloged =
-            row.original.catalogVehicleId === UNCATALOGED_VEHICLE_ID;
+            Number(row.original.catalogVehicleId) === UNCATALOGED_VEHICLE_ID;
           if (isUncataloged) {
             return (
               <span className="text-sm italic text-muted-foreground">

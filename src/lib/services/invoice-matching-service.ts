@@ -276,7 +276,7 @@ export async function resolveLicensePlate(
     select: { id: true },
   });
 
-  if (vehicle) return vehicle.id;
+  if (vehicle) return Number(vehicle.id);
 
   // Fallback: ricerca case-insensitive con contains (per targhe con formattazione diversa)
   const vehicles = await prisma.tenantVehicle.findMany({
@@ -288,7 +288,7 @@ export async function resolveLicensePlate(
 
   for (const v of vehicles) {
     if (normalizePlate(v.licensePlate) === normalized) {
-      return v.id;
+      return Number(v.id);
     }
   }
 
@@ -350,7 +350,7 @@ export async function findCandidateFuelRecords(
   });
 
   return records.map((r) => ({
-    id: r.id,
+    id: Number(r.id),
     date: r.date,
     quantity: r.quantityLiters,
     totalCost: r.amountEur,

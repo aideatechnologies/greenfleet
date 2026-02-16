@@ -313,7 +313,7 @@ export async function getAuditEntries(
   ]);
 
   const entries: AuditLogEntry[] = data.map((row): AuditLogEntry => ({
-    id: row.id,
+    id: Number(row.id),
     action: row.action as AuditAction,
     entityType: row.entityType,
     entityId: row.entityId,

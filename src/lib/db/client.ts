@@ -1,6 +1,7 @@
 import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaMssql } from "@prisma/adapter-mssql";
 import { tenantExtension } from "./tenant-extension";
+import { bigintToNumberExtension } from "./bigint-extension";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -56,9 +57,11 @@ if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
 
-// Tenant-scoped client with automatic tenantId filtering
+// Tenant-scoped client with automatic tenantId filtering + bigint→number conversion
 export function getPrismaForTenant(tenantId: string) {
-  return prisma.$extends(tenantExtension(tenantId));
+  return prisma
+    .$extends(tenantExtension(tenantId))
+    .$extends(bigintToNumberExtension());
 }
 
 export type PrismaClientWithTenant = ReturnType<typeof getPrismaForTenant>;

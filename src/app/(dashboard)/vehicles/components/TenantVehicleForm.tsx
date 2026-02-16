@@ -125,7 +125,7 @@ export function TenantVehicleForm({
   });
 
   const selectedEmployee = employees.find(
-    (e) => e.id === form.watch("assignedEmployeeId")
+    (e) => Number(e.id) === form.watch("assignedEmployeeId")
   );
 
   return (

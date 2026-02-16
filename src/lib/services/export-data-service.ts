@@ -203,23 +203,25 @@ async function buildVehicleDetails(
   // Group by vehicle
   const fuelByVehicle = new Map<number, typeof fuelRecords>();
   for (const r of fuelRecords) {
-    const arr = fuelByVehicle.get(r.vehicleId) ?? [];
+    const vid = Number(r.vehicleId);
+    const arr = fuelByVehicle.get(vid) ?? [];
     arr.push(r);
-    fuelByVehicle.set(r.vehicleId, arr);
+    fuelByVehicle.set(vid, arr);
   }
 
   const kmByVehicle = new Map<number, typeof kmReadings>();
   for (const r of kmReadings) {
-    const arr = kmByVehicle.get(r.vehicleId) ?? [];
+    const vid = Number(r.vehicleId);
+    const arr = kmByVehicle.get(vid) ?? [];
     arr.push(r);
-    kmByVehicle.set(r.vehicleId, arr);
+    kmByVehicle.set(vid, arr);
   }
 
   const details: NonNullable<ReportExportData["vehicleDetails"]> = [];
 
   for (const vehicle of vehicles) {
-    const vFuel = fuelByVehicle.get(vehicle.id) ?? [];
-    const vKm = kmByVehicle.get(vehicle.id) ?? [];
+    const vFuel = fuelByVehicle.get(Number(vehicle.id)) ?? [];
+    const vKm = kmByVehicle.get(Number(vehicle.id)) ?? [];
 
     // Determine fuel type (hybrid-aware)
     const fuelType = getEffectiveFuelType(vehicle.catalogVehicle, vFuel) ?? "BENZINA";

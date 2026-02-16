@@ -103,7 +103,7 @@ export function VehicleEditSection({
   const [employeeSearch, setEmployeeSearch] = useState("");
   const [employeeOpen, setEmployeeOpen] = useState(false);
 
-  const isUncataloged = vehicle.catalogVehicleId === Number(UNCATALOGED_VEHICLE_ID);
+  const isUncataloged = Number(vehicle.catalogVehicleId) === UNCATALOGED_VEHICLE_ID;
 
   function handleAssociateCatalog(catalogVehicle: CatalogVehicleWithEngines) {
     startTransition(async () => {
@@ -190,7 +190,7 @@ export function VehicleEditSection({
   });
 
   const selectedEmployee =
-    employees.find((e) => e.id === form.watch("assignedEmployeeId")) ??
+    employees.find((e) => Number(e.id) === form.watch("assignedEmployeeId")) ??
     vehicle.assignedEmployee;
 
   // Read-only view

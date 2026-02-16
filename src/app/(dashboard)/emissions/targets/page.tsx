@@ -4,7 +4,7 @@ import { getPrismaForTenant } from "@/lib/db/client";
 import { getTargetCurrentEmissions } from "@/lib/services/target-data-loader";
 import { calculateTargetProgress } from "@/lib/services/emission-calculator";
 import type { TargetPeriod } from "@/types/emission-target";
-import { TargetList } from "./components/TargetList";
+import { TargetList, type TargetWithProgress } from "./components/TargetList";
 
 export default async function EmissionTargetsPage() {
   const ctx = await getSessionContext();
@@ -75,7 +75,7 @@ export default async function EmissionTargetsPage() {
           </p>
         </div>
       </div>
-      <TargetList targets={targetsWithProgress} canEdit={canEdit} />
+      <TargetList targets={targetsWithProgress as unknown as TargetWithProgress[]} canEdit={canEdit} />
     </div>
   );
 }

@@ -37,7 +37,8 @@ export default async function MacroFuelTypesPage() {
         </div>
       </div>
 
-      <MacroFuelTypeTable macroFuelTypes={macroFuelTypes} canEdit={canEdit} />
+      {/* bigint→number at runtime via Prisma extension */}
+      <MacroFuelTypeTable macroFuelTypes={macroFuelTypes as any} canEdit={canEdit} />
     </div>
   );
 }

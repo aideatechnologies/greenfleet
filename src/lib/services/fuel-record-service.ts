@@ -146,7 +146,7 @@ export async function createFuelRecord(
     userId,
     action: "fuel_record.created",
     entityType: "FuelRecord",
-    entityId: record.id,
+    entityId: Number(record.id),
     data: {
       vehicleId: input.vehicleId,
       date: input.date,
@@ -185,7 +185,7 @@ export async function updateFuelRecord(
   // Validate odometer (exclude current record from check)
   const odometerError = await validateOdometer(
     prisma,
-    existing.vehicleId,
+    Number(existing.vehicleId),
     input.date,
     input.odometerKm,
     id
@@ -430,7 +430,7 @@ export async function getVehicleFeed(
     fuelRecords as unknown as FuelRecordWithDetails[]
   ).map((r) => ({
     type: "fuel_record" as const,
-    id: r.id,
+    id: Number(r.id),
     date: r.date,
     odometerKm: r.odometerKm,
     fuelType: r.fuelType,
@@ -444,7 +444,7 @@ export async function getVehicleFeed(
 
   const kmItems: FuelFeedItem[] = kmReadings.map((r) => ({
     type: "km_reading" as const,
-    id: r.id,
+    id: Number(r.id),
     date: r.date,
     odometerKm: r.odometerKm,
     notes: r.notes,

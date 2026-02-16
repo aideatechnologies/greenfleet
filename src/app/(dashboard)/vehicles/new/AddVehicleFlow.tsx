@@ -12,7 +12,7 @@ export function AddVehicleFlow() {
   const [selectedVehicle, setSelectedVehicle] =
     useState<CatalogVehicleWithEngines | null>(null);
 
-  const catalogVehicleId = selectedVehicle?.id ?? UNCATALOGED_VEHICLE_ID;
+  const catalogVehicleId: number = selectedVehicle?.id != null ? Number(selectedVehicle.id) : UNCATALOGED_VEHICLE_ID;
 
   return (
     <div className="space-y-6">

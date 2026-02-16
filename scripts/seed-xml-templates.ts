@@ -476,7 +476,7 @@ async function main() {
       ...(edenredSupplier
         ? [
             {
-              supplierId: edenredSupplier.id,
+              supplierId: Number(edenredSupplier.id),
               fieldName: "licensePlate",
               name: "Alias flotta JOLLY (Edenred)",
               patterns: [{ label: "JOLLY N", regex: "JOLLY\\s*(\\d+)", regexGroup: 1 }],
@@ -488,14 +488,14 @@ async function main() {
       ...(essoSupplier
         ? [
             {
-              supplierId: essoSupplier.id,
+              supplierId: Number(essoSupplier.id),
               fieldName: "licensePlate",
               name: "Targa da carta-targa (ESSO)",
               patterns: [{ label: "Carta-Targa", regex: "\\d+-([A-Z]{2}\\d{3}[A-Z]{2})", regexGroup: 1 }],
               priority: 0,
             },
             {
-              supplierId: essoSupplier.id,
+              supplierId: Number(essoSupplier.id),
               fieldName: "cardNumber",
               name: "Numero carta numerico (ESSO)",
               patterns: [{ label: "con carta N", regex: "con carta (\\d+)", regexGroup: 1 }],

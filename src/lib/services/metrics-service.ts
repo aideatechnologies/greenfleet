@@ -159,7 +159,7 @@ export async function getTenantMetrics(
     orderBy: { date: "asc" },
   });
 
-  return rows;
+  return rows as unknown as TenantMetricsRow[];
 }
 
 // ---------------------------------------------------------------------------

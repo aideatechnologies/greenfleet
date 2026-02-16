@@ -149,7 +149,7 @@ export function CarlistTable({
     if (!deleteTarget) return;
     setIsDeleting(true);
     try {
-      const result = await deleteCarlistAction(deleteTarget.id);
+      const result = await deleteCarlistAction(Number(deleteTarget.id));
       if (result.success) {
         toast.success("Carlist eliminata con successo");
         router.refresh();
@@ -378,7 +378,7 @@ export function CarlistTable({
       {editCarlist && (
         <CarlistForm
           mode="edit"
-          carlistId={editCarlist.id}
+          carlistId={Number(editCarlist.id)}
           defaultValues={{
             name: editCarlist.name,
             description: editCarlist.description ?? "",

@@ -261,7 +261,7 @@ export async function addCatalogVehicles(
     select: { catalogVehicleId: true },
   });
 
-  const existingIds = new Set(existing.map((e) => e.catalogVehicleId));
+  const existingIds = new Set(existing.map((e) => Number(e.catalogVehicleId)));
   const newIds = catalogVehicleIds.filter((id) => !existingIds.has(id));
 
   if (newIds.length === 0) {
@@ -340,5 +340,5 @@ export async function getCarlistOptions(
     orderBy: { name: "asc" },
   });
 
-  return carlists;
+  return carlists as unknown as CarlistOption[];
 }

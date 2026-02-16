@@ -675,8 +675,8 @@ async function phase2(orgId: string): Promise<Map<string, number>> {
             isActive: true,
           },
         });
-        supplierByVat.set(sup.vatNumber, result.id);
-        supplierByName.set(normalizeSupplierName(sup.name), result.id);
+        supplierByVat.set(sup.vatNumber, Number(result.id));
+        supplierByName.set(normalizeSupplierName(sup.name), Number(result.id));
         s.created++;
       } else {
         // Suppliers without VAT (e.g. Shell) — find by name or create
@@ -700,7 +700,7 @@ async function phase2(orgId: string): Promise<Map<string, number>> {
               isActive: true,
             },
           });
-          supplierByName.set(normalizeSupplierName(sup.name), existing.id);
+          supplierByName.set(normalizeSupplierName(sup.name), Number(existing.id));
           s.updated++;
         } else {
           const created = await prisma.supplier.create({
@@ -718,7 +718,7 @@ async function phase2(orgId: string): Promise<Map<string, number>> {
               isActive: true,
             },
           });
-          supplierByName.set(normalizeSupplierName(sup.name), created.id);
+          supplierByName.set(normalizeSupplierName(sup.name), Number(created.id));
           s.created++;
         }
       }
@@ -734,8 +734,8 @@ async function phase2(orgId: string): Promise<Map<string, number>> {
     where: { tenantId: orgId },
   });
   for (const sup of allSuppliers) {
-    if (sup.vatNumber) supplierByVat.set(sup.vatNumber, sup.id);
-    supplierByName.set(normalizeSupplierName(sup.name), sup.id);
+    if (sup.vatNumber) supplierByVat.set(sup.vatNumber, Number(sup.id));
+    supplierByName.set(normalizeSupplierName(sup.name), Number(sup.id));
   }
 
   printStats("Fornitori", s);
@@ -795,7 +795,7 @@ async function phase3(orgId: string): Promise<Map<string, number>> {
           isActive: true,
         },
       });
-      tierMap.set(name, result.id);
+      tierMap.set(name, Number(result.id));
       s.created++;
     } catch (e) {
       err(`Car Tier "${name}": ${e instanceof Error ? e.message : String(e)}`);
@@ -916,7 +916,7 @@ async function phase4(
             isActive,
           },
         });
-        employeeMap.set(codice, existing.id);
+        employeeMap.set(codice, Number(existing.id));
         s.updated++;
       } else {
         const created = await prisma.employee.create({
@@ -932,7 +932,7 @@ async function phase4(
             isActive,
           },
         });
-        employeeMap.set(codice, created.id);
+        employeeMap.set(codice, Number(created.id));
         s.created++;
       }
     } catch (e) {
@@ -948,7 +948,7 @@ async function phase4(
     });
     for (const emp of allEmployees) {
       if (emp.employeeCode) {
-        employeeMap.set(emp.employeeCode, emp.id);
+        employeeMap.set(emp.employeeCode, Number(emp.id));
       }
     }
   }
@@ -1137,7 +1137,7 @@ async function phase5(
       });
 
       if (existing) {
-        catalogMap.set(key, existing.id);
+        catalogMap.set(key, Number(existing.id));
         s.updated++;
       } else {
         const created = await prisma.catalogVehicle.create({
@@ -1155,7 +1155,7 @@ async function phase5(
             },
           },
         });
-        catalogMap.set(key, created.id);
+        catalogMap.set(key, Number(created.id));
         s.created++;
       }
     } catch (e) {
@@ -1203,7 +1203,7 @@ async function phase6(
     where: { codiceInfocarData: "__UNCATALOGED__" },
     select: { id: true },
   });
-  const UNCATALOGED_VEHICLE_ID = sentinelVehicle?.id ?? -1;
+  const UNCATALOGED_VEHICLE_ID = sentinelVehicle ? Number(sentinelVehicle.id) : -1;
 
   for (const v of vehicleRows) {
     const ft = v.fuelType ?? "BENZINA";
@@ -1264,7 +1264,7 @@ async function phase6(
           status: "ACTIVE",
         },
       });
-      vehicleMap.set(v.targa, result.id);
+      vehicleMap.set(v.targa, Number(result.id));
       s.created++;
     } catch (e) {
       err(`TenantVehicle "${v.targa}": ${e instanceof Error ? e.message : String(e)}`);
@@ -1326,7 +1326,7 @@ async function phase6(
       where: { tenantId: orgId },
     });
     for (const v of allVehicles) {
-      vehicleMap.set(v.licensePlate, v.id);
+      vehicleMap.set(v.licensePlate, Number(v.id));
     }
   }
 
@@ -1356,8 +1356,8 @@ async function phase7(
       where: { tenantId: orgId },
     });
     for (const sup of allSuppliers) {
-      if (sup.vatNumber) supplierByVat.set(sup.vatNumber, sup.id);
-      supplierByName.set(normalizeSupplierName(sup.name), sup.id);
+      if (sup.vatNumber) supplierByVat.set(sup.vatNumber, Number(sup.id));
+      supplierByName.set(normalizeSupplierName(sup.name), Number(sup.id));
     }
   }
 
@@ -1552,7 +1552,7 @@ async function phase8(
       where: { tenantId: orgId },
     });
     for (const sup of allSuppliers) {
-      supplierByName.set(normalizeSupplierName(sup.name), sup.id);
+      supplierByName.set(normalizeSupplierName(sup.name), Number(sup.id));
     }
   }
 

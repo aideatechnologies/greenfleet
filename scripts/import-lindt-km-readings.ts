@@ -173,7 +173,7 @@ async function main() {
   for (const v of vehicles) {
     if (v.licensePlate) {
       plateToVehicle.set(v.licensePlate.toUpperCase(), {
-        id: v.id,
+        id: Number(v.id),
         licensePlate: v.licensePlate,
       });
     }

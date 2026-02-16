@@ -77,7 +77,7 @@ export async function createManualVehicle(
 
     return {
       success: true,
-      data: { id: vehicle.id },
+      data: { id: Number(vehicle.id) },
     };
   } catch (error) {
     logger.error(

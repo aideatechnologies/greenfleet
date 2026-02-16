@@ -32,5 +32,5 @@ export async function getCarlistsAction(): Promise<
     orderBy: { name: "asc" },
   });
 
-  return { success: true, data: carlists };
+  return { success: true, data: carlists as unknown as CarlistOption[] };
 }

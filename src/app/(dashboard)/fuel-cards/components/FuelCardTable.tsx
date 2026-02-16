@@ -221,17 +221,17 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {row.original.status !== "ACTIVE" && (
-                <DropdownMenuItem onClick={() => handleToggleStatus(row.original.id, "ACTIVE")}>
+                <DropdownMenuItem onClick={() => handleToggleStatus(Number(row.original.id), "ACTIVE")}>
                   Attiva
                 </DropdownMenuItem>
               )}
               {row.original.status !== "SUSPENDED" && (
-                <DropdownMenuItem onClick={() => handleToggleStatus(row.original.id, "SUSPENDED")}>
+                <DropdownMenuItem onClick={() => handleToggleStatus(Number(row.original.id), "SUSPENDED")}>
                   Sospendi
                 </DropdownMenuItem>
               )}
               {row.original.status !== "EXPIRED" && (
-                <DropdownMenuItem onClick={() => handleToggleStatus(row.original.id, "EXPIRED")}>
+                <DropdownMenuItem onClick={() => handleToggleStatus(Number(row.original.id), "EXPIRED")}>
                   Segna Scaduta
                 </DropdownMenuItem>
               )}

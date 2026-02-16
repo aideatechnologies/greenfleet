@@ -55,7 +55,7 @@ export default async function CarlistDetailPage({
 
       {/* Vehicle table */}
       <CarlistVehicleTable
-        carlistId={carlist.id}
+        carlistId={Number(carlist.id)}
         vehicles={carlist.vehicles}
         canEdit={canEdit}
         fuelTypeLabels={fuelTypeLabels}

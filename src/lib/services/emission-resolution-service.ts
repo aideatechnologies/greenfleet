@@ -79,7 +79,7 @@ export async function resolveEmissionContexts(
 
     contexts.push({
       macroFuelType: {
-        id: mt.id,
+        id: Number(mt.id),
         name: mt.name,
         scope: mt.scope as EmissionScope,
         unit: mt.unit,
@@ -159,7 +159,7 @@ export async function resolveAllEmissionContextsBulk(
 
     const context: EmissionContext = {
       macroFuelType: {
-        id: mt.id,
+        id: Number(mt.id),
         name: mt.name,
         scope: mt.scope as EmissionScope,
         unit: mt.unit,

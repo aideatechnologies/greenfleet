@@ -140,7 +140,7 @@ model Invitation {
 
 // Feature toggle per tenant
 model TenantFeature {
-  id         Int      @id @default(autoincrement())
+  id         BigInt      @id @default(autoincrement())
   tenantId   String   @map("tenant_id")
   featureKey String   @map("feature_key")
   enabled    Boolean  @default(false)
@@ -156,7 +156,7 @@ model TenantFeature {
 
 // Catalogo Veicoli Globale (no tenantId — condiviso tra tutti i tenant)
 model CatalogVehicle {
-  id                   Int       @id @default(autoincrement())
+  id                   BigInt       @id @default(autoincrement())
   codiceInfocarData    String?   @unique @map("codice_infocardata")
   marca                String
   modello              String
@@ -184,8 +184,8 @@ model CatalogVehicle {
 }
 
 model Engine {
-  id                     Int      @id @default(autoincrement())
-  catalogVehicleId       Int      @map("catalog_vehicle_id")
+  id                     BigInt      @id @default(autoincrement())
+  catalogVehicleId       BigInt      @map("catalog_vehicle_id")
   nucmot                 String?
   fuelType               String   @map("fuel_type")
   cilindrata             Int?
@@ -197,7 +197,7 @@ model Engine {
   co2GKmNedc             Float?   @map("co2_g_km_nedc")
   co2GKmWltpIsCalculated Boolean  @default(false) @map("co2_g_km_wltp_is_calculated")
   co2GKmNedcIsCalculated Boolean  @default(false) @map("co2_g_km_nedc_is_calculated")
-  conversionConfigId     Int?     @map("conversion_config_id")
+  conversionConfigId     BigInt?     @map("conversion_config_id")
   consumptionL100Km      Float?   @map("consumption_l_100km")
   consumptionUnit        String   @default("L/100KM") @map("consumption_unit")
   createdAt              DateTime @default(now()) @map("created_at")
@@ -213,7 +213,7 @@ model Engine {
 
 // Configurazione conversione emissioni WLTP <-> NEDC (globale)
 model EmissionConversionConfig {
-  id               Int      @id @default(autoincrement())
+  id               BigInt      @id @default(autoincrement())
   name             String
   nedcToWltpFactor Float    @map("nedc_to_wltp_factor")
   wltpToNedcFactor Float    @map("wltp_to_nedc_factor")
@@ -230,7 +230,7 @@ model EmissionConversionConfig {
 
 // Fasce Car List (tenant-scoped)
 model CarTier {
-  id          Int      @id @default(autoincrement())
+  id          BigInt      @id @default(autoincrement())
   tenantId    String   @map("tenant_id")
   name        String   @db.NVarChar(100)
   description String?  @db.NVarChar(500)
@@ -248,7 +248,7 @@ model CarTier {
 
 // Dipendenti (tenant-scoped)
 model Employee {
-  id           Int      @id @default(autoincrement())
+  id           BigInt      @id @default(autoincrement())
   tenantId     String   @map("tenant_id")
   firstName    String   @map("first_name")
   lastName     String   @map("last_name")
@@ -258,7 +258,7 @@ model Employee {
   employeeCode String?  @map("employee_code")
   matricola    String?  @db.NVarChar(50)
   workLocation String?  @map("work_location")
-  carTierId    Int?     @map("car_tier_id")
+  carTierId    BigInt?     @map("car_tier_id")
   isPool       Boolean  @default(false) @map("is_pool")
   type         String   @default("employee") @map("type")
   isActive     Boolean  @default(true) @map("is_active")
@@ -280,13 +280,13 @@ model Employee {
 
 // Veicoli operativi del tenant (flotta aziendale)
 model TenantVehicle {
-  id                 Int      @id @default(autoincrement())
+  id                 BigInt      @id @default(autoincrement())
   tenantId           String   @map("tenant_id")
-  catalogVehicleId   Int      @map("catalog_vehicle_id")
+  catalogVehicleId   BigInt      @map("catalog_vehicle_id")
   licensePlate       String   @map("license_plate")
   registrationDate   DateTime @map("registration_date")
   status             String   @default("ACTIVE") @map("status")
-  assignedEmployeeId Int?     @map("assigned_employee_id")
+  assignedEmployeeId BigInt?     @map("assigned_employee_id")
   notes              String?
   createdAt          DateTime @default(now()) @map("created_at")
   updatedAt          DateTime @updatedAt @map("updated_at")
@@ -312,10 +312,10 @@ model TenantVehicle {
 
 // Assegnazioni veicolo-dipendente (tenant-scoped)
 model VehicleAssignment {
-  id         Int       @id @default(autoincrement())
+  id         BigInt       @id @default(autoincrement())
   tenantId   String    @map("tenant_id")
-  vehicleId  Int       @map("vehicle_id")
-  employeeId Int       @map("employee_id")
+  vehicleId  BigInt       @map("vehicle_id")
+  employeeId BigInt       @map("employee_id")
   startDate  DateTime  @map("start_date")
   endDate    DateTime? @map("end_date")
   notes      String?
@@ -333,9 +333,9 @@ model VehicleAssignment {
 
 // Contratti veicoli (STI, tenant-scoped)
 model Contract {
-  id        Int      @id @default(autoincrement())
+  id        BigInt      @id @default(autoincrement())
   tenantId  String   @map("tenant_id")
-  vehicleId Int      @map("vehicle_id")
+  vehicleId BigInt      @map("vehicle_id")
   type      String   @map("type")
   status    String   @default("ACTIVE") @map("status")
   notes     String?
@@ -344,7 +344,7 @@ model Contract {
   // Campi generali contratto
   contractNumber String?  @map("contract_number")
   contractKm     Int?     @map("contract_km")
-  supplierId     Int?     @map("supplier_id")
+  supplierId     BigInt?     @map("supplier_id")
   durationMonths Int?     @map("duration_months")
   totalKm        Int?     @map("total_km")
   financialRate  Float?   @map("financial_rate")
@@ -396,7 +396,7 @@ model Contract {
 
 // Tipi Fornitore (tenant-scoped)
 model SupplierType {
-  id          Int      @id @default(autoincrement())
+  id          BigInt      @id @default(autoincrement())
   tenantId    String   @map("tenant_id")
   code        String   @db.NVarChar(50)
   label       String   @db.NVarChar(100)
@@ -415,9 +415,9 @@ model SupplierType {
 
 // Fornitori (tenant-scoped)
 model Supplier {
-  id             Int      @id @default(autoincrement())
+  id             BigInt      @id @default(autoincrement())
   tenantId       String   @map("tenant_id")
-  supplierTypeId Int      @map("supplier_type_id")
+  supplierTypeId BigInt      @map("supplier_type_id")
   name           String   @db.NVarChar(200)
   vatNumber      String?  @map("vat_number") @db.NVarChar(20)
   address        String?  @db.NVarChar(500)
@@ -444,16 +444,16 @@ model Supplier {
 
 // Carte carburante (tenant-scoped)
 model FuelCard {
-  id                 Int       @id @default(autoincrement())
+  id                 BigInt       @id @default(autoincrement())
   tenantId           String    @map("tenant_id")
   cardNumber         String    @map("card_number") @db.NVarChar(50)
   issuer             String    @db.NVarChar(100)
-  supplierId         Int?      @map("supplier_id")
+  supplierId         BigInt?      @map("supplier_id")
   expiryDate         DateTime? @map("expiry_date")
   status             String    @default("ACTIVE")
   assignmentType     String    @map("assignment_type")
-  assignedVehicleId  Int?      @map("assigned_vehicle_id")
-  assignedEmployeeId Int?      @map("assigned_employee_id")
+  assignedVehicleId  BigInt?      @map("assigned_vehicle_id")
+  assignedEmployeeId BigInt?      @map("assigned_employee_id")
   notes              String?   @db.NVarChar(500)
   createdAt          DateTime  @default(now()) @map("created_at")
   updatedAt          DateTime  @updatedAt @map("updated_at")
@@ -473,9 +473,9 @@ model FuelCard {
 
 // Storico targhe veicolo (tenant-scoped)
 model LicensePlateHistory {
-  id          Int       @id @default(autoincrement())
+  id          BigInt       @id @default(autoincrement())
   tenantId    String    @map("tenant_id")
-  vehicleId   Int       @map("vehicle_id")
+  vehicleId   BigInt       @map("vehicle_id")
   plateNumber String    @map("plate_number")
   startDate   DateTime  @map("start_date")
   endDate     DateTime? @map("end_date")
@@ -492,11 +492,11 @@ model LicensePlateHistory {
 
 // Rifornimenti carburante (tenant-scoped)
 model FuelRecord {
-  id             Int      @id @default(autoincrement())
+  id             BigInt      @id @default(autoincrement())
   tenantId       String   @map("tenant_id")
-  vehicleId      Int      @map("vehicle_id")
+  vehicleId      BigInt      @map("vehicle_id")
   userId         String   @map("user_id")
-  fuelCardId     Int?     @map("fuel_card_id")
+  fuelCardId     BigInt?     @map("fuel_card_id")
   date           DateTime
   fuelType       String   @map("fuel_type")
   quantityLiters Float    @map("quantity_liters")
@@ -520,7 +520,7 @@ model FuelRecord {
 
 // Audit trail legacy (tenant-scoped)
 model AuditEntry {
-  id         Int      @id @default(autoincrement())
+  id         BigInt      @id @default(autoincrement())
   tenantId   String   @map("tenant_id")
   userId     String   @map("user_id")
   action     String
@@ -538,7 +538,7 @@ model AuditEntry {
 
 // Audit trail completo (tenant-scoped)
 model AuditLog {
-  id         Int      @id @default(autoincrement())
+  id         BigInt      @id @default(autoincrement())
   action     String
   entityType String   @map("entity_type")
   entityId   String   @map("entity_id")
@@ -557,7 +557,7 @@ model AuditLog {
 
 // Metriche giornaliere per-tenant (tenant-scoped)
 model TenantMetrics {
-  id              Int      @id @default(autoincrement())
+  id              BigInt      @id @default(autoincrement())
   tenantId        String   @map("tenant_id")
   date            DateTime
   queryCount      Int      @default(0) @map("query_count")
@@ -574,7 +574,7 @@ model TenantMetrics {
 
 // Carlist — raggruppamenti veicoli (tenant-scoped)
 model Carlist {
-  id          Int      @id @default(autoincrement())
+  id          BigInt      @id @default(autoincrement())
   tenantId    String   @map("tenant_id")
   name        String   @db.NVarChar(100)
   description String?  @db.NVarChar(500)
@@ -593,9 +593,9 @@ model Carlist {
 
 // Relazione N:M esplicita Carlist-CatalogVehicle
 model CarlistVehicle {
-  id               Int      @id @default(autoincrement())
-  carlistId        Int      @map("carlist_id")
-  catalogVehicleId Int      @map("catalog_vehicle_id")
+  id               BigInt      @id @default(autoincrement())
+  carlistId        BigInt      @map("carlist_id")
+  catalogVehicleId BigInt      @map("catalog_vehicle_id")
   addedAt          DateTime @default(now()) @map("added_at")
   addedBy          String   @map("added_by")
 
@@ -611,9 +611,9 @@ model CarlistVehicle {
 
 // Documenti veicolo (tenant-scoped)
 model VehicleDocument {
-  id            Int      @id @default(autoincrement())
+  id            BigInt      @id @default(autoincrement())
   tenantId      String   @map("tenant_id")
-  vehicleId     Int      @map("vehicle_id")
+  vehicleId     BigInt      @map("vehicle_id")
   documentType  String   @map("document_type")
   description   String?
   expiryDate    DateTime @map("expiry_date")
@@ -636,9 +636,9 @@ model VehicleDocument {
 
 // Rilevazioni chilometriche dedicate (tenant-scoped)
 model KmReading {
-  id         Int      @id @default(autoincrement())
+  id         BigInt      @id @default(autoincrement())
   tenantId   String   @map("tenant_id")
-  vehicleId  Int      @map("vehicle_id")
+  vehicleId  BigInt      @map("vehicle_id")
   userId     String   @map("user_id")
   date       DateTime
   odometerKm Int      @map("odometer_km")
@@ -657,7 +657,7 @@ model KmReading {
 
 // Macro Tipi Carburante (globale)
 model MacroFuelType {
-  id        Int      @id @default(autoincrement())
+  id        BigInt      @id @default(autoincrement())
   name      String   @unique @db.NVarChar(100)
   scope     Int
   unit      String   @db.NVarChar(10)
@@ -676,9 +676,9 @@ model MacroFuelType {
 
 // Mappatura FuelType veicolo → MacroFuelType (globale)
 model FuelTypeMacroMapping {
-  id              Int    @id @default(autoincrement())
+  id              BigInt    @id @default(autoincrement())
   vehicleFuelType String @map("vehicle_fuel_type")
-  macroFuelTypeId Int    @map("macro_fuel_type_id")
+  macroFuelTypeId BigInt    @map("macro_fuel_type_id")
   scope           Int
   description     String @default("") @map("description") @db.NVarChar(100)
 
@@ -692,7 +692,7 @@ model FuelTypeMacroMapping {
 
 // GWP per gas Kyoto (globale)
 model GwpConfig {
-  id        Int      @id @default(autoincrement())
+  id        BigInt      @id @default(autoincrement())
   gasName   String   @map("gas_name") @db.NVarChar(10)
   gwpValue  Float    @map("gwp_value")
   source    String   @db.NVarChar(100)
@@ -707,8 +707,8 @@ model GwpConfig {
 
 // Fattori di emissione per-gas per MacroFuelType (globale)
 model EmissionFactor {
-  id              Int      @id @default(autoincrement())
-  macroFuelTypeId Int?     @map("macro_fuel_type_id")
+  id              BigInt      @id @default(autoincrement())
+  macroFuelTypeId BigInt?     @map("macro_fuel_type_id")
   co2             Float    @default(0)
   ch4             Float    @default(0)
   n2o             Float    @default(0)
@@ -735,10 +735,10 @@ model EmissionFactor {
 
 // Target emissioni (tenant-scoped)
 model EmissionTarget {
-  id          Int      @id @default(autoincrement())
+  id          BigInt      @id @default(autoincrement())
   tenantId    String   @map("tenant_id")
   scope       String
-  carlistId   Int?     @map("carlist_id")
+  carlistId   BigInt?     @map("carlist_id")
   targetValue Float    @map("target_value")
   period      String
   startDate   DateTime @map("start_date")
@@ -757,9 +757,9 @@ model EmissionTarget {
 
 // Template estrazione XML (tenant-scoped)
 model SupplierXmlTemplate {
-  id              Int      @id @default(autoincrement())
+  id              BigInt      @id @default(autoincrement())
   tenantId        String   @map("tenant_id")
-  supplierId      Int      @map("supplier_id")
+  supplierId      BigInt      @map("supplier_id")
   name            String   @db.NVarChar(200)
   description     String?  @db.NVarChar(500)
   templateConfig  String   @map("template_config") @db.NVarChar(Max)
@@ -779,9 +779,9 @@ model SupplierXmlTemplate {
 
 // Import fatture XML (tenant-scoped)
 model InvoiceImport {
-  id                   Int       @id @default(autoincrement())
+  id                   BigInt       @id @default(autoincrement())
   tenantId             String    @map("tenant_id")
-  templateId           Int       @map("template_id")
+  templateId           BigInt       @map("template_id")
   userId               String    @map("user_id")
   fileName             String    @map("file_name") @db.NVarChar(255)
   fileHash             String?   @map("file_hash") @db.NVarChar(64)
@@ -811,9 +811,9 @@ model InvoiceImport {
 
 // Righe importate da fatture XML (tenant-scoped)
 model InvoiceImportLine {
-  id                  Int       @id @default(autoincrement())
+  id                  BigInt       @id @default(autoincrement())
   tenantId            String    @map("tenant_id")
-  importId            Int       @map("import_id")
+  importId            BigInt       @map("import_id")
   lineNumber          Int       @map("line_number")
   licensePlate        String?   @map("license_plate") @db.NVarChar(50)
   date                DateTime?
@@ -825,11 +825,11 @@ model InvoiceImportLine {
   description         String?   @db.NVarChar(500)
   rawXml              String?   @map("raw_xml") @db.NVarChar(Max)
   matchStatus         String    @default("UNMATCHED") @map("match_status")
-  matchedFuelRecordId Int?      @map("matched_fuel_record_id")
-  createdFuelRecordId Int?      @map("created_fuel_record_id")
+  matchedFuelRecordId BigInt?      @map("matched_fuel_record_id")
+  createdFuelRecordId BigInt?      @map("created_fuel_record_id")
   matchScore          Float?    @map("match_score")
   matchDetails        String?   @map("match_details") @db.NVarChar(Max)
-  resolvedVehicleId   Int?      @map("resolved_vehicle_id")
+  resolvedVehicleId   BigInt?      @map("resolved_vehicle_id")
   extractionErrors    String?   @map("extraction_errors") @db.NVarChar(Max)
   createdAt           DateTime  @default(now()) @map("created_at")
   updatedAt           DateTime  @updatedAt @map("updated_at")
@@ -844,7 +844,7 @@ model InvoiceImportLine {
 
 // Preset filtri report emissioni (tenant-scoped)
 model ReportFilterPreset {
-  id          Int      @id @default(autoincrement())
+  id          BigInt      @id @default(autoincrement())
   tenantId    String   @map("tenant_id")
   name        String
   filters     String   @map("filters")
@@ -859,9 +859,9 @@ model ReportFilterPreset {
 
 // Preset regex per estrazione campi XML (tenant-scoped)
 model FieldRegexPreset {
-  id          Int      @id @default(autoincrement())
+  id          BigInt      @id @default(autoincrement())
   tenantId    String   @map("tenant_id")
-  supplierId  Int?     @map("supplier_id")
+  supplierId  BigInt?     @map("supplier_id")
   fieldName   String   @map("field_name") @db.NVarChar(50)
   name        String   @db.NVarChar(200)
   patterns    String   @db.NVarChar(Max)

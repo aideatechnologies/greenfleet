@@ -248,9 +248,10 @@ export async function getDashboardKPIs(
   // Total km this month: for each vehicle, (max odometer - min odometer)
   const vehicleOdometers = new Map<number, { min: number; max: number }>();
   for (const reading of kmData) {
-    const existing = vehicleOdometers.get(reading.vehicleId);
+    const vid = Number(reading.vehicleId);
+    const existing = vehicleOdometers.get(vid);
     if (!existing) {
-      vehicleOdometers.set(reading.vehicleId, {
+      vehicleOdometers.set(vid, {
         min: reading.odometerKm,
         max: reading.odometerKm,
       });
@@ -542,11 +543,12 @@ export async function getFleetDelta(
   // Group by vehicleId
   const recordsByVehicle = new Map<number, typeof allFuelRecords>();
   for (const fr of allFuelRecords) {
-    const list = recordsByVehicle.get(fr.vehicleId);
+    const vid = Number(fr.vehicleId);
+    const list = recordsByVehicle.get(vid);
     if (list) {
       list.push(fr);
     } else {
-      recordsByVehicle.set(fr.vehicleId, [fr]);
+      recordsByVehicle.set(vid, [fr]);
     }
   }
 
@@ -554,7 +556,7 @@ export async function getFleetDelta(
   let totalReal = 0;
 
   for (const vehicle of vehicles) {
-    const fuelRecords = recordsByVehicle.get(vehicle.id);
+    const fuelRecords = recordsByVehicle.get(Number(vehicle.id));
     if (!fuelRecords || fuelRecords.length < 2) continue;
 
     // Calculate km travelled
@@ -720,7 +722,7 @@ export async function getNotifications(
     const typeLabel = CONTRACT_TYPE_LABELS[contract.type] ?? contract.type;
 
     contracts.push({
-      id: contract.id,
+      id: Number(contract.id),
       type: "contract",
       title: `${typeLabel} - ${contract.vehicle.licensePlate}`,
       description: `Scade tra ${daysRemaining} giorni`,
@@ -761,12 +763,12 @@ export async function getNotifications(
     const typeLabel = DOCUMENT_TYPE_LABELS[doc.documentType] ?? doc.documentType;
 
     documents.push({
-      id: doc.id,
+      id: Number(doc.id),
       type: "document",
       title: `${typeLabel} - ${doc.vehicle.licensePlate}`,
       description: `Scade tra ${daysRemaining} giorni`,
       severity,
-      link: `/fleet/${doc.vehicleId}`,
+      link: `/fleet/${Number(doc.vehicleId)}`,
       daysRemaining,
     });
   }
@@ -880,7 +882,7 @@ export async function getFleetBreakdownByFuelType(
   for (const m of allMappings) {
     if (m.scope === 1) {
       fuelTypeToMacro.set(m.vehicleFuelType, {
-        id: m.macroFuelType.id,
+        id: Number(m.macroFuelType.id),
         name: m.macroFuelType.name,
         color: m.macroFuelType.color,
       });
@@ -890,7 +892,7 @@ export async function getFleetBreakdownByFuelType(
   for (const m of allMappings) {
     if (!fuelTypeToMacro.has(m.vehicleFuelType)) {
       fuelTypeToMacro.set(m.vehicleFuelType, {
-        id: m.macroFuelType.id,
+        id: Number(m.macroFuelType.id),
         name: m.macroFuelType.name,
         color: m.macroFuelType.color,
       });
@@ -903,9 +905,10 @@ export async function getFleetBreakdownByFuelType(
     { litres: number; kwh: number; fuelType: string; minOdo: number; maxOdo: number }
   >();
   for (const fr of fuelRecords) {
-    const existing = fuelByVehicle.get(fr.vehicleId);
+    const vid = Number(fr.vehicleId);
+    const existing = fuelByVehicle.get(vid);
     if (!existing) {
-      fuelByVehicle.set(fr.vehicleId, {
+      fuelByVehicle.set(vid, {
         litres: fr.quantityLiters,
         kwh: fr.quantityKwh ?? 0,
         fuelType: fr.fuelType,
@@ -958,7 +961,7 @@ export async function getFleetBreakdownByFuelType(
       continue;
     }
 
-    const vehicleFuel = fuelByVehicle.get(vehicle.id);
+    const vehicleFuel = fuelByVehicle.get(Number(vehicle.id));
     const litres = vehicleFuel?.litres ?? 0;
     const kwh = vehicleFuel?.kwh ?? 0;
     const km = vehicleFuel ? Math.max(0, vehicleFuel.maxOdo - vehicleFuel.minOdo) : 0;
@@ -979,7 +982,7 @@ export async function getFleetBreakdownByFuelType(
     }
 
     const detail: FuelTypeVehicleDetail = {
-      vehicleId: vehicle.id,
+      vehicleId: Number(vehicle.id),
       licensePlate: vehicle.licensePlate,
       make: vehicle.catalogVehicle?.marca ?? "",
       model: vehicle.catalogVehicle?.modello ?? "",
@@ -996,7 +999,7 @@ export async function getFleetBreakdownByFuelType(
       groups.set(groupKey, {
         macroName: macro.name,
         color: macro.color,
-        vehicleIds: new Set([vehicle.id]),
+        vehicleIds: new Set([Number(vehicle.id)]),
         vehicles: [detail],
         totalLitres: litres,
         totalKwh: kwh,
@@ -1004,7 +1007,7 @@ export async function getFleetBreakdownByFuelType(
         totalEmissions: vehicleEmissions,
       });
     } else {
-      group.vehicleIds.add(vehicle.id);
+      group.vehicleIds.add(Number(vehicle.id));
       group.vehicles.push(detail);
       group.totalLitres += litres;
       group.totalKwh += kwh;
@@ -1144,12 +1147,13 @@ export async function getFleetBreakdownByCarlist(
   const catalogToCarlist = new Map<number, Array<{ id: number; name: string }>>();
   for (const cv of carlistVehicles) {
     const entry = cv as unknown as {
-      catalogVehicleId: number;
-      carlist: { id: number; name: string };
+      catalogVehicleId: number | bigint;
+      carlist: { id: number | bigint; name: string };
     };
-    const list = catalogToCarlist.get(entry.catalogVehicleId) ?? [];
-    list.push({ id: entry.carlist.id, name: entry.carlist.name });
-    catalogToCarlist.set(entry.catalogVehicleId, list);
+    const catId = Number(entry.catalogVehicleId);
+    const list = catalogToCarlist.get(catId) ?? [];
+    list.push({ id: Number(entry.carlist.id), name: entry.carlist.name });
+    catalogToCarlist.set(catId, list);
   }
 
   // Index fuel records by vehicleId
@@ -1158,9 +1162,10 @@ export async function getFleetBreakdownByCarlist(
     { litres: number; kwh: number; fuelType: string; minOdo: number; maxOdo: number }
   >();
   for (const fr of fuelRecords) {
-    const existing = fuelByVehicle.get(fr.vehicleId);
+    const vid = Number(fr.vehicleId);
+    const existing = fuelByVehicle.get(vid);
     if (!existing) {
-      fuelByVehicle.set(fr.vehicleId, {
+      fuelByVehicle.set(vid, {
         litres: fr.quantityLiters,
         kwh: fr.quantityKwh ?? 0,
         fuelType: fr.fuelType,
@@ -1242,33 +1247,34 @@ export async function getFleetBreakdownByCarlist(
   const assignedVehicleIds = new Set<number>();
 
   for (const vehicle of vehicles) {
-    allVehicleIds.add(vehicle.id);
+    const vehicleIdNum = Number(vehicle.id);
+    allVehicleIds.add(vehicleIdNum);
     if (!vehicle.catalogVehicle?.engines?.length) continue;
 
-    const vehicleFuel = fuelByVehicle.get(vehicle.id);
+    const vehicleFuel = fuelByVehicle.get(vehicleIdNum);
     const km = vehicleFuel ? Math.max(0, vehicleFuel.maxOdo - vehicleFuel.minOdo) : 0;
     const litres = vehicleFuel?.litres ?? 0;
     const kwh = vehicleFuel?.kwh ?? 0;
-    const emissions = getVehicleEmissions(vehicle.id, vehicle);
+    const emissions = getVehicleEmissions(vehicleIdNum, vehicle);
 
-    const carlists = catalogToCarlist.get(vehicle.catalogVehicleId);
+    const carlists = catalogToCarlist.get(Number(vehicle.catalogVehicleId));
     if (!carlists || carlists.length === 0) continue;
 
-    assignedVehicleIds.add(vehicle.id);
+    assignedVehicleIds.add(vehicleIdNum);
 
     for (const cl of carlists) {
       const group = groups.get(cl.id);
       if (!group) {
         groups.set(cl.id, {
           name: cl.name,
-          vehicleIds: new Set([vehicle.id]),
+          vehicleIds: new Set([vehicleIdNum]),
           totalKm: km,
           totalLitres: litres,
           totalKwh: kwh,
           totalEmissions: emissions,
         });
       } else {
-        group.vehicleIds.add(vehicle.id);
+        group.vehicleIds.add(vehicleIdNum);
         group.totalKm += km;
         group.totalLitres += litres;
         group.totalKwh += kwh;

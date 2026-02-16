@@ -10,6 +10,9 @@ import { EmissionFactorForm } from "./components/EmissionFactorForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+// Local type alias matching component expectations (bigint→number at runtime via Prisma extension)
+type MacroFuelTypeRef = { id: number; name: string; scope: number; unit: string };
+
 export default async function EmissionFactorsPage({
   searchParams,
 }: {
@@ -68,7 +71,7 @@ export default async function EmissionFactorsPage({
           {canEdit && (
             <EmissionFactorForm
               mode="create"
-              macroFuelTypes={macroFuelTypes}
+              macroFuelTypes={macroFuelTypes as unknown as MacroFuelTypeRef[]}
               fuelTypeOptions={fuelTypeOptions}
             />
           )}
@@ -76,8 +79,9 @@ export default async function EmissionFactorsPage({
       </div>
 
       <EmissionFactorTable
-        factors={result.data}
-        macroFuelTypes={macroFuelTypes}
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+        factors={result.data as any}
+        macroFuelTypes={macroFuelTypes as unknown as MacroFuelTypeRef[]}
         fuelTypeOptions={fuelTypeOptions}
         canEdit={canEdit}
       />

@@ -75,7 +75,7 @@ export default async function VehicleDetailPage({
   ]);
 
   const catalog = vehicle.catalogVehicle;
-  const isUncataloged = vehicle.catalogVehicleId === UNCATALOGED_VEHICLE_ID;
+  const isUncataloged = Number(vehicle.catalogVehicleId) === UNCATALOGED_VEHICLE_ID;
   const status = vehicle.status as VehicleStatus;
 
   function statusBadgeClasses(s: string): string {
@@ -282,12 +282,12 @@ export default async function VehicleDetailPage({
         <div className="space-y-6">
           <VehicleEditSection vehicle={vehicle} canEdit={canEdit} />
           <PlateHistoryPanel
-            vehicleId={vehicle.id}
+            vehicleId={Number(vehicle.id)}
             currentPlate={vehicle.licensePlate}
             canEdit={canEdit}
           />
           <AssignmentPanel
-            vehicleId={vehicle.id}
+            vehicleId={Number(vehicle.id)}
             currentAssignment={currentAssignmentData}
             canEdit={canEdit}
           />
@@ -312,14 +312,14 @@ export default async function VehicleDetailPage({
         <CardContent>
           <ContractTimeline
             contracts={contractsData}
-            vehicleId={vehicle.id}
+            vehicleId={Number(vehicle.id)}
           />
         </CardContent>
       </Card>
 
       {/* Documents */}
       <DocumentTab
-        vehicleId={vehicle.id}
+        vehicleId={Number(vehicle.id)}
         tenantId={tenantId}
         canEdit={canEdit}
       />

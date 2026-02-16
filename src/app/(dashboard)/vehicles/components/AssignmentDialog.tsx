@@ -158,7 +158,7 @@ export function AssignmentDialog({
   });
 
   const selectedEmployee = employees.find(
-    (e) => e.id === form.watch("employeeId")
+    (e) => Number(e.id) === form.watch("employeeId")
   );
 
   return (
@@ -238,7 +238,7 @@ export function AssignmentDialog({
                                   <Check
                                     className={cn(
                                       "mr-2 h-4 w-4",
-                                      field.value === emp.id
+                                      field.value === Number(emp.id)
                                         ? "opacity-100"
                                         : "opacity-0"
                                     )}
@@ -268,7 +268,7 @@ export function AssignmentDialog({
                                   <Check
                                     className={cn(
                                       "mr-2 h-4 w-4",
-                                      field.value === emp.id
+                                      field.value === Number(emp.id)
                                         ? "opacity-100"
                                         : "opacity-0"
                                     )}

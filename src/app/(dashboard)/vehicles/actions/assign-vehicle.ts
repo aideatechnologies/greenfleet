@@ -52,7 +52,7 @@ export async function assignVehicleAction(
     revalidatePath("/dipendenti");
     revalidatePath(`/dipendenti/${parsed.data.employeeId}`);
 
-    return { success: true, data: { id: assignment.id } };
+    return { success: true, data: { id: Number(assignment.id) } };
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Errore nell'assegnazione";

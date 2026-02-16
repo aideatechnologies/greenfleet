@@ -269,7 +269,7 @@ export async function createKmReading(
     userId,
     action: "km_reading.created",
     entityType: "KmReading",
-    entityId: record.id,
+    entityId: Number(record.id),
     data: {
       vehicleId: input.vehicleId,
       date: input.date,
@@ -304,7 +304,7 @@ export async function updateKmReading(
   // Validate odometer (exclude current record from check)
   const odometerError = await validateOdometerKm(
     prisma,
-    existing.vehicleId,
+    Number(existing.vehicleId),
     input.date,
     input.odometerKm,
     id

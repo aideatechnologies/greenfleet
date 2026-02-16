@@ -48,7 +48,7 @@ export function SupplierTypeTable({ types }: SupplierTypeTableProps) {
   const [newDescription, setNewDescription] = useState("");
 
   function startEditing(type: SupplierType) {
-    setEditingId(type.id);
+    setEditingId(Number(type.id));
     setEditLabel(type.label);
     setEditDescription(type.description ?? "");
     setEditSortOrder(type.sortOrder);
@@ -173,7 +173,7 @@ export function SupplierTypeTable({ types }: SupplierTypeTableProps) {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  {editingId === type.id ? (
+                  {editingId === Number(type.id) ? (
                     <Input
                       value={editLabel}
                       onChange={(e) => setEditLabel(e.target.value)}
@@ -184,7 +184,7 @@ export function SupplierTypeTable({ types }: SupplierTypeTableProps) {
                   )}
                 </TableCell>
                 <TableCell>
-                  {editingId === type.id ? (
+                  {editingId === Number(type.id) ? (
                     <Input
                       value={editDescription}
                       onChange={(e) => setEditDescription(e.target.value)}
@@ -197,7 +197,7 @@ export function SupplierTypeTable({ types }: SupplierTypeTableProps) {
                   )}
                 </TableCell>
                 <TableCell className="text-center">
-                  {editingId === type.id ? (
+                  {editingId === Number(type.id) ? (
                     <Input
                       type="number"
                       value={editSortOrder}
@@ -209,7 +209,7 @@ export function SupplierTypeTable({ types }: SupplierTypeTableProps) {
                   )}
                 </TableCell>
                 <TableCell className="text-center">
-                  {editingId === type.id ? (
+                  {editingId === Number(type.id) ? (
                     <Switch checked={editIsActive} onCheckedChange={setEditIsActive} />
                   ) : (
                     <Badge variant={type.isActive ? "default" : "secondary"}>
@@ -218,12 +218,12 @@ export function SupplierTypeTable({ types }: SupplierTypeTableProps) {
                   )}
                 </TableCell>
                 <TableCell>
-                  {editingId === type.id ? (
+                  {editingId === Number(type.id) ? (
                     <div className="flex items-center gap-1">
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => handleSaveEdit(type.id)}
+                        onClick={() => handleSaveEdit(Number(type.id))}
                         disabled={isPending}
                       >
                         <Save className="h-4 w-4" />

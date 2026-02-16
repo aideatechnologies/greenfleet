@@ -36,7 +36,8 @@ export default async function EmissionStandardsPage() {
         </div>
       </div>
 
-      <ConversionConfigTable configs={configs} />
+      {/* bigint→number at runtime via Prisma extension */}
+      <ConversionConfigTable configs={configs as any} />
     </div>
   );
 }

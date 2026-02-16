@@ -275,7 +275,7 @@ export function EmployeeTable({
                           onClick={() =>
                             setConfirmDialog({
                               open: true,
-                              employeeId: employee.id,
+                              employeeId: Number(employee.id),
                               employeeName: `${employee.firstName} ${employee.lastName}`,
                               action: "deactivate",
                             })
@@ -290,7 +290,7 @@ export function EmployeeTable({
                           onClick={() =>
                             setConfirmDialog({
                               open: true,
-                              employeeId: employee.id,
+                              employeeId: Number(employee.id),
                               employeeName: `${employee.firstName} ${employee.lastName}`,
                               action: "reactivate",
                             })

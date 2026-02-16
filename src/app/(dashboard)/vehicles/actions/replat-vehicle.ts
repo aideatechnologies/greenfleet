@@ -52,7 +52,7 @@ export async function replatVehicleAction(
 
     return {
       success: true,
-      data: { id: result.id, newPlate: result.plateNumber },
+      data: { id: Number(result.id), newPlate: result.plateNumber },
     };
   } catch (error) {
     const message =

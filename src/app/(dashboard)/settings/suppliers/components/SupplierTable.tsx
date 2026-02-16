@@ -222,7 +222,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
               )}
               <DropdownMenuItem
                 onClick={() =>
-                  handleToggleActive(row.original.id, row.original.isActive)
+                  handleToggleActive(Number(row.original.id), row.original.isActive)
                 }
               >
                 {row.original.isActive ? (

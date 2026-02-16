@@ -39,15 +39,15 @@ export default async function FuelTypeMappingsPage() {
           {canEdit && (
             <FuelTypeMappingForm
               mode="create"
-              macroFuelTypes={macroFuelTypes}
+              macroFuelTypes={macroFuelTypes as any}
             />
           )}
         </div>
       </div>
 
       <FuelTypeMappingTable
-        mappings={mappings}
-        macroFuelTypes={macroFuelTypes}
+        mappings={mappings as any}
+        macroFuelTypes={macroFuelTypes as any}
         canEdit={canEdit}
       />
     </div>

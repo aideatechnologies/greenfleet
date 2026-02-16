@@ -55,7 +55,7 @@ export async function getAvailableCatalogVehiclesAction(
     });
 
     const data: AvailableCatalogVehicle[] = vehicles.map((v) => ({
-      id: v.id,
+      id: Number(v.id),
       marca: v.marca,
       modello: v.modello,
       allestimento: v.allestimento,

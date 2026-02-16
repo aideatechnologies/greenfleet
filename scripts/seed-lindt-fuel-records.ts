@@ -366,7 +366,7 @@ async function main() {
 
         records.push({
           tenantId: org.id,
-          vehicleId: vehicle.id,
+          vehicleId: Number(vehicle.id),
           userId: adminUser.id,
           date: new Date(year, month, day),
           fuelType,

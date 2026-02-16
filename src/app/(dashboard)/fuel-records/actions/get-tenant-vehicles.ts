@@ -66,7 +66,7 @@ export async function getTenantVehiclesForFuelAction(): Promise<
 
       return {
         success: true,
-        data: mapVehicles(vehicles),
+        data: mapVehicles(vehicles as unknown as Parameters<typeof mapVehicles>[0]),
       };
     }
 
@@ -79,7 +79,7 @@ export async function getTenantVehiclesForFuelAction(): Promise<
 
     return {
       success: true,
-      data: mapVehicles(vehicles),
+      data: mapVehicles(vehicles as unknown as Parameters<typeof mapVehicles>[0]),
     };
   } catch {
     return {

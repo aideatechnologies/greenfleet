@@ -165,10 +165,10 @@ export function KmReadingTable({
     );
     for (let i = 0; i < sorted.length; i++) {
       if (i === 0) {
-        map.set(sorted[i].id, null);
+        map.set(Number(sorted[i].id), null);
       } else {
         const delta = sorted[i].odometerKm - sorted[i - 1].odometerKm;
-        map.set(sorted[i].id, delta);
+        map.set(Number(sorted[i].id), delta);
       }
     }
     return map;
@@ -250,7 +250,7 @@ export function KmReadingTable({
         id: "deltaKm",
         header: "Delta Km",
         cell: ({ row }) => {
-          const delta = deltaKmMap.get(row.original.id);
+          const delta = deltaKmMap.get(Number(row.original.id));
           if (delta === null || delta === undefined) {
             return <span className="text-muted-foreground">-</span>;
           }
@@ -325,7 +325,7 @@ export function KmReadingTable({
                         onClick={() =>
                           setConfirmDialog({
                             open: true,
-                            readingId: reading.id,
+                            readingId: Number(reading.id),
                             vehicleInfo: `${reading.vehicle.licensePlate} - ${kmFmt.format(reading.odometerKm)} km`,
                           })
                         }

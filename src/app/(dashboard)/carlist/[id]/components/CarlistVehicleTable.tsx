@@ -188,7 +188,7 @@ export function CarlistVehicleTable({
 
   // IDs of catalog vehicles already in the carlist
   const existingCatalogVehicleIds = useMemo(
-    () => vehicles.map((v) => v.catalogVehicleId),
+    () => vehicles.map((v) => Number(v.catalogVehicleId)),
     [vehicles]
   );
 

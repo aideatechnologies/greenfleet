@@ -359,22 +359,23 @@ async function loadFuelRecords(
   prisma: PrismaClientWithTenant,
   vehicleIds: number[],
   dateRange: { startDate: Date; endDate: Date }
-) {
-  return prisma.fuelRecord.findMany({
+): Promise<FuelRecordRow[]> {
+  const rows = await prisma.fuelRecord.findMany({
     where: {
       vehicleId: { in: vehicleIds },
       date: { gte: dateRange.startDate, lte: dateRange.endDate },
     },
     orderBy: { date: "asc" },
   });
+  return rows as unknown as FuelRecordRow[];
 }
 
 async function loadKmReadings(
   prisma: PrismaClientWithTenant,
   vehicleIds: number[],
   dateRange: { startDate: Date; endDate: Date }
-) {
-  return prisma.kmReading.findMany({
+): Promise<KmReadingRow[]> {
+  const rows = await prisma.kmReading.findMany({
     where: {
       vehicleId: { in: vehicleIds },
       date: { gte: dateRange.startDate, lte: dateRange.endDate },
@@ -382,6 +383,7 @@ async function loadKmReadings(
     orderBy: { date: "asc" },
     select: { vehicleId: true, odometerKm: true, date: true },
   });
+  return rows as unknown as KmReadingRow[];
 }
 
 async function loadEmissionContexts(
@@ -433,9 +435,9 @@ async function loadCarlistMappings(
 
   const map = new Map<number, Array<{ id: number; name: string }>>();
   for (const v of vehicles) {
-    const carlists = catalogToCarlist.get(v.catalogVehicleId);
+    const carlists = catalogToCarlist.get(Number(v.catalogVehicleId));
     if (carlists) {
-      map.set(v.id, carlists);
+      map.set(Number(v.id), carlists);
     }
   }
   return map;
@@ -1100,7 +1102,7 @@ export async function getFleetOverview(
     },
   });
   const carlistCountMap = new Map(
-    carlists.map((c) => [c.id, c._count.vehicles])
+    carlists.map((c) => [Number(c.id), c._count.vehicles])
   );
 
   const items: DrillDownItem[] = carlistAggs.map((agg) => ({
@@ -1285,7 +1287,7 @@ export async function getVehicleDetail(
   const imageUrl = vehicle.catalogVehicle.imageUrl ?? undefined;
 
   return {
-    vehicleId: vehicle.id,
+    vehicleId: Number(vehicle.id),
     plate: vehicle.licensePlate,
     makeModel,
     imageUrl,
@@ -1365,7 +1367,7 @@ export async function getTargetProgressForDashboard(
 
   return {
     target: {
-      id: target.id,
+      id: Number(target.id),
       description: target.description,
       scope: target.scope,
       period: target.period,

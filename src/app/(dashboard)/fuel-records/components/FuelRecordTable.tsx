@@ -408,7 +408,7 @@ export function FuelRecordTable({
                           if (record.quantityKwh != null) qtyParts.push(`${numberFmt.format(record.quantityKwh)} kWh`);
                           setConfirmDialog({
                             open: true,
-                            recordId: record.id,
+                            recordId: Number(record.id),
                             recordInfo: `${qtyParts.join(" + ") || "\u2014"} - ${record.vehicle.licensePlate}`,
                           });
                         }}

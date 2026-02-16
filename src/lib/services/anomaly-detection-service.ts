@@ -163,8 +163,8 @@ export async function detectFuelAnomalies(
     const previous = i > 0 ? records[i - 1] : null;
 
     const anomalies = checkFuelRecordAnomaly(
-      current,
-      previous,
+      current as unknown as FuelRecordForAnomaly,
+      previous as unknown as FuelRecordForAnomaly | null,
       consumptionRef
     );
     allAnomalies.push(...anomalies);

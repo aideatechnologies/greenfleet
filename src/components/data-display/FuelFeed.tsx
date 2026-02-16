@@ -204,7 +204,7 @@ export function FuelFeed({
                 variant={variant}
                 canEdit={canEdit}
                 showVehicle={showVehicle}
-                anomalies={anomalyMap.get(record.id)}
+                anomalies={anomalyMap.get(Number(record.id))}
                 fuelTypeLabels={fuelTypeLabels}
                 co2Factors={co2Factors}
               />
@@ -423,7 +423,7 @@ function FuelFeedItemCard({
 
   function handleDelete() {
     startTransition(async () => {
-      const result = await deleteFuelRecordAction(record.id);
+      const result = await deleteFuelRecordAction(Number(record.id));
       if (result.success) {
         toast.success("Rifornimento eliminato");
         setDeleteDialogOpen(false);

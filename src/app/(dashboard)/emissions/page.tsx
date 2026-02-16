@@ -85,7 +85,7 @@ async function EmissionContent() {
   return (
     <EmissionDashboard
       initialReport={initialReport}
-      carlists={carlists}
+      carlists={carlists as unknown as { id: number; name: string }[]}
       defaultStartDate={defaultStartDate}
       defaultEndDate={defaultEndDate}
       filterOptions={filterOptions}
