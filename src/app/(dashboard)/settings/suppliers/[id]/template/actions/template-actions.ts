@@ -30,7 +30,7 @@ import { logger } from "@/lib/utils/logger";
 // ---------------------------------------------------------------------------
 
 export async function getXmlTemplatesForSupplierAction(
-  supplierId: string
+  supplierId: number
 ): Promise<ActionResult<XmlTemplateWithSupplier[]>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -63,7 +63,7 @@ export async function getXmlTemplatesForSupplierAction(
 }
 
 export async function getXmlTemplateAction(
-  templateId: string
+  templateId: number
 ): Promise<ActionResult<XmlTemplateWithSupplier>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -169,7 +169,7 @@ export async function autoDetectSupplierAction(
 // ---------------------------------------------------------------------------
 
 export async function saveXmlTemplateAction(data: {
-  supplierId: string;
+  supplierId: number;
   name: string;
   description?: string;
   templateConfig: TemplateConfig;
@@ -224,7 +224,7 @@ export async function saveXmlTemplateAction(data: {
 }
 
 export async function updateXmlTemplateAction(
-  templateId: string,
+  templateId: number,
   data: {
     name?: string;
     description?: string;

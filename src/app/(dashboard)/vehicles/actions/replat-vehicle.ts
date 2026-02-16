@@ -11,7 +11,7 @@ import { logger } from "@/lib/utils/logger";
 
 export async function replatVehicleAction(
   input: unknown
-): Promise<ActionResult<{ id: string; newPlate: string }>> {
+): Promise<ActionResult<{ id: number; newPlate: string }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;

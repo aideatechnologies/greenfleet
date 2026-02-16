@@ -71,7 +71,7 @@ export const SCOPE_LABELS: Record<EmissionScope, string> = {
 
 export type EmissionContext = {
   macroFuelType: {
-    id: string;
+    id: number;
     name: string;
     scope: EmissionScope;
     unit: string;

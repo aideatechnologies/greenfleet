@@ -7,9 +7,9 @@ import { extractLinesFromXml } from "./xml-parser-service";
 // ---------------------------------------------------------------------------
 
 export type XmlTemplateWithSupplier = {
-  id: string;
+  id: number;
   tenantId: string;
-  supplierId: string;
+  supplierId: number;
   name: string;
   description: string | null;
   templateConfig: TemplateConfig;
@@ -19,7 +19,7 @@ export type XmlTemplateWithSupplier = {
   createdAt: Date;
   updatedAt: Date;
   supplier: {
-    id: string;
+    id: number;
     name: string;
     vatNumber: string | null;
   };
@@ -52,7 +52,7 @@ function toXmlTemplateWithSupplier(row: any): XmlTemplateWithSupplier {
 // ---------------------------------------------------------------------------
 
 export type CreateXmlTemplateInput = {
-  supplierId: string;
+  supplierId: number;
   name: string;
   description?: string;
   templateConfig: TemplateConfig;
@@ -99,7 +99,7 @@ export type UpdateXmlTemplateInput = {
 
 export async function updateXmlTemplate(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: UpdateXmlTemplateInput
 ): Promise<XmlTemplateWithSupplier> {
   const updateData: Record<string, unknown> = {};
@@ -130,7 +130,7 @@ export async function updateXmlTemplate(
 
 export async function getXmlTemplateById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<XmlTemplateWithSupplier | null> {
   const result = await prisma.supplierXmlTemplate.findFirst({
     where: { id },
@@ -151,7 +151,7 @@ export async function getXmlTemplateById(
 
 export async function getXmlTemplatesBySupplier(
   prisma: PrismaClientWithTenant,
-  supplierId: string
+  supplierId: number
 ): Promise<XmlTemplateWithSupplier[]> {
   const results = await prisma.supplierXmlTemplate.findMany({
     where: { supplierId },

@@ -43,8 +43,9 @@ export async function updateDocumentAction(
     };
   }
 
-  const documentId = formData.get("documentId") as string;
-  if (!documentId) {
+  const documentIdRaw = formData.get("documentId");
+  const documentId = documentIdRaw ? Number(documentIdRaw) : NaN;
+  if (!documentIdRaw || isNaN(documentId)) {
     return {
       success: false,
       error: "ID documento mancante",
@@ -106,7 +107,7 @@ export async function updateDocumentAction(
       const uploadResult = await uploadFile(
         file,
         tenantId,
-        existingDoc.vehicleId
+        String(existingDoc.vehicleId)
       );
       fileData = uploadResult;
 

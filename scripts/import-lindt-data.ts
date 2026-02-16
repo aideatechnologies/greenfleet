@@ -404,13 +404,12 @@ async function phase1(): Promise<{
   }
 
   // Ensure sentinel CatalogVehicle exists (for vehicles without catalog match)
-  const sentinel = await prisma.catalogVehicle.findUnique({
-    where: { id: "uncataloged-vehicle-sentinel" },
+  const sentinel = await prisma.catalogVehicle.findFirst({
+    where: { codiceInfocarData: "__UNCATALOGED__" },
   });
   if (!sentinel) {
     await prisma.catalogVehicle.create({
       data: {
-        id: "uncataloged-vehicle-sentinel",
         codiceInfocarData: "__UNCATALOGED__",
         marca: "Non catalogato",
         modello: "",
@@ -525,7 +524,7 @@ async function phase1(): Promise<{
 // ---------------------------------------------------------------------------
 // Phase 2: Suppliers
 // ---------------------------------------------------------------------------
-async function phase2(orgId: string): Promise<Map<string, string>> {
+async function phase2(orgId: string): Promise<Map<string, number>> {
   phaseHeader(2, "Fornitori");
   const s = newStats();
   stats["Fornitori"] = s;
@@ -624,15 +623,17 @@ async function phase2(orgId: string): Promise<Map<string, string>> {
   }
 
   // Maps for later phases: vatNumber -> supplierId, name -> supplierId
-  const supplierByVat = new Map<string, string>();
-  const supplierByName = new Map<string, string>();
+  const supplierByVat = new Map<string, number>();
+  const supplierByName = new Map<string, number>();
 
   if (DRY_RUN) {
+    let dryId = -1;
     for (const sup of suppliers) {
       info(`[DRY-RUN] Fornitore: ${sup.name} (${sup.type}, P.IVA: ${sup.vatNumber ?? "N/A"})`);
       s.created++;
-      if (sup.vatNumber) supplierByVat.set(sup.vatNumber, `dry-run-${sup.name}`);
-      supplierByName.set(normalizeSupplierName(sup.name), `dry-run-${sup.name}`);
+      if (sup.vatNumber) supplierByVat.set(sup.vatNumber, dryId);
+      supplierByName.set(normalizeSupplierName(sup.name), dryId);
+      dryId--;
     }
     printStats("Fornitori", s);
     return supplierByVat;
@@ -744,7 +745,7 @@ async function phase2(orgId: string): Promise<Map<string, string>> {
 // ---------------------------------------------------------------------------
 // Phase 3: Car Tiers
 // ---------------------------------------------------------------------------
-async function phase3(orgId: string): Promise<Map<string, string>> {
+async function phase3(orgId: string): Promise<Map<string, number>> {
   phaseHeader(3, "Fasce Car List");
   const s = newStats();
   stats["Fasce Car List"] = s;
@@ -752,7 +753,7 @@ async function phase3(orgId: string): Promise<Map<string, string>> {
   const rows = readExcel(FILES.carList);
 
   // tierName -> tierId
-  const tierMap = new Map<string, string>();
+  const tierMap = new Map<string, number>();
 
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i] as Record<string, unknown>;
@@ -768,7 +769,7 @@ async function phase3(orgId: string): Promise<Map<string, string>> {
 
     if (DRY_RUN) {
       info(`[DRY-RUN] Car Tier: ${name}`);
-      tierMap.set(name, `dry-run-tier-${i}`);
+      tierMap.set(name, -(i + 1));
       s.created++;
       continue;
     }
@@ -811,8 +812,8 @@ async function phase3(orgId: string): Promise<Map<string, string>> {
 // ---------------------------------------------------------------------------
 async function phase4(
   orgId: string,
-  tierMap: Map<string, string>
-): Promise<Map<string, string>> {
+  tierMap: Map<string, number>
+): Promise<Map<string, number>> {
   phaseHeader(4, "Dipendenti");
   const s = newStats();
   stats["Dipendenti"] = s;
@@ -820,7 +821,7 @@ async function phase4(
   const rows = readExcel(FILES.dipendenti);
 
   // employeeCode -> employeeId
-  const employeeMap = new Map<string, string>();
+  const employeeMap = new Map<string, number>();
 
   for (const row of rows) {
     const r = row as Record<string, unknown>;
@@ -863,7 +864,7 @@ async function phase4(
     }
 
     // Match car tier by partial match on the carList field
-    let carTierId: string | null = null;
+    let carTierId: number | null = null;
     if (carListField) {
       // Try exact match first
       if (tierMap.has(carListField)) {
@@ -887,7 +888,7 @@ async function phase4(
       info(
         `[DRY-RUN] Dipendente: ${firstName} ${lastName} (${codice}, ${type}${carTierId ? ", con car tier" : ""})`
       );
-      employeeMap.set(codice, `dry-run-emp-${codice}`);
+      employeeMap.set(codice, -1);
       s.created++;
       continue;
     }
@@ -1068,7 +1069,7 @@ function readVeicoliContratti(): ContractRow[] {
 
 async function phase5(
   vehicleRows: VehicleRow[]
-): Promise<Map<string, string>> {
+): Promise<Map<string, number>> {
   phaseHeader(5, "Catalogo Veicoli");
   const s = newStats();
   stats["Catalogo veicoli"] = s;
@@ -1095,7 +1096,7 @@ async function phase5(
   }
 
   // catalogKey -> catalogVehicleId
-  const catalogMap = new Map<string, string>();
+  const catalogMap = new Map<string, number>();
 
   info(`Combinazioni uniche (marca, modello, alimentazione): ${uniqueCombos.size}`);
 
@@ -1106,7 +1107,7 @@ async function phase5(
       info(
         `[DRY-RUN] CatalogVehicle: ${combo.marca} ${combo.modello} (${combo.fuelType}${isHybrid ? ", ibrido" : ""})`
       );
-      catalogMap.set(key, `dry-run-catalog-${key}`);
+      catalogMap.set(key, -1);
       s.created++;
       continue;
     }
@@ -1176,9 +1177,9 @@ async function phase6(
   orgId: string,
   vehicleRows: VehicleRow[],
   contractRows: ContractRow[],
-  catalogMap: Map<string, string>,
-  employeeMap: Map<string, string>
-): Promise<Map<string, string>> {
+  catalogMap: Map<string, number>,
+  employeeMap: Map<string, number>
+): Promise<Map<string, number>> {
   phaseHeader(6, "Veicoli Flotta");
   const s = newStats();
   stats["Veicoli flotta"] = s;
@@ -1195,9 +1196,14 @@ async function phase6(
   }
 
   // licensePlate -> vehicleId
-  const vehicleMap = new Map<string, string>();
+  const vehicleMap = new Map<string, number>();
 
-  const UNCATALOGED_VEHICLE_ID = "uncataloged-vehicle-sentinel";
+  // Resolve sentinel catalogVehicle ID for vehicles without catalog match
+  const sentinelVehicle = await prisma.catalogVehicle.findFirst({
+    where: { codiceInfocarData: "__UNCATALOGED__" },
+    select: { id: true },
+  });
+  const UNCATALOGED_VEHICLE_ID = sentinelVehicle?.id ?? -1;
 
   for (const v of vehicleRows) {
     const ft = v.fuelType ?? "BENZINA";
@@ -1217,7 +1223,7 @@ async function phase6(
     }
 
     // Find assigned employee from contract data
-    let assignedEmployeeId: string | null = null;
+    let assignedEmployeeId: number | null = null;
     if (contractData?.dipendenteCode) {
       assignedEmployeeId = employeeMap.get(contractData.dipendenteCode) ?? null;
     }
@@ -1226,7 +1232,7 @@ async function phase6(
       info(
         `[DRY-RUN] TenantVehicle: ${v.targa} (${v.marca} ${v.modello}, ${ft})`
       );
-      vehicleMap.set(v.targa, `dry-run-vehicle-${v.targa}`);
+      vehicleMap.set(v.targa, -1);
       s.created++;
       continue;
     }
@@ -1334,16 +1340,16 @@ async function phase6(
 async function phase7(
   orgId: string,
   contractRows: ContractRow[],
-  vehicleMap: Map<string, string>,
-  employeeMap: Map<string, string>
+  vehicleMap: Map<string, number>,
+  employeeMap: Map<string, number>
 ): Promise<void> {
   phaseHeader(7, "Contratti");
   const s = newStats();
   stats["Contratti"] = s;
 
   // Load suppliers for this tenant to build lookup maps
-  let supplierByVat = new Map<string, string>();
-  let supplierByName = new Map<string, string>();
+  let supplierByVat = new Map<string, number>();
+  let supplierByName = new Map<string, number>();
 
   if (!DRY_RUN) {
     const allSuppliers = await prisma.supplier.findMany({
@@ -1395,7 +1401,7 @@ async function phase7(
       : "LUNGO_TERMINE";
 
     // Resolve supplier
-    let supplierId: string | null = null;
+    let supplierId: number | null = null;
     if (cr.fornitoreVat) {
       supplierId = supplierByVat.get(cr.fornitoreVat) ?? null;
     }
@@ -1530,8 +1536,8 @@ async function phase7(
 // ---------------------------------------------------------------------------
 async function phase8(
   orgId: string,
-  vehicleMap: Map<string, string>,
-  employeeMap: Map<string, string>
+  vehicleMap: Map<string, number>,
+  employeeMap: Map<string, number>
 ): Promise<void> {
   phaseHeader(8, "Carte Carburante");
   const s = newStats();
@@ -1540,7 +1546,7 @@ async function phase8(
   const rows = readExcel(FILES.cartaCarburante);
 
   // Load suppliers for issuer matching
-  let supplierByName = new Map<string, string>();
+  let supplierByName = new Map<string, number>();
   if (!DRY_RUN) {
     const allSuppliers = await prisma.supplier.findMany({
       where: { tenantId: orgId },
@@ -1576,7 +1582,7 @@ async function phase8(
     }
 
     // Resolve vehicle
-    let assignedVehicleId: string | null = null;
+    let assignedVehicleId: number | null = null;
     if (targa) {
       assignedVehicleId = vehicleMap.get(targa) ?? null;
       if (!assignedVehicleId) {
@@ -1586,7 +1592,7 @@ async function phase8(
     }
 
     // Resolve employee from "Surname Name (code)" format
-    let assignedEmployeeId: string | null = null;
+    let assignedEmployeeId: number | null = null;
     if (assegnatario) {
       const empCode = extractEmployeeCode(assegnatario);
       if (empCode && !isMissingEmployeeCode(empCode)) {
@@ -1601,7 +1607,7 @@ async function phase8(
     }
 
     // Resolve supplier from issuer name
-    let supplierId: string | null = null;
+    let supplierId: number | null = null;
     if (!DRY_RUN) {
       supplierId = supplierByName.get(normalizeSupplierName(issuer)) ?? null;
     }

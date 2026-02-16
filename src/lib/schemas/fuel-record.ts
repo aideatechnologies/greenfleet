@@ -6,7 +6,7 @@ import { DEFAULT_PAGE_SIZE } from "@/lib/utils/constants";
 // ---------------------------------------------------------------------------
 
 export const createFuelRecordSchema = z.object({
-  vehicleId: z.string().min(1, { error: "Il veicolo e obbligatorio" }),
+  vehicleId: z.coerce.number({ error: "Il veicolo e obbligatorio" }),
   date: z.coerce.date({ error: "La data e obbligatoria" }),
   fuelType: z.string().min(1, { error: "Il tipo carburante e obbligatorio" }),
   quantityLiters: z
@@ -25,6 +25,10 @@ export const createFuelRecordSchema = z.object({
     .number({ error: "Il chilometraggio e obbligatorio" })
     .int({ error: "Il chilometraggio deve essere un numero intero" })
     .nonnegative({ error: "Il chilometraggio non puo essere negativo" }),
+  fuelCardId: z
+    .coerce.number()
+    .nullable()
+    .optional(),
   notes: z
     .string()
     .max(1000, { error: "Le note non possono superare 1000 caratteri" })
@@ -58,6 +62,10 @@ export const updateFuelRecordSchema = z.object({
     .number({ error: "Il chilometraggio e obbligatorio" })
     .int({ error: "Il chilometraggio deve essere un numero intero" })
     .nonnegative({ error: "Il chilometraggio non puo essere negativo" }),
+  fuelCardId: z
+    .coerce.number()
+    .nullable()
+    .optional(),
   notes: z
     .string()
     .max(1000, { error: "Le note non possono superare 1000 caratteri" })
@@ -73,7 +81,7 @@ export type UpdateFuelRecordData = z.output<typeof updateFuelRecordSchema>;
 // ---------------------------------------------------------------------------
 
 export const fuelRecordFilterSchema = z.object({
-  vehicleId: z.string().optional(),
+  vehicleId: z.coerce.number().optional(),
   dateFrom: z.coerce.date().optional(),
   dateTo: z.coerce.date().optional(),
   fuelType: z

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ReplatDialog } from "./ReplatDialog";
 
 type PlateHistoryPanelProps = {
-  vehicleId: string;
+  vehicleId: number;
   currentPlate: string;
   canEdit: boolean;
 };

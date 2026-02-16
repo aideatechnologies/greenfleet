@@ -66,10 +66,10 @@ const editFormSchema = z.object({
     error: "Stato non valido",
   }),
   assignedEmployeeId: z
-    .string()
+    .coerce.number()
     .nullable()
     .optional()
-    .transform((val) => (val === "" ? null : val)),
+    .transform((val) => (val === 0 ? null : val)),
   notes: z
     .string()
     .max(500, { error: "Le note non possono superare 500 caratteri" })
@@ -83,7 +83,7 @@ type FormValues = {
   licensePlate: string;
   registrationDate: Date;
   status: string;
-  assignedEmployeeId: string | null | undefined;
+  assignedEmployeeId: number | null | undefined;
   notes: string | null | undefined;
 };
 
@@ -103,7 +103,7 @@ export function VehicleEditSection({
   const [employeeSearch, setEmployeeSearch] = useState("");
   const [employeeOpen, setEmployeeOpen] = useState(false);
 
-  const isUncataloged = vehicle.catalogVehicleId === UNCATALOGED_VEHICLE_ID;
+  const isUncataloged = vehicle.catalogVehicleId === Number(UNCATALOGED_VEHICLE_ID);
 
   function handleAssociateCatalog(catalogVehicle: CatalogVehicleWithEngines) {
     startTransition(async () => {
@@ -125,14 +125,14 @@ export function VehicleEditSection({
   }
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(editFormSchema) as Resolver<FormValues>,
+    resolver: zodResolver(editFormSchema) as unknown as Resolver<FormValues>,
     defaultValues: {
       licensePlate: vehicle.licensePlate,
       registrationDate: new Date(vehicle.registrationDate),
       status: vehicle.status,
       assignedEmployeeId: vehicle.assignedEmployeeId ?? null,
       notes: vehicle.notes ?? "",
-    },
+    } as FormValues,
     mode: "onBlur",
   });
 
@@ -176,7 +176,7 @@ export function VehicleEditSection({
       status: vehicle.status,
       assignedEmployeeId: vehicle.assignedEmployeeId ?? null,
       notes: vehicle.notes ?? "",
-    });
+    } as FormValues);
     setIsEditing(false);
   }
 

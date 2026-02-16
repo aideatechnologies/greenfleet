@@ -36,7 +36,17 @@ export async function GET(
   }
 
   // 2. Get document (tenant-scoped)
-  const { id } = await params;
+  const { id: idStr } = await params;
+  const id = Number(idStr);
+  if (isNaN(id)) {
+    return new Response(
+      JSON.stringify({ error: "ID documento non valido" }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
   const tenantPrisma = getPrismaForTenant(organizationId);
   const document = await getDocumentById(tenantPrisma, id);
 

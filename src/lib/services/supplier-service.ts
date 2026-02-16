@@ -54,7 +54,7 @@ export async function createSupplier(
 
 export async function updateSupplier(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: UpdateSupplierInput
 ): Promise<SupplierWithType> {
   return prisma.supplier.update({
@@ -80,7 +80,7 @@ export async function updateSupplier(
 
 export async function getSupplierById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<SupplierWithType | null> {
   const result = await prisma.supplier.findFirst({
     where: { id },
@@ -170,7 +170,7 @@ export async function getSuppliersByTypeCode(
 
 export async function toggleSupplierActive(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   isActive: boolean
 ): Promise<SupplierWithType> {
   return prisma.supplier.update({

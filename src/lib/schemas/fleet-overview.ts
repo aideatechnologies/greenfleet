@@ -16,7 +16,7 @@ export const fleetOverviewFilterSchema = z.object({
   contractStatus: z
     .enum(["HAS_CONTRACT", "NO_CONTRACT", "EXPIRING"] as [string, ...string[]])
     .optional(),
-  carlistId: z.string().optional(),
+  carlistId: z.coerce.number().optional(),
   page: z.coerce.number().min(1).default(1),
   pageSize: z.coerce.number().min(1).max(100).default(DEFAULT_PAGE_SIZE),
   sortBy: z

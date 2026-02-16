@@ -14,7 +14,7 @@ import { getPrismaForTenant } from "@/lib/db/client";
 import { logger } from "@/lib/utils/logger";
 
 export async function updateContractAction(
-  contractId: string,
+  contractId: number,
   input: unknown
 ): Promise<ActionResult<ContractWithDetails>> {
   const authResult = await requireAuth();

@@ -30,7 +30,7 @@ const AUDITABLE_FIELDS = [
 ];
 
 export async function updateEmissionFactorAction(
-  id: string,
+  id: number,
   input: unknown
 ): Promise<ActionResult<EmissionFactor>> {
   const authResult = await requireAuth();
@@ -83,7 +83,7 @@ export async function updateEmissionFactorAction(
         userId: ctx.userId,
         action: "emission_factor.updated",
         entityType: "EmissionFactor",
-        entityId: id,
+        entityId: String(id),
         changes,
       });
     }

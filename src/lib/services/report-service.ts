@@ -43,7 +43,7 @@ import { getFuelTypeLabels } from "@/lib/utils/fuel-type-label";
 // ---------------------------------------------------------------------------
 
 type VehicleDataRow = {
-  vehicleId: string;
+  vehicleId: number;
   label: string;
   licensePlate: string;
   fuelType: string;
@@ -54,7 +54,7 @@ type VehicleDataRow = {
   kmTravelled: number;
   emissionFactor: number; // backward-compat: total kgCO2e / L approximation
   emissionContexts: EmissionContext[];
-  carlistIds: string[];
+  carlistIds: number[];
   carlistNames: string[];
   periodKey: string;
   periodLabel: string;
@@ -229,7 +229,7 @@ export async function getEmissionBreakdown(
 // ---------------------------------------------------------------------------
 
 type VehicleWithCatalog = {
-  id: string;
+  id: number;
   licensePlate: string;
   catalogVehicle: {
     marca: string;
@@ -357,7 +357,7 @@ async function loadVehicles(
 
 async function loadFuelRecords(
   prisma: PrismaClientWithTenant,
-  vehicleIds: string[],
+  vehicleIds: number[],
   dateRange: { startDate: Date; endDate: Date }
 ) {
   return prisma.fuelRecord.findMany({
@@ -371,7 +371,7 @@ async function loadFuelRecords(
 
 async function loadKmReadings(
   prisma: PrismaClientWithTenant,
-  vehicleIds: string[],
+  vehicleIds: number[],
   dateRange: { startDate: Date; endDate: Date }
 ) {
   return prisma.kmReading.findMany({
@@ -399,7 +399,7 @@ async function loadEmissionContexts(
 
 async function loadCarlistMappings(
   prisma: PrismaClientWithTenant,
-  vehicleIds: string[]
+  vehicleIds: number[]
 ) {
   const vehicles = await prisma.tenantVehicle.findMany({
     where: { id: { in: vehicleIds } },
@@ -418,20 +418,20 @@ async function loadCarlistMappings(
   });
 
   const catalogToCarlist = new Map<
-    string,
-    Array<{ id: string; name: string }>
+    number,
+    Array<{ id: number; name: string }>
   >();
   for (const entry of entries) {
     const e = entry as unknown as {
-      catalogVehicleId: string;
-      carlist: { id: string; name: string };
+      catalogVehicleId: number;
+      carlist: { id: number; name: string };
     };
     const existing = catalogToCarlist.get(e.catalogVehicleId) ?? [];
     existing.push({ id: e.carlist.id, name: e.carlist.name });
     catalogToCarlist.set(e.catalogVehicleId, existing);
   }
 
-  const map = new Map<string, Array<{ id: string; name: string }>>();
+  const map = new Map<number, Array<{ id: number; name: string }>>();
   for (const v of vehicles) {
     const carlists = catalogToCarlist.get(v.catalogVehicleId);
     if (carlists) {
@@ -446,7 +446,7 @@ async function loadCarlistMappings(
 // ---------------------------------------------------------------------------
 
 type FuelRecordRow = {
-  vehicleId: string;
+  vehicleId: number;
   date: Date;
   fuelType: string;
   quantityLiters: number;
@@ -455,7 +455,7 @@ type FuelRecordRow = {
 };
 
 type KmReadingRow = {
-  vehicleId: string;
+  vehicleId: number;
   odometerKm: number;
   date: Date;
 };
@@ -465,7 +465,7 @@ function buildDataRows(
   fuelRecords: FuelRecordRow[],
   kmReadings: KmReadingRow[],
   emissionContexts: Map<string, EmissionContext[]>,
-  carlistMappings: Map<string, Array<{ id: string; name: string }>>,
+  carlistMappings: Map<number, Array<{ id: number; name: string }>>,
   dateRange: { startDate: Date; endDate: Date },
   granularity: PeriodGranularity,
   fuelTypeLabels: Map<string, string>
@@ -573,8 +573,8 @@ function aggregate(
   fuelTypeLabels: Map<string, string>
 ): EmissionAggregation[] {
   const groups = new Map<
-    string,
-    { label: string; id: string; rows: VehicleDataRow[] }
+    string | number,
+    { label: string; id: string | number; rows: VehicleDataRow[] }
   >();
 
   for (const row of rows) {
@@ -718,7 +718,7 @@ function getGroupKeys(
   row: VehicleDataRow,
   level: ReportParams["aggregationLevel"],
   fuelTypeLabels: Map<string, string>
-): Array<{ id: string; label: string }> {
+): Array<{ id: string | number; label: string }> {
   switch (level) {
     case "FLEET":
       return [{ id: "__fleet__", label: "Totale Parco" }];
@@ -857,7 +857,7 @@ function buildBreakdown(rows: VehicleDataRow[], fuelTypeLabels: Map<string, stri
 
 function computeMetadata(
   aggregations: EmissionAggregation[],
-  vehicles: Array<{ id: string }>,
+  vehicles: Array<{ id: number }>,
   dateRange: { startDate: Date; endDate: Date }
 ): ReportResult["metadata"] {
   let totalTheoretical = 0;
@@ -1035,8 +1035,8 @@ function generatePeriods(
 // Utility helpers
 // ---------------------------------------------------------------------------
 
-function groupBy<T>(items: T[], keyFn: (item: T) => string): Map<string, T[]> {
-  const map = new Map<string, T[]>();
+function groupBy<T, K = string>(items: T[], keyFn: (item: T) => K): Map<K, T[]> {
+  const map = new Map<K, T[]>();
   for (const item of items) {
     const key = keyFn(item);
     const existing = map.get(key) ?? [];
@@ -1113,7 +1113,7 @@ export async function getFleetOverview(
     totalKm: agg.totalKm,
     contributionPercentage:
       totalReal === 0 ? 0 : round2((agg.realEmissions / totalReal) * 100),
-    childCount: carlistCountMap.get(agg.id) ?? 0,
+    childCount: carlistCountMap.get(agg.id as number) ?? 0,
   }));
 
   items.sort((a, b) => b.realEmissions - a.realEmissions);
@@ -1129,7 +1129,7 @@ export async function getFleetOverview(
 
 export async function getCarlistDetail(
   prisma: PrismaClientWithTenant,
-  carlistId: string,
+  carlistId: number,
   dateRange: { startDate: Date; endDate: Date }
 ): Promise<DrillDownResult> {
   const carlist = await prisma.carlist.findUnique({
@@ -1172,7 +1172,7 @@ export async function getCarlistDetail(
 
 export async function getVehicleDetail(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   dateRange: { startDate: Date; endDate: Date }
 ): Promise<VehicleEmissionDetail | null> {
   const vehicle = await prisma.tenantVehicle.findUnique({
@@ -1314,11 +1314,11 @@ export async function getVehicleDetail(
 export async function getTargetProgressForDashboard(
   prisma: PrismaClientWithTenant,
   scope: TargetScope,
-  scopeId?: string,
+  scopeId?: number,
   dateRange?: { startDate: Date; endDate: Date }
 ): Promise<{
   target: {
-    id: string;
+    id: number;
     description: string | null;
     scope: string;
     period: string;

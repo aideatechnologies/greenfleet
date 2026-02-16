@@ -15,7 +15,7 @@ import { logger } from "@/lib/utils/logger";
 const BATCH_SIZE = 500;
 
 type ImportRowInput = {
-  vehicleId: string;
+  vehicleId: number;
   licensePlate: string;
   date: string; // ISO string
   fuelType: string;
@@ -172,7 +172,7 @@ export async function importFuelRecordsAction(
  * Used by the import wizard to resolve license plates to vehicleIds.
  */
 export async function getTenantVehiclePlatesAction(): Promise<
-  ActionResult<{ id: string; licensePlate: string }[]>
+  ActionResult<{ id: number; licensePlate: string }[]>
 > {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -206,7 +206,7 @@ export async function getTenantVehiclePlatesAction(): Promise<
 
     return {
       success: true,
-      data: vehicles as { id: string; licensePlate: string }[],
+      data: vehicles as { id: number; licensePlate: string }[],
     };
   } catch {
     return {

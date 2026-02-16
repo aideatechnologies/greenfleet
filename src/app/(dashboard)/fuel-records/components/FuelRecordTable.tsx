@@ -82,17 +82,24 @@ type FuelRecordTableProps = {
   };
   canEdit: boolean;
   fuelTypeLabels?: Record<string, string>;
+  co2Factors?: Record<string, number>;
 };
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
+const co2Fmt = new Intl.NumberFormat("it-IT", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 export function FuelRecordTable({
   records,
   pagination,
   canEdit,
   fuelTypeLabels = {},
+  co2Factors = {},
 }: FuelRecordTableProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -105,7 +112,7 @@ export function FuelRecordTable({
   // Delete confirm dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
-    recordId: string;
+    recordId: number | string;
     recordInfo: string;
   }>({ open: false, recordId: "", recordInfo: "" });
   const [isDeleting, setIsDeleting] = useState(false);
@@ -134,7 +141,7 @@ export function FuelRecordTable({
   async function handleConfirmDelete() {
     setIsDeleting(true);
     try {
-      const result = await deleteFuelRecordAction(confirmDialog.recordId);
+      const result = await deleteFuelRecordAction(Number(confirmDialog.recordId));
       if (result.success) {
         toast.success("Rifornimento eliminato");
         router.refresh();
@@ -305,6 +312,46 @@ export function FuelRecordTable({
             {kmFmt.format(row.original.odometerKm)} km
           </span>
         ),
+      },
+      {
+        id: "co2Emissions",
+        accessorFn: (row) =>
+          row.quantityLiters * (co2Factors[row.fuelType] ?? 0),
+        header: ({ column }) => (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="-ml-3 h-8"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            CO2 (kg)
+            <ArrowUpDown className="ml-2 h-3 w-3" />
+          </Button>
+        ),
+        cell: ({ row }) => {
+          const factor = co2Factors[row.original.fuelType] ?? 0;
+          const co2 = row.original.quantityLiters * factor;
+          return co2 > 0 ? (
+            <span className="font-medium tabular-nums">
+              {co2Fmt.format(co2)} kg
+            </span>
+          ) : (
+            <span className="text-muted-foreground">{"\u2014"}</span>
+          );
+        },
+      },
+      {
+        id: "fuelCard",
+        accessorFn: (row) => row.fuelCard?.cardNumber ?? "",
+        header: "N. Carta",
+        cell: ({ row }) => {
+          const card = row.original.fuelCard;
+          return card ? (
+            <span className="font-mono text-xs">{card.cardNumber}</span>
+          ) : (
+            <span className="text-muted-foreground">{"\u2014"}</span>
+          );
+        },
       },
       {
         id: "source",

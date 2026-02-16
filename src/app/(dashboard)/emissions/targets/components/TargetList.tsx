@@ -59,9 +59,9 @@ type SerializedProgress = {
 };
 
 export type TargetWithProgress = {
-  id: string;
+  id: number;
   scope: string;
-  carlistId: string | null;
+  carlistId: number | null;
   carlistName: string | null;
   targetValue: number;
   period: string;
@@ -112,7 +112,7 @@ export function TargetList({ targets, canEdit }: TargetListProps) {
   const [isPending, startTransition] = useTransition();
   const [createOpen, setCreateOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<TargetWithProgress | null>(null);
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
   function handleDelete() {
     if (!deleteTargetId) return;

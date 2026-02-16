@@ -5,14 +5,16 @@ import { getSessionContext, isTenantAdmin } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
 import { getFuelCardById } from "@/lib/services/fuel-card-service";
 import { FuelCardForm } from "../../components/FuelCardForm";
-import type { CreateFuelCardInput } from "@/lib/schemas/fuel-card";
 
 export default async function EditFuelCardPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) notFound();
+
   const ctx = await getSessionContext();
   if (!ctx || !ctx.organizationId) redirect("/login");
 
@@ -24,15 +26,15 @@ export default async function EditFuelCardPage({
   const fuelCard = await getFuelCardById(prisma, id);
   if (!fuelCard) notFound();
 
-  const defaultValues: CreateFuelCardInput = {
+  const defaultValues = {
     cardNumber: fuelCard.cardNumber,
     issuer: fuelCard.issuer,
-    supplierId: fuelCard.supplierId ?? "",
+    supplierId: fuelCard.supplierId != null ? String(fuelCard.supplierId) : "",
     expiryDate: fuelCard.expiryDate ? new Date(fuelCard.expiryDate) : undefined,
     status: fuelCard.status as "ACTIVE" | "EXPIRED" | "SUSPENDED",
     assignmentType: fuelCard.assignmentType as "VEHICLE" | "EMPLOYEE" | "JOLLY",
-    assignedVehicleId: fuelCard.assignedVehicleId ?? "",
-    assignedEmployeeId: fuelCard.assignedEmployeeId ?? "",
+    assignedVehicleId: fuelCard.assignedVehicleId != null ? String(fuelCard.assignedVehicleId) : "",
+    assignedEmployeeId: fuelCard.assignedEmployeeId != null ? String(fuelCard.assignedEmployeeId) : "",
     notes: fuelCard.notes ?? "",
   };
 
@@ -55,7 +57,7 @@ export default async function EditFuelCardPage({
         </p>
       </div>
 
-      <FuelCardForm mode="edit" fuelCardId={id} defaultValues={defaultValues} />
+      <FuelCardForm mode="edit" fuelCardId={String(id)} defaultValues={defaultValues} />
     </div>
   );
 }

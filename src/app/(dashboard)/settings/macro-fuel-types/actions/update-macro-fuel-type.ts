@@ -18,7 +18,7 @@ import { logger } from "@/lib/utils/logger";
 const AUDITABLE_FIELDS = ["name", "scope", "unit", "color", "sortOrder", "isActive"];
 
 export async function updateMacroFuelTypeAction(
-  id: string,
+  id: number,
   input: unknown
 ): Promise<ActionResult<MacroFuelType>> {
   const authResult = await requireAuth();
@@ -68,7 +68,7 @@ export async function updateMacroFuelTypeAction(
         userId: ctx.userId,
         action: "macro_fuel_type.updated",
         entityType: "MacroFuelType",
-        entityId: id,
+        entityId: String(id),
         changes,
       });
     }

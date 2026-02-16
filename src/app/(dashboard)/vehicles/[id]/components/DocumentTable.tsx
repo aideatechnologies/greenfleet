@@ -79,7 +79,7 @@ type SerializedDocument = {
 type DocumentTableProps = {
   documents: SerializedDocument[];
   summary: DocumentSummary;
-  vehicleId: string;
+  vehicleId: number;
   canEdit: boolean;
 };
 
@@ -140,7 +140,7 @@ export function DocumentTable({
 
   function handleDelete(id: string) {
     startTransition(async () => {
-      const result = await deleteDocumentAction(id, vehicleId);
+      const result = await deleteDocumentAction(Number(id), Number(vehicleId));
       if (result.success) {
         toast.success("Documento eliminato");
         router.refresh();

@@ -132,7 +132,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
     }, SEARCH_DEBOUNCE_MS);
   }
 
-  async function handleToggleStatus(id: string, newStatus: string) {
+  async function handleToggleStatus(id: number, newStatus: string) {
     const result = await toggleFuelCardStatusAction(id, newStatus);
     if (result.success) {
       toast.success("Stato carta aggiornato");

@@ -13,7 +13,7 @@ import type { ContractType } from "@/types/contract";
 // ---------------------------------------------------------------------------
 
 interface ContractItem {
-  id: string;
+  id: number;
   type: string;
   status: string;
   supplier: string | null;

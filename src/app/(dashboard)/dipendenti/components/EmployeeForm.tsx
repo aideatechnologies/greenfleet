@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
@@ -38,7 +38,7 @@ export function EmployeeForm(props: EmployeeFormProps) {
   const isEdit = props.mode === "edit";
 
   const form = useForm<CreateEmployeeInput>({
-    resolver: zodResolver(createEmployeeSchema),
+    resolver: zodResolver(createEmployeeSchema) as unknown as Resolver<CreateEmployeeInput>,
     defaultValues: isEdit
       ? props.defaultValues
       : {
@@ -47,6 +47,8 @@ export function EmployeeForm(props: EmployeeFormProps) {
           email: "",
           phone: "",
           fiscalCode: "",
+          matricola: "",
+          avgMonthlyKm: undefined,
         },
     mode: "onBlur",
   });
@@ -169,6 +171,56 @@ export function EmployeeForm(props: EmployeeFormProps) {
                     }
                     className="font-mono uppercase"
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="matricola"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Matricola</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="MAT-001"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="avgMonthlyKm"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Km medi mensili</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      step="1"
+                      min="0"
+                      placeholder="0"
+                      {...field}
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        field.onChange(
+                          val === "" ? undefined : parseInt(val, 10)
+                        );
+                      }}
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      km
+                    </span>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

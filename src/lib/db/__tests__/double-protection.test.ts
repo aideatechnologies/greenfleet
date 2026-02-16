@@ -15,7 +15,8 @@ describe("RLS Context Helper — Unit Tests", () => {
   it("should reject empty tenantId", () => {
     // setTenantContext should throw if tenantId is empty
     expect(() => {
-      if (!("" as string)) {
+      const val = "" as string;
+      if (!val) {
         throw new Error("tenantId is required for RLS context");
       }
     }).toThrow("tenantId is required for RLS context");

@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 // ---------------------------------------------------------------------------
 
 interface VehicleData {
-  id: string;
+  id: number;
   marca: string;
   modello: string;
   allestimento?: string | null;
@@ -32,7 +32,7 @@ interface EngineData {
 }
 
 interface AssignedEmployee {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
 }

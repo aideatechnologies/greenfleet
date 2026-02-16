@@ -6,7 +6,7 @@ import { DEFAULT_PAGE_SIZE } from "@/lib/utils/constants";
 // ---------------------------------------------------------------------------
 
 export const createKmReadingSchema = z.object({
-  vehicleId: z.string().min(1, { error: "Il veicolo e obbligatorio" }),
+  vehicleId: z.coerce.number({ error: "Il veicolo e obbligatorio" }),
   date: z.coerce.date({ error: "La data e obbligatoria" }),
   odometerKm: z
     .number({ error: "Il chilometraggio e obbligatorio" })
@@ -47,7 +47,7 @@ export type UpdateKmReadingData = z.output<typeof updateKmReadingSchema>;
 // ---------------------------------------------------------------------------
 
 export const kmReadingFilterSchema = z.object({
-  vehicleId: z.string().optional(),
+  vehicleId: z.coerce.number().optional(),
   dateFrom: z.coerce.date().optional(),
   dateTo: z.coerce.date().optional(),
   search: z.string().optional(),

@@ -17,7 +17,7 @@ export const CODALL_TIMEOUT_MS = parseInt(
 );
 
 /** Sentinel CatalogVehicle ID for vehicles without catalog association */
-export const UNCATALOGED_VEHICLE_ID = "uncataloged-vehicle-sentinel";
+export const UNCATALOGED_VEHICLE_ID = 0;
 
 /** Toast auto-dismiss delay for success messages */
 export const TOAST_SUCCESS_DURATION = 5000;

@@ -81,7 +81,7 @@ export async function createEmissionTargetAction(
       userId: ctx.userId,
       action: "emission_target.created",
       entityType: "EmissionTarget",
-      entityId: target.id,
+      entityId: String(target.id),
       data: {
         scope: target.scope,
         carlistId: target.carlistId,

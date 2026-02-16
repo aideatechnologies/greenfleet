@@ -43,15 +43,15 @@ import { SCOPE_LABELS, type EmissionScope } from "@/types/emission";
 import { formatNumber } from "@/lib/utils/format";
 
 type MacroFuelTypeRef = {
-  id: string;
+  id: number;
   name: string;
   scope: number;
   unit: string;
 };
 
 type EmissionFactorRow = {
-  id: string;
-  macroFuelTypeId: string | null;
+  id: number;
+  macroFuelTypeId: number | null;
   macroFuelType?: MacroFuelTypeRef | null;
   fuelType?: string | null;
   co2: number;
@@ -93,9 +93,9 @@ export function EmissionFactorTable({
   const router = useRouter();
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean;
-    id: string;
+    id: number;
     label: string;
-  }>({ open: false, id: "", label: "" });
+  }>({ open: false, id: 0, label: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleDelete() {
@@ -112,7 +112,7 @@ export function EmissionFactorTable({
       toast.error("Errore nell'eliminazione");
     } finally {
       setIsLoading(false);
-      setDeleteDialog({ open: false, id: "", label: "" });
+      setDeleteDialog({ open: false, id: 0, label: "" });
     }
   }
 
@@ -249,7 +249,7 @@ export function EmissionFactorTable({
                             fuelTypeOptions={fuelTypeOptions}
                             defaultValues={{
                               macroFuelTypeId:
-                                factor.macroFuelTypeId ?? "",
+                                factor.macroFuelTypeId ?? 0,
                               fuelType: factor.fuelType ?? "",
                               co2: factor.co2,
                               ch4: factor.ch4,

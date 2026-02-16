@@ -40,10 +40,21 @@ export const createEmployeeSchema = z.object({
       ])
     )
     .optional(),
+  matricola: z
+    .string()
+    .max(50, { error: "La matricola non puo superare 50 caratteri" })
+    .nullable()
+    .optional()
+    .transform((val) => (val === "" ? null : val)),
+  avgMonthlyKm: z
+    .number()
+    .nonnegative({ error: "I km medi mensili non possono essere negativi" })
+    .nullable()
+    .optional(),
 });
 
 export const updateEmployeeSchema = createEmployeeSchema.extend({
-  id: z.string().min(1, { error: "ID dipendente obbligatorio" }),
+  id: z.coerce.number({ error: "ID dipendente obbligatorio" }),
 });
 
 export const employeeFilterSchema = z.object({

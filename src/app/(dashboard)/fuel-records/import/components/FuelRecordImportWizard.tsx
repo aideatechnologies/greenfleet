@@ -165,7 +165,7 @@ export function FuelRecordImportWizard() {
       }
 
       // Build plate -> vehicleId map
-      const vehiclePlateMap = new Map<string, string>();
+      const vehiclePlateMap = new Map<string, number>();
       for (const v of platesResult.data) {
         vehiclePlateMap.set(normalizeLicensePlate(v.licensePlate), v.id);
       }

@@ -35,7 +35,7 @@ export async function buildExportData(
     aggregationLevel: AggregationLevel;
     includeVehicleDetail: boolean;
     includeMethodology: boolean;
-    carlistId?: string;
+    carlistId?: number;
   }
 ): Promise<ReportExportData> {
   const reportParams: ReportParams = {
@@ -201,14 +201,14 @@ async function buildVehicleDetails(
   }
 
   // Group by vehicle
-  const fuelByVehicle = new Map<string, typeof fuelRecords>();
+  const fuelByVehicle = new Map<number, typeof fuelRecords>();
   for (const r of fuelRecords) {
     const arr = fuelByVehicle.get(r.vehicleId) ?? [];
     arr.push(r);
     fuelByVehicle.set(r.vehicleId, arr);
   }
 
-  const kmByVehicle = new Map<string, typeof kmReadings>();
+  const kmByVehicle = new Map<number, typeof kmReadings>();
   for (const r of kmReadings) {
     const arr = kmByVehicle.get(r.vehicleId) ?? [];
     arr.push(r);
@@ -280,7 +280,7 @@ async function buildMethodology(
   tenantPrisma: PrismaClientWithTenant,
   startDate: Date,
   endDate: Date,
-  _carlistId?: string
+  _carlistId?: number
 ): Promise<Omit<ReportExportData["methodology"], "period" | "perimeter">> {
   const fuelTypeLabels = await getFuelTypeLabels();
   // Load unique emission factors used in the period

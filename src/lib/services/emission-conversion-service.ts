@@ -9,7 +9,7 @@ export type EngineEmissionInput = {
   co2GKmWltp?: number | null;
   co2GKmNedc?: number | null;
   co2Standard: "WLTP" | "NEDC";
-  conversionConfigId?: string | null;
+  conversionConfigId?: number | null;
 };
 
 export type EngineEmissionResult = {
@@ -56,7 +56,7 @@ export async function getDefaultConversionConfig(): Promise<EmissionConversionCo
 
 /** Restituisce la configurazione specificata o quella predefinita */
 export async function getConversionConfig(
-  configId?: string | null
+  configId?: number | null
 ): Promise<EmissionConversionConfig> {
   if (configId) {
     const config = await prisma.emissionConversionConfig.findUnique({
@@ -173,7 +173,7 @@ export async function listConversionConfigs(): Promise<
 
 /** Recupera una singola configurazione per ID */
 export async function getConversionConfigById(
-  id: string
+  id: number
 ): Promise<EmissionConversionConfig | null> {
   return prisma.emissionConversionConfig.findUnique({
     where: { id },

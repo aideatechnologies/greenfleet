@@ -175,9 +175,9 @@ export function AuditLogTable({
   users,
   currentFilters,
 }: AuditLogTableProps) {
-  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
-  const toggleRow = useCallback((id: string) => {
+  const toggleRow = useCallback((id: number) => {
     setExpandedRows((prev) => {
       const next = new Set(prev);
       if (next.has(id)) {

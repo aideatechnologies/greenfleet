@@ -46,7 +46,7 @@ export type UpdateSupplierTypeInput = z.infer<typeof updateSupplierTypeSchema>;
 // ---------------------------------------------------------------------------
 
 export const createSupplierSchema = z.object({
-  supplierTypeId: z.string().min(1, { error: "Il tipo fornitore e obbligatorio" }),
+  supplierTypeId: z.coerce.number({ error: "Il tipo fornitore e obbligatorio" }),
   name: z
     .string()
     .min(1, { error: "Il nome e obbligatorio" })
@@ -99,7 +99,7 @@ export type UpdateSupplierInput = z.infer<typeof updateSupplierSchema>;
 
 export const supplierFilterSchema = z.object({
   search: z.string().optional(),
-  supplierTypeId: z.string().optional(),
+  supplierTypeId: z.coerce.number().optional(),
   isActive: z
     .enum(["true", "false", "all"])
     .optional()

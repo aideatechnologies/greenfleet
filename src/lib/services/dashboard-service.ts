@@ -67,7 +67,7 @@ export type DashboardTargetProgress = TargetProgress & {
 export type NotificationSeverity = "warning" | "destructive" | "info";
 
 export type DashboardNotification = {
-  id: string;
+  id: number;
   type: "contract" | "document";
   title: string;
   description: string;
@@ -246,7 +246,7 @@ export async function getDashboardKPIs(
   );
 
   // Total km this month: for each vehicle, (max odometer - min odometer)
-  const vehicleOdometers = new Map<string, { min: number; max: number }>();
+  const vehicleOdometers = new Map<number, { min: number; max: number }>();
   for (const reading of kmData) {
     const existing = vehicleOdometers.get(reading.vehicleId);
     if (!existing) {
@@ -540,7 +540,7 @@ export async function getFleetDelta(
   });
 
   // Group by vehicleId
-  const recordsByVehicle = new Map<string, typeof allFuelRecords>();
+  const recordsByVehicle = new Map<number, typeof allFuelRecords>();
   for (const fr of allFuelRecords) {
     const list = recordsByVehicle.get(fr.vehicleId);
     if (list) {
@@ -783,7 +783,7 @@ export async function getNotifications(
 // ---------------------------------------------------------------------------
 
 export type FuelTypeVehicleDetail = {
-  vehicleId: string;
+  vehicleId: number;
   licensePlate: string;
   make: string;
   model: string;
@@ -874,7 +874,7 @@ export async function getFleetBreakdownByFuelType(
   // Build lookup: vehicleFuelType -> primary MacroFuelType (scope 1 preferred for grouping)
   // For hybrids, scope 1 = thermal MacroFuelType, scope 2 = electric MacroFuelType.
   // We group the vehicle under the scope-1 MacroFuelType for counting purposes.
-  type MacroInfo = { id: string; name: string; color: string };
+  type MacroInfo = { id: number; name: string; color: string };
   const fuelTypeToMacro = new Map<string, MacroInfo>();
   // First pass: collect scope-1 mappings (preferred for grouping)
   for (const m of allMappings) {
@@ -899,7 +899,7 @@ export async function getFleetBreakdownByFuelType(
 
   // Index fuel records by vehicleId
   const fuelByVehicle = new Map<
-    string,
+    number,
     { litres: number; kwh: number; fuelType: string; minOdo: number; maxOdo: number }
   >();
   for (const fr of fuelRecords) {
@@ -933,7 +933,7 @@ export async function getFleetBreakdownByFuelType(
   type MacroGroup = {
     macroName: string;
     color: string;
-    vehicleIds: Set<string>;
+    vehicleIds: Set<number>;
     vehicles: FuelTypeVehicleDetail[];
     totalLitres: number;
     totalKwh: number;
@@ -1044,7 +1044,7 @@ export async function getFleetBreakdownByFuelType(
   items.sort((a, b) => b.emissionsKgCO2e - a.emissionsKgCO2e);
 
   // Totals
-  const allVehicleIds = new Set<string>();
+  const allVehicleIds = new Set<number>();
   for (const group of groups.values()) {
     for (const vid of group.vehicleIds) allVehicleIds.add(vid);
   }
@@ -1063,7 +1063,7 @@ export async function getFleetBreakdownByFuelType(
 // ---------------------------------------------------------------------------
 
 export type CarlistBreakdownItem = {
-  carlistId: string;
+  carlistId: number;
   carlistName: string;
   vehicleCount: number;
   totalKm: number;
@@ -1141,11 +1141,11 @@ export async function getFleetBreakdownByCarlist(
   }
 
   // Build carlist membership map: catalogVehicleId → carlist[]
-  const catalogToCarlist = new Map<string, Array<{ id: string; name: string }>>();
+  const catalogToCarlist = new Map<number, Array<{ id: number; name: string }>>();
   for (const cv of carlistVehicles) {
     const entry = cv as unknown as {
-      catalogVehicleId: string;
-      carlist: { id: string; name: string };
+      catalogVehicleId: number;
+      carlist: { id: number; name: string };
     };
     const list = catalogToCarlist.get(entry.catalogVehicleId) ?? [];
     list.push({ id: entry.carlist.id, name: entry.carlist.name });
@@ -1154,7 +1154,7 @@ export async function getFleetBreakdownByCarlist(
 
   // Index fuel records by vehicleId
   const fuelByVehicle = new Map<
-    string,
+    number,
     { litres: number; kwh: number; fuelType: string; minOdo: number; maxOdo: number }
   >();
   for (const fr of fuelRecords) {
@@ -1185,9 +1185,9 @@ export async function getFleetBreakdownByCarlist(
   );
 
   // Per-vehicle emissions cache
-  const vehicleEmissionsCache = new Map<string, number>();
+  const vehicleEmissionsCache = new Map<number, number>();
 
-  function getVehicleEmissions(vehicleId: string, vehicle: typeof vehicles[number]): number {
+  function getVehicleEmissions(vehicleId: number, vehicle: typeof vehicles[number]): number {
     if (vehicleEmissionsCache.has(vehicleId)) {
       return vehicleEmissionsCache.get(vehicleId)!;
     }
@@ -1230,16 +1230,16 @@ export async function getFleetBreakdownByCarlist(
   // Aggregate per carlist
   type CarlistGroup = {
     name: string;
-    vehicleIds: Set<string>;
+    vehicleIds: Set<number>;
     totalKm: number;
     totalLitres: number;
     totalKwh: number;
     totalEmissions: number;
   };
-  const groups = new Map<string, CarlistGroup>();
+  const groups = new Map<number, CarlistGroup>();
 
-  const allVehicleIds = new Set<string>();
-  const assignedVehicleIds = new Set<string>();
+  const allVehicleIds = new Set<number>();
+  const assignedVehicleIds = new Set<number>();
 
   for (const vehicle of vehicles) {
     allVehicleIds.add(vehicle.id);
@@ -1279,7 +1279,7 @@ export async function getFleetBreakdownByCarlist(
 
   // Build result
   let grandTotalEmissions = 0;
-  const uniqueVehicleIds = new Set<string>();
+  const uniqueVehicleIds = new Set<number>();
 
   const items: CarlistBreakdownItem[] = [];
   for (const [carlistId, group] of groups) {

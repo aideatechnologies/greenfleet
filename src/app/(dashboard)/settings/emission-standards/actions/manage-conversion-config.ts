@@ -84,7 +84,7 @@ export async function createConversionConfig(
 // ---------------------------------------------------------------------------
 
 export async function updateConversionConfig(
-  id: string,
+  id: number,
   formData: FormData
 ): Promise<ActionResult<EmissionConversionConfig>> {
   const authResult = await requireAuth();
@@ -161,8 +161,8 @@ export async function updateConversionConfig(
 // ---------------------------------------------------------------------------
 
 export async function deleteConversionConfig(
-  id: string
-): Promise<ActionResult<{ id: string }>> {
+  id: number
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
@@ -229,7 +229,7 @@ export async function deleteConversionConfig(
 // ---------------------------------------------------------------------------
 
 export async function setDefaultConversionConfig(
-  id: string
+  id: number
 ): Promise<ActionResult<EmissionConversionConfig>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;

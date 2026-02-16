@@ -35,7 +35,7 @@ import type {
 type BreadcrumbEntry = {
   level: DrillDownLevel;
   label: string;
-  id: string | null;
+  id: number | null;
   icon: typeof Building2;
 };
 
@@ -105,9 +105,10 @@ export function DrillDownNavigator({
       setError(null);
       setVehicleDetail(null);
       startTransition(async () => {
+        const numericId = Number(item.id);
         const result = await drillDown(
           "CARLIST",
-          item.id,
+          numericId,
           startDate,
           endDate
         );
@@ -118,7 +119,7 @@ export function DrillDownNavigator({
             {
               level: "CARLIST",
               label: item.label,
-              id: item.id,
+              id: numericId,
               icon: List,
             },
           ]);
@@ -135,8 +136,9 @@ export function DrillDownNavigator({
     (item: DrillDownItem) => {
       setError(null);
       startTransition(async () => {
+        const numericId = Number(item.id);
         const result = await getVehicleDetailAction(
-          item.id,
+          numericId,
           startDate,
           endDate
         );
@@ -150,7 +152,7 @@ export function DrillDownNavigator({
             {
               level: "VEHICLE",
               label: item.label,
-              id: item.id,
+              id: numericId,
               icon: Car,
             },
           ]);

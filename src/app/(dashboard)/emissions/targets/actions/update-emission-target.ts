@@ -113,7 +113,7 @@ export async function updateEmissionTargetAction(
       userId: ctx.userId,
       action: "emission_target.updated",
       entityType: "EmissionTarget",
-      entityId: updated.id,
+      entityId: String(updated.id),
       changes,
     });
 

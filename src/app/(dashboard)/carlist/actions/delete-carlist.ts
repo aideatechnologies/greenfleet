@@ -9,8 +9,8 @@ import { getPrismaForTenant } from "@/lib/db/client";
 import { logger } from "@/lib/utils/logger";
 
 export async function deleteCarlistAction(
-  id: string
-): Promise<ActionResult<{ id: string }>> {
+  id: number
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;

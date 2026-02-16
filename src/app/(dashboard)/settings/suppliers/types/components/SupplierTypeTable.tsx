@@ -37,7 +37,7 @@ type SupplierTypeTableProps = {
 export function SupplierTypeTable({ types }: SupplierTypeTableProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [editLabel, setEditLabel] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editSortOrder, setEditSortOrder] = useState(0);
@@ -59,7 +59,7 @@ export function SupplierTypeTable({ types }: SupplierTypeTableProps) {
     setEditingId(null);
   }
 
-  function handleSaveEdit(id: string) {
+  function handleSaveEdit(id: number) {
     startTransition(async () => {
       const result = await updateSupplierTypeAction(id, {
         label: editLabel,

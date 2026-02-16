@@ -66,7 +66,7 @@ export async function getActiveTemplatesAction(): Promise<
 }
 
 export async function getImportAction(
-  importId: string
+  importId: number
 ): Promise<ActionResult<InvoiceImportWithLines>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -153,7 +153,7 @@ export async function getImportsListAction(
 // ---------------------------------------------------------------------------
 
 export async function startImportAction(data: {
-  templateId: string;
+  templateId: number;
   fileName: string;
   xmlContent: string;
   requireManualConfirm: boolean;
@@ -232,7 +232,7 @@ export async function startImportAction(data: {
 }
 
 export async function confirmLineAction(
-  lineId: string,
+  lineId: number,
   action: "confirm" | "reject" | "skip"
 ): Promise<ActionResult<void>> {
   const authResult = await requireAuth();
@@ -276,7 +276,7 @@ export async function confirmLineAction(
 }
 
 export async function confirmAllAutoMatchedAction(
-  importId: string
+  importId: number
 ): Promise<ActionResult<number>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -319,7 +319,7 @@ export async function confirmAllAutoMatchedAction(
 }
 
 export async function finalizeImportAction(
-  importId: string
+  importId: number
 ): Promise<ActionResult<InvoiceImportWithLines>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -367,7 +367,7 @@ export async function finalizeImportAction(
 
 export type DetectResult = {
   detection: FatturaDetection;
-  suggestedTemplateId: string | null;
+  suggestedTemplateId: number | null;
   suggestedTemplateName: string | null;
 };
 
@@ -398,7 +398,7 @@ export async function detectFatturaAction(
     }
 
     // Try to find an existing template for this supplier
-    let suggestedTemplateId: string | null = null;
+    let suggestedTemplateId: number | null = null;
     let suggestedTemplateName: string | null = null;
 
     if (detection.supplierVat) {

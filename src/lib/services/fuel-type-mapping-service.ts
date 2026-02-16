@@ -11,7 +11,7 @@ import type {
 
 export async function getFuelTypeMappings(
   prisma: PrismaClient
-): Promise<(FuelTypeMacroMapping & { macroFuelType: { id: string; name: string; scope: number; unit: string } })[]> {
+): Promise<(FuelTypeMacroMapping & { macroFuelType: { id: number; name: string; scope: number; unit: string } })[]> {
   return prisma.fuelTypeMacroMapping.findMany({
     include: {
       macroFuelType: {
@@ -29,7 +29,7 @@ export async function getFuelTypeMappings(
 export async function getMappingsForFuelType(
   prisma: PrismaClient,
   vehicleFuelType: string
-): Promise<(FuelTypeMacroMapping & { macroFuelType: { id: string; name: string; scope: number; unit: string } })[]> {
+): Promise<(FuelTypeMacroMapping & { macroFuelType: { id: number; name: string; scope: number; unit: string } })[]> {
   return prisma.fuelTypeMacroMapping.findMany({
     where: { vehicleFuelType },
     include: {
@@ -65,7 +65,7 @@ export async function createFuelTypeMapping(
 
 export async function updateFuelTypeMapping(
   prisma: PrismaClient,
-  id: string,
+  id: number,
   input: UpdateFuelTypeMappingData
 ): Promise<FuelTypeMacroMapping> {
   const existing = await prisma.fuelTypeMacroMapping.findUnique({
@@ -93,7 +93,7 @@ export async function updateFuelTypeMapping(
 
 export async function deleteFuelTypeMapping(
   prisma: PrismaClient,
-  id: string
+  id: number
 ): Promise<FuelTypeMacroMapping> {
   const existing = await prisma.fuelTypeMacroMapping.findUnique({
     where: { id },

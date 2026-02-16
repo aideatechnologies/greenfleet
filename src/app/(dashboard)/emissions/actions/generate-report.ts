@@ -17,7 +17,7 @@ type GenerateReportInput = {
   dateRange: { startDate: string; endDate: string };
   aggregationLevel: string;
   periodGranularity?: string;
-  carlistId?: string;
+  carlistId?: number;
   vehicleFilters?: VehicleFilters;
 };
 

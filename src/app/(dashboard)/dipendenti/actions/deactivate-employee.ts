@@ -10,7 +10,7 @@ import { logger } from "@/lib/utils/logger";
 import type { Employee } from "@/generated/prisma/client";
 
 export async function deactivateEmployeeAction(
-  employeeId: string
+  employeeId: number
 ): Promise<ActionResult<Employee>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;

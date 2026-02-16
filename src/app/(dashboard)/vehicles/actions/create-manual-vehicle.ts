@@ -16,7 +16,7 @@ import { revalidatePath } from "next/cache";
  */
 export async function createManualVehicle(
   input: ManualVehicleWithEnginesInput
-): Promise<ActionResult<{ id: string }>> {
+): Promise<ActionResult<{ id: number }>> {
   // 1. Verifica autenticazione
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;

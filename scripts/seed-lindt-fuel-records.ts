@@ -282,7 +282,7 @@ async function main() {
   // 6. Generate fuel records
   type FuelRecordInput = {
     tenantId: string;
-    vehicleId: string;
+    vehicleId: number;
     userId: string;
     date: Date;
     fuelType: string;

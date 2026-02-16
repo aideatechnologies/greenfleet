@@ -23,7 +23,11 @@ export default async function EditKmReadingPage({
     redirect("/km-readings");
   }
 
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) {
+    notFound();
+  }
   const prisma = getPrismaForTenant(tenantId);
 
   const reading = await prisma.kmReading.findFirst({
@@ -42,7 +46,7 @@ export default async function EditKmReadingPage({
   }
 
   const defaultValues = {
-    vehicleId: reading.vehicleId,
+    vehicleId: String(reading.vehicleId),
     date: reading.date,
     odometerKm: reading.odometerKm,
     notes: reading.notes ?? undefined,
@@ -58,6 +62,10 @@ export default async function EditKmReadingPage({
         >
           Rilevazioni Km
         </Link>
+        <ChevronRight className="h-4 w-4" />
+        <span className="text-muted-foreground">
+          {reading.vehicle.licensePlate}
+        </span>
         <ChevronRight className="h-4 w-4" />
         <span className="text-foreground">Modifica</span>
       </nav>
@@ -78,9 +86,9 @@ export default async function EditKmReadingPage({
 
       <KmReadingForm
         mode="edit"
-        recordId={id}
+        recordId={String(id)}
         defaultValues={defaultValues}
-        defaultVehicleId={reading.vehicleId}
+        defaultVehicleId={String(reading.vehicleId)}
       />
     </div>
   );

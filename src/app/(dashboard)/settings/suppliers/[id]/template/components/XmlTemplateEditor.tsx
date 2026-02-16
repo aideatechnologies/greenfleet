@@ -61,7 +61,7 @@ import {
 // ---------------------------------------------------------------------------
 
 type XmlTemplateEditorProps = {
-  supplierId: string;
+  supplierId: number;
   supplierName: string;
   templates: XmlTemplateWithSupplier[];
 };
@@ -231,7 +231,7 @@ export function XmlTemplateEditor({
   templates,
 }: XmlTemplateEditorProps) {
   // ---- State ----
-  const [activeTemplateId, setActiveTemplateId] = useState<string | null>(null);
+  const [activeTemplateId, setActiveTemplateId] = useState<number | null>(null);
   const [step, setStep] = useState(0);
   const [maxReachedStep, setMaxReachedStep] = useState(0);
   const [templateName, setTemplateName] = useState("");

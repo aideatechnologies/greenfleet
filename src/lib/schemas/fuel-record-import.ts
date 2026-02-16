@@ -52,7 +52,7 @@ export type FuelRecordImportRow = z.infer<typeof fuelRecordImportRowSchema>;
 // ---------------------------------------------------------------------------
 
 export type ValidatedFuelRecordRow = {
-  vehicleId: string;
+  vehicleId: number;
   licensePlate: string;
   date: Date;
   fuelType: string;

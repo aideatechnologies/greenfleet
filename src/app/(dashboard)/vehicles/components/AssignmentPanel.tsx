@@ -24,7 +24,7 @@ import { unassignVehicleAction } from "../actions/unassign-vehicle";
 import type { VehicleAssignmentWithEmployee } from "@/lib/services/assignment-service";
 
 type AssignmentPanelProps = {
-  vehicleId: string;
+  vehicleId: number;
   currentAssignment: VehicleAssignmentWithEmployee | null;
   canEdit: boolean;
 };

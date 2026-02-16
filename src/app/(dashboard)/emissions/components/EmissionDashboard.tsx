@@ -24,7 +24,7 @@ import {
 // ---------------------------------------------------------------------------
 
 type CarlistOption = {
-  id: string;
+  id: number;
   name: string;
 };
 
@@ -96,7 +96,7 @@ export function EmissionDashboard({
     setPresets((prev) => [...prev, preset].sort((a, b) => a.name.localeCompare(b.name)));
   }, []);
 
-  const handlePresetDeleted = useCallback((presetId: string) => {
+  const handlePresetDeleted = useCallback((presetId: number) => {
     setPresets((prev) => prev.filter((p) => p.id !== presetId));
   }, []);
 

@@ -51,7 +51,7 @@ export type ReportParams = {
   dateRange: { startDate: Date; endDate: Date };
   aggregationLevel: AggregationLevel;
   periodGranularity?: PeriodGranularity;
-  carlistId?: string;
+  carlistId?: number;
   vehicleFilters?: VehicleFilters;
 };
 
@@ -62,7 +62,7 @@ export type ReportParams = {
 export type EmissionAggregation = {
   // --- Campi esistenti ---
   label: string;
-  id: string;
+  id: string | number;
   theoreticalEmissions: number;
   realEmissions: number;
   deltaAbsolute: number;
@@ -140,7 +140,7 @@ export type ReportResult = {
 export type DrillDownLevel = "FLEET" | "CARLIST" | "VEHICLE";
 
 export type DrillDownItem = {
-  id: string;
+  id: string | number;
   label: string;
   subtitle?: string;
   theoreticalEmissions: number;
@@ -155,14 +155,14 @@ export type DrillDownItem = {
 export type DrillDownResult = {
   level: DrillDownLevel;
   parentLabel: string;
-  parentId?: string;
+  parentId?: string | number;
   items: DrillDownItem[];
   totalEmissions: number;
   totalTheoreticalEmissions: number;
 };
 
 export type VehicleEmissionDetail = {
-  vehicleId: string;
+  vehicleId: number;
   plate: string;
   makeModel: string;
   imageUrl?: string;
@@ -241,10 +241,10 @@ export type CSVOptions = {
 // ---------------------------------------------------------------------------
 
 export type ReportFilterPreset = {
-  id: string;
+  id: number;
   name: string;
   filters: VehicleFilters & {
-    carlistId?: string;
+    carlistId?: number;
     aggregationLevel?: AggregationLevel;
     periodGranularity?: PeriodGranularity;
   };

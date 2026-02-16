@@ -66,9 +66,9 @@ export class RecordNotFoundError extends Error {
  */
 export async function getLastKnownOdometer(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   beforeDate?: Date,
-  excludeKmReadingId?: string
+  excludeKmReadingId?: number
 ): Promise<{ odometerKm: number; date: Date; source: string } | null> {
   const dateFilter = beforeDate ? { lt: beforeDate } : {};
 
@@ -137,10 +137,10 @@ export async function getLastKnownOdometer(
  */
 export async function validateOdometerKm(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   date: Date,
   odometerKm: number,
-  excludeId?: string
+  excludeId?: number
 ): Promise<string | null> {
   // Find the most recent record BEFORE this date (from both tables)
   const [prevKmReading, prevFuelRecord] = await Promise.all([
@@ -288,7 +288,7 @@ export async function createKmReading(
 
 export async function updateKmReading(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   input: UpdateKmReadingData,
   userId: string
 ): Promise<KmReadingWithDetails> {
@@ -349,7 +349,7 @@ export async function updateKmReading(
 
 export async function deleteKmReading(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   userId: string
 ): Promise<void> {
   const existing = await prisma.kmReading.findFirst({
@@ -438,7 +438,7 @@ export async function getKmReadings(
 
 export async function getKmReadingsByVehicle(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   pagination: { page: number; pageSize: number }
 ): Promise<PaginatedResult<KmReadingWithDetails>> {
   const { page, pageSize } = pagination;

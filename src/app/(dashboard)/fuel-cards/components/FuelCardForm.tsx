@@ -8,10 +8,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
-import {
-  createFuelCardSchema,
-  type CreateFuelCardInput,
-} from "@/lib/schemas/fuel-card";
+import { createFuelCardSchema } from "@/lib/schemas/fuel-card";
 import {
   FuelCardStatus,
   FUEL_CARD_STATUS_LABELS,
@@ -58,10 +55,26 @@ import {
 import { createFuelCardAction, updateFuelCardAction } from "../actions/fuel-card-actions";
 import { getFuelCardOptionsAction } from "../actions/get-fuel-card-options";
 
+// ---------------------------------------------------------------------------
+// Form values type (uses string IDs for selectors; Zod coerces to number)
+// ---------------------------------------------------------------------------
+
+type FuelCardFormValues = {
+  cardNumber: string;
+  issuer: string;
+  supplierId: string;
+  expiryDate?: Date;
+  status: string;
+  assignmentType: string;
+  assignedVehicleId: string;
+  assignedEmployeeId: string;
+  notes: string;
+};
+
 type FuelCardFormProps = {
   mode: "create" | "edit";
   fuelCardId?: string;
-  defaultValues?: CreateFuelCardInput;
+  defaultValues?: FuelCardFormValues;
 };
 
 export function FuelCardForm({ mode, fuelCardId, defaultValues }: FuelCardFormProps) {
@@ -73,8 +86,8 @@ export function FuelCardForm({ mode, fuelCardId, defaultValues }: FuelCardFormPr
 
   const isEdit = mode === "edit";
 
-  const form = useForm<CreateFuelCardInput>({
-    resolver: zodResolver(createFuelCardSchema) as unknown as Resolver<CreateFuelCardInput>,
+  const form = useForm<FuelCardFormValues>({
+    resolver: zodResolver(createFuelCardSchema) as unknown as Resolver<FuelCardFormValues>,
     defaultValues: defaultValues ?? {
       cardNumber: "",
       issuer: "",
@@ -103,11 +116,11 @@ export function FuelCardForm({ mode, fuelCardId, defaultValues }: FuelCardFormPr
     loadOptions();
   }, []);
 
-  function handleSubmit(values: CreateFuelCardInput) {
+  function handleSubmit(values: FuelCardFormValues) {
     startTransition(async () => {
       try {
         if (isEdit && fuelCardId) {
-          const result = await updateFuelCardAction(fuelCardId, values);
+          const result = await updateFuelCardAction(Number(fuelCardId), values);
           if (result.success) {
             toast.success("Carta carburante aggiornata con successo");
             router.push("/fuel-cards");

@@ -49,7 +49,7 @@ type CarlistVehicleRow = CarlistVehicle & {
 };
 
 type CarlistVehicleTableProps = {
-  carlistId: string;
+  carlistId: number;
   vehicles: CarlistVehicleRow[];
   canEdit: boolean;
   fuelTypeLabels?: Record<string, string>;

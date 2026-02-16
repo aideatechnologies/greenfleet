@@ -18,7 +18,10 @@ export default async function EmployeeDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) notFound();
+
   const ctx = await getSessionContext();
   if (!ctx || !ctx.organizationId) {
     redirect("/login");
@@ -87,7 +90,7 @@ export default async function EmployeeDetailPage({
               </Link>
             </Button>
             <EmployeeStatusButton
-              employeeId={employee.id}
+              employeeId={String(employee.id)}
               employeeName={`${employee.firstName} ${employee.lastName}`}
               isActive={employee.isActive}
             />

@@ -58,6 +58,7 @@ export async function createContract(
     type: data.type,
     status: "ACTIVE",
     notes: data.notes ?? null,
+    contractKm: (data as Record<string, unknown>).contractKm ?? null,
   };
 
   // Type-specific fields
@@ -172,7 +173,7 @@ export async function getContracts(
 
 export async function getContractById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<ContractWithDetails | null> {
   const result = await prisma.contract.findFirst({
     where: { id },
@@ -187,11 +188,12 @@ export async function getContractById(
 
 export async function updateContract(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: UpdateContractInput
 ): Promise<ContractWithDetails> {
   const updateData: Record<string, unknown> = {
     notes: data.notes ?? null,
+    contractKm: (data as Record<string, unknown>).contractKm ?? null,
   };
 
   // Type-specific fields
@@ -240,7 +242,7 @@ export async function updateContract(
 
 export async function closeContract(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<ContractWithDetails> {
   return prisma.contract.update({
     where: { id },
@@ -255,7 +257,7 @@ export async function closeContract(
 
 export async function getContractsByVehicle(
   prisma: PrismaClientWithTenant,
-  vehicleId: string
+  vehicleId: number
 ): Promise<ContractWithDetails[]> {
   const results = await prisma.contract.findMany({
     where: { vehicleId },
@@ -282,9 +284,10 @@ export async function createContractWithSuccession(
   data: ContractInput
 ): Promise<{ contract: ContractWithDetails; closedContract: ContractWithDetails | null }> {
   // Check for existing active contract
+  const vehicleId = data.vehicleId as number;
   const activeContract = await prisma.contract.findFirst({
     where: {
-      vehicleId: data.vehicleId,
+      vehicleId,
       status: "ACTIVE",
     },
     include: INCLUDE_DETAILS,
@@ -332,7 +335,7 @@ export async function createContractWithSuccession(
  */
 export async function getActiveContractForVehicle(
   prisma: PrismaClientWithTenant,
-  vehicleId: string
+  vehicleId: number
 ): Promise<ContractWithDetails | null> {
   const result = await prisma.contract.findFirst({
     where: {

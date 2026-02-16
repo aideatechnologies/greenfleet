@@ -36,7 +36,7 @@ import { GwpConfigForm } from "./GwpConfigForm";
 import { formatNumber } from "@/lib/utils/format";
 
 type GwpConfigRow = {
-  id: string;
+  id: number;
   gasName: string;
   gwpValue: number;
   source: string;
@@ -54,9 +54,9 @@ export function GwpConfigTable({
   const router = useRouter();
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean;
-    id: string;
+    id: number;
     gasName: string;
-  }>({ open: false, id: "", gasName: "" });
+  }>({ open: false, id: 0, gasName: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleDelete() {
@@ -73,7 +73,7 @@ export function GwpConfigTable({
       toast.error("Errore nell'eliminazione");
     } finally {
       setIsLoading(false);
-      setDeleteDialog({ open: false, id: "", gasName: "" });
+      setDeleteDialog({ open: false, id: 0, gasName: "" });
     }
   }
 

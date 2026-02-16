@@ -45,9 +45,9 @@ export type UpdateCarlistInput = z.input<typeof updateCarlistSchema>;
 // ---------------------------------------------------------------------------
 
 export const addCatalogVehiclesToCarlistSchema = z.object({
-  carlistId: z.string().min(1, { error: "ID carlist obbligatorio" }),
+  carlistId: z.coerce.number({ error: "ID carlist obbligatorio" }),
   catalogVehicleIds: z
-    .array(z.string().min(1, { error: "ID veicolo catalogo non valido" }))
+    .array(z.coerce.number({ error: "ID veicolo catalogo non valido" }))
     .min(1, { error: "Selezionare almeno un veicolo" }),
 });
 
@@ -58,9 +58,9 @@ export type AddCatalogVehiclesToCarlistInput = z.input<typeof addCatalogVehicles
 // ---------------------------------------------------------------------------
 
 export const removeCatalogVehiclesFromCarlistSchema = z.object({
-  carlistId: z.string().min(1, { error: "ID carlist obbligatorio" }),
+  carlistId: z.coerce.number({ error: "ID carlist obbligatorio" }),
   catalogVehicleIds: z
-    .array(z.string().min(1, { error: "ID veicolo catalogo non valido" }))
+    .array(z.coerce.number({ error: "ID veicolo catalogo non valido" }))
     .min(1, { error: "Selezionare almeno un veicolo" }),
 });
 

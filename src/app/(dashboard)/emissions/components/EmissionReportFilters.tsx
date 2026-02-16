@@ -52,7 +52,7 @@ import { savePresetAction, deletePresetAction } from "../actions/preset-actions"
 // ---------------------------------------------------------------------------
 
 type CarlistOption = {
-  id: string;
+  id: number;
   name: string;
 };
 
@@ -64,7 +64,7 @@ interface EmissionReportFiltersProps {
   filterOptions: FilterOptions;
   presets: ReportFilterPreset[];
   onPresetSaved?: (preset: ReportFilterPreset) => void;
-  onPresetDeleted?: (presetId: string) => void;
+  onPresetDeleted?: (presetId: number) => void;
   resultsRef?: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -107,7 +107,7 @@ export function EmissionReportFilters({
     useState<AggregationLevel>("VEHICLE");
   const [periodGranularity, setPeriodGranularity] =
     useState<PeriodGranularity>("MONTHLY");
-  const [carlistId, setCarlistId] = useState<string | undefined>(undefined);
+  const [carlistId, setCarlistId] = useState<number | undefined>(undefined);
 
   // Advanced filters
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -144,11 +144,11 @@ export function EmissionReportFilters({
   const applyPreset = (presetId: string) => {
     setSelectedPresetId(presetId);
     if (presetId === "__none__") return;
-    const preset = presets.find((p) => p.id === presetId);
+    const preset = presets.find((p) => String(p.id) === presetId);
     if (!preset) return;
     const { carlistId: pCarlist, aggregationLevel: pAgg, periodGranularity: pGran, ...vf } = preset.filters;
     setVehicleFilters(vf);
-    if (pCarlist) setCarlistId(pCarlist);
+    if (pCarlist != null) setCarlistId(pCarlist);
     if (pAgg) setAggregationLevel(pAgg);
     if (pGran) setPeriodGranularity(pGran);
     setShowAdvanced(Object.keys(vf).length > 0);
@@ -158,7 +158,7 @@ export function EmissionReportFilters({
     if (!presetName.trim()) return;
     const filters = {
       ...vehicleFilters,
-      carlistId: carlistId === "__all__" ? undefined : carlistId,
+      carlistId,
       aggregationLevel,
       periodGranularity,
     };
@@ -172,9 +172,10 @@ export function EmissionReportFilters({
 
   const handleDeletePreset = async () => {
     if (selectedPresetId === "__none__") return;
-    const result = await deletePresetAction(selectedPresetId);
+    const numericId = Number(selectedPresetId);
+    const result = await deletePresetAction(numericId);
     if (result.success) {
-      onPresetDeleted?.(selectedPresetId);
+      onPresetDeleted?.(numericId);
       setSelectedPresetId("__none__");
     }
   };
@@ -193,7 +194,7 @@ export function EmissionReportFilters({
         },
         aggregationLevel,
         periodGranularity,
-        carlistId: carlistId === "__all__" ? undefined : carlistId,
+        carlistId,
         vehicleFilters: cleanFilters,
       });
 
@@ -337,9 +338,9 @@ export function EmissionReportFilters({
             <div className="space-y-2 sm:w-48">
               <label className="text-sm font-medium">Carlist</label>
               <Select
-                value={carlistId ?? "__all__"}
+                value={carlistId != null ? String(carlistId) : "__all__"}
                 onValueChange={(v) =>
-                  setCarlistId(v === "__all__" ? undefined : v)
+                  setCarlistId(v === "__all__" ? undefined : Number(v))
                 }
               >
                 <SelectTrigger className="w-full">
@@ -348,7 +349,7 @@ export function EmissionReportFilters({
                 <SelectContent>
                   <SelectItem value="__all__">Tutte le carlist</SelectItem>
                   {carlists.map((cl) => (
-                    <SelectItem key={cl.id} value={cl.id}>
+                    <SelectItem key={cl.id} value={String(cl.id)}>
                       {cl.name}
                     </SelectItem>
                   ))}
@@ -377,7 +378,7 @@ export function EmissionReportFilters({
                     </SelectItem>
                   ) : (
                     presets.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>
+                      <SelectItem key={p.id} value={String(p.id)}>
                         {p.name}
                       </SelectItem>
                     ))

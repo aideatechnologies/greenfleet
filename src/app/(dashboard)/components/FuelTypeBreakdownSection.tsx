@@ -85,7 +85,7 @@ const emissionsChartConfig = {
 // ---------------------------------------------------------------------------
 
 type VehicleRow = {
-  vehicleId: string;
+  vehicleId: number;
   licensePlate: string;
   make: string;
   model: string;

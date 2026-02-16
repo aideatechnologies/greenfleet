@@ -47,7 +47,7 @@ export async function createMacroFuelTypeAction(
         userId: ctx.userId,
         action: "macro_fuel_type.created",
         entityType: "MacroFuelType",
-        entityId: macroFuelType.id,
+        entityId: String(macroFuelType.id),
         data: {
           name: parsed.data.name,
           scope: parsed.data.scope,

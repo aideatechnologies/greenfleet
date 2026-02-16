@@ -15,7 +15,7 @@ import { logger } from "@/lib/utils/logger";
 
 const targetProgressSchema = z.object({
   scope: z.union([z.literal("Fleet"), z.literal("Carlist")]),
-  scopeId: z.string().nullable(),
+  scopeId: z.number().nullable(),
   startDate: z.string({ error: "La data di inizio e obbligatoria" }),
   endDate: z.string({ error: "La data di fine e obbligatoria" }),
 });
@@ -26,7 +26,7 @@ const targetProgressSchema = z.object({
 
 export type TargetProgressResult = {
   target: {
-    id: string;
+    id: number;
     description: string | null;
     scope: string;
     period: string;
@@ -43,7 +43,7 @@ export type TargetProgressResult = {
 
 export async function getTargetProgressAction(
   scope: string,
-  scopeId: string | null,
+  scopeId: number | null,
   startDate: string,
   endDate: string
 ): Promise<ActionResult<TargetProgressResult | null>> {

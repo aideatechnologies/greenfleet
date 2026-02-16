@@ -54,6 +54,7 @@ import { SuccessionConfirmDialog } from "./SuccessionConfirmDialog";
 type ProprietarioValues = {
   type: "PROPRIETARIO";
   vehicleId: string;
+  contractKm?: number | null;
   notes?: string;
   purchaseDate: Date;
   purchasePrice: number;
@@ -63,6 +64,7 @@ type ProprietarioValues = {
 type BreveTermineValues = {
   type: "BREVE_TERMINE";
   vehicleId: string;
+  contractKm?: number | null;
   notes?: string;
   supplierId: string;
   startDate: Date;
@@ -74,6 +76,7 @@ type BreveTermineValues = {
 type LungoTermineValues = {
   type: "LUNGO_TERMINE";
   vehicleId: string;
+  contractKm?: number | null;
   notes?: string;
   supplierId: string;
   startDate: Date;
@@ -87,6 +90,7 @@ type LungoTermineValues = {
 type LeasingFinanziarioValues = {
   type: "LEASING_FINANZIARIO";
   vehicleId: string;
+  contractKm?: number | null;
   notes?: string;
   supplierId: string;
   startDate: Date;
@@ -129,6 +133,7 @@ function getDefaultValues(
       return {
         type: "PROPRIETARIO",
         vehicleId: "",
+        contractKm: undefined,
         notes: "",
         purchaseDate: undefined as unknown as Date,
         purchasePrice: undefined as unknown as number,
@@ -138,6 +143,7 @@ function getDefaultValues(
       return {
         type: "BREVE_TERMINE",
         vehicleId: "",
+        contractKm: undefined,
         notes: "",
         supplierId: "",
         startDate: undefined as unknown as Date,
@@ -149,6 +155,7 @@ function getDefaultValues(
       return {
         type: "LUNGO_TERMINE",
         vehicleId: "",
+        contractKm: undefined,
         notes: "",
         supplierId: "",
         startDate: undefined as unknown as Date,
@@ -162,6 +169,7 @@ function getDefaultValues(
       return {
         type: "LEASING_FINANZIARIO",
         vehicleId: "",
+        contractKm: undefined,
         notes: "",
         supplierId: "",
         startDate: undefined as unknown as Date,
@@ -242,7 +250,7 @@ export function ContractForm({
       try {
         if (isEdit && contractId) {
           const result = await updateContractAction(
-            contractId,
+            Number(contractId),
             values as UpdateContractInput
           );
           if (result.success) {
@@ -313,6 +321,14 @@ export function ContractForm({
               )}
             />
           )}
+
+          {/* Km contratto (shared across all types) */}
+          <NumberField
+            form={form}
+            name="contractKm"
+            label="Km contratto"
+            unit="km"
+          />
 
           {/* Type-specific fields */}
           {contractType === "PROPRIETARIO" && (

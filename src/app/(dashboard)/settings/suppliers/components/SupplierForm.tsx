@@ -9,7 +9,6 @@ import type { SupplierType } from "@/generated/prisma/client";
 import {
   createSupplierSchema,
   updateSupplierSchema,
-  type CreateSupplierInput,
 } from "@/lib/schemas/supplier";
 import {
   Form,
@@ -32,10 +31,26 @@ import {
 import { createSupplierAction, updateSupplierAction } from "../actions/supplier-actions";
 import { getSupplierTypesAction } from "../actions/supplier-type-actions";
 
+// ---------------------------------------------------------------------------
+// Form values type (uses string for supplierTypeId; Zod coerces to number)
+// ---------------------------------------------------------------------------
+
+type SupplierFormValues = {
+  supplierTypeId: string;
+  name: string;
+  vatNumber?: string;
+  address?: string;
+  pec?: string;
+  contactName?: string;
+  contactPhone?: string;
+  contactEmail?: string;
+  notes?: string;
+};
+
 type SupplierFormProps = {
   mode: "create" | "edit";
   supplierId?: string;
-  defaultValues?: CreateSupplierInput;
+  defaultValues?: SupplierFormValues;
 };
 
 export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormProps) {
@@ -46,8 +61,8 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
   const isEdit = mode === "edit";
   const schema = isEdit ? updateSupplierSchema : createSupplierSchema;
 
-  const form = useForm<CreateSupplierInput>({
-    resolver: zodResolver(schema) as unknown as Resolver<CreateSupplierInput>,
+  const form = useForm<SupplierFormValues>({
+    resolver: zodResolver(schema) as unknown as Resolver<SupplierFormValues>,
     defaultValues: defaultValues ?? {
       supplierTypeId: "",
       name: "",
@@ -72,11 +87,11 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
     loadTypes();
   }, []);
 
-  function handleSubmit(values: CreateSupplierInput) {
+  function handleSubmit(values: SupplierFormValues) {
     startTransition(async () => {
       try {
         if (isEdit && supplierId) {
-          const result = await updateSupplierAction(supplierId, values);
+          const result = await updateSupplierAction(Number(supplierId), values);
           if (result.success) {
             toast.success("Fornitore aggiornato con successo");
             router.push("/settings/suppliers");
@@ -118,7 +133,7 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
                   </FormControl>
                   <SelectContent>
                     {supplierTypes.map((type) => (
-                      <SelectItem key={type.id} value={type.id}>
+                      <SelectItem key={type.id} value={String(type.id)}>
                         {type.label}
                       </SelectItem>
                     ))}

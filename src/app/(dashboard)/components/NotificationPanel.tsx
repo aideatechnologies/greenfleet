@@ -83,7 +83,7 @@ function NotificationGroup({
   title: string;
   icon: React.ElementType;
   items: Array<{
-    id: string;
+    id: number;
     title: string;
     description: string;
     severity: string;

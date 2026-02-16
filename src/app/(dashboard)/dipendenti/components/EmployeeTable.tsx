@@ -82,7 +82,7 @@ export function EmployeeTable({
   // Confirm dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
-    employeeId: string;
+    employeeId: number | string;
     employeeName: string;
     action: "deactivate" | "reactivate";
   }>({ open: false, employeeId: "", employeeName: "", action: "deactivate" });
@@ -142,8 +142,8 @@ export function EmployeeTable({
     try {
       const result =
         confirmDialog.action === "deactivate"
-          ? await deactivateEmployeeAction(confirmDialog.employeeId)
-          : await reactivateEmployeeAction(confirmDialog.employeeId);
+          ? await deactivateEmployeeAction(Number(confirmDialog.employeeId))
+          : await reactivateEmployeeAction(Number(confirmDialog.employeeId));
 
       if (result.success) {
         toast.success(

@@ -92,7 +92,7 @@ export async function assignVehicle(
  */
 export async function unassignVehicle(
   db: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   endDate: Date,
   notes?: string
 ): Promise<void> {
@@ -135,7 +135,7 @@ export async function unassignVehicle(
  */
 export async function getAssignmentHistory(
   db: PrismaClientWithTenant,
-  vehicleId: string
+  vehicleId: number
 ): Promise<VehicleAssignmentWithEmployee[]> {
   const assignments = await db.vehicleAssignment.findMany({
     where: { vehicleId },
@@ -154,7 +154,7 @@ export async function getAssignmentHistory(
  */
 export async function getCurrentAssignment(
   db: PrismaClientWithTenant,
-  vehicleId: string
+  vehicleId: number
 ): Promise<VehicleAssignmentWithEmployee | null> {
   const assignment = await db.vehicleAssignment.findFirst({
     where: {
@@ -176,7 +176,7 @@ export async function getCurrentAssignment(
  */
 export async function getVehiclesByEmployee(
   db: PrismaClientWithTenant,
-  employeeId: string
+  employeeId: number
 ): Promise<VehicleAssignmentWithVehicle[]> {
   const assignments = await db.vehicleAssignment.findMany({
     where: { employeeId },

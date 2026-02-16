@@ -63,7 +63,7 @@ type SerializedDocument = {
 type DocumentFormProps = {
   open: boolean;
   onClose: () => void;
-  vehicleId: string;
+  vehicleId: number;
   editingDocument: SerializedDocument | null;
 };
 
@@ -192,7 +192,7 @@ export function DocumentForm({
         if (isEditing) {
           formData.append("documentId", editingDocument.id);
         } else {
-          formData.append("vehicleId", vehicleId);
+          formData.append("vehicleId", String(vehicleId));
         }
 
         formData.append("documentType", values.documentType);

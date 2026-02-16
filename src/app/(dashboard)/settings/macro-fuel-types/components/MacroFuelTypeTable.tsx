@@ -37,7 +37,7 @@ import { SCOPE_LABELS, type EmissionScope } from "@/types/emission";
 import type { FuelUnit } from "@/lib/utils/fuel-units";
 
 type MacroFuelTypeRow = {
-  id: string;
+  id: number;
   name: string;
   scope: number;
   unit: string;
@@ -57,9 +57,9 @@ export function MacroFuelTypeTable({
   const router = useRouter();
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean;
-    id: string;
+    id: number;
     name: string;
-  }>({ open: false, id: "", name: "" });
+  }>({ open: false, id: 0, name: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleDelete() {
@@ -76,7 +76,7 @@ export function MacroFuelTypeTable({
       toast.error("Errore nell'eliminazione");
     } finally {
       setIsLoading(false);
-      setDeleteDialog({ open: false, id: "", name: "" });
+      setDeleteDialog({ open: false, id: 0, name: "" });
     }
   }
 

@@ -58,7 +58,7 @@ export async function createPreset(
 
 export async function updatePreset(
   prisma: PrismaClientWithTenant,
-  presetId: string,
+  presetId: number,
   name: string,
   filters: ReportFilterPreset["filters"]
 ): Promise<ReportFilterPreset> {
@@ -83,7 +83,7 @@ export async function updatePreset(
 
 export async function deletePreset(
   prisma: PrismaClientWithTenant,
-  presetId: string
+  presetId: number
 ): Promise<void> {
   await prisma.reportFilterPreset.delete({
     where: { id: presetId },

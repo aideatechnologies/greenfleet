@@ -59,7 +59,7 @@ type GwpConfigFormProps =
   | {
       mode: "edit";
       trigger: ReactNode;
-      configId: string;
+      configId: number;
       defaultValues: EditValues;
     };
 

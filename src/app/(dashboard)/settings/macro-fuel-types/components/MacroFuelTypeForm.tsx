@@ -60,7 +60,7 @@ type MacroFuelTypeFormProps =
   | {
       mode: "edit";
       trigger: ReactNode;
-      macroFuelTypeId: string;
+      macroFuelTypeId: number;
       defaultValues: EditValues;
     };
 

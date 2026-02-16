@@ -145,6 +145,7 @@ type FuelFeedProps = {
   showVehicle?: boolean;
   anomalies?: FuelAnomaly[];
   fuelTypeLabels?: Record<string, string>;
+  co2Factors?: Record<string, number>;
 };
 
 export function FuelFeed({
@@ -154,11 +155,12 @@ export function FuelFeed({
   showVehicle = true,
   anomalies,
   fuelTypeLabels = {},
+  co2Factors = {},
 }: FuelFeedProps) {
   const grouped = groupByDate(records);
   const anomalyMap = useMemo(() => {
-    if (!anomalies) return new Map<string, FuelAnomaly[]>();
-    const map = new Map<string, FuelAnomaly[]>();
+    if (!anomalies) return new Map<number, FuelAnomaly[]>();
+    const map = new Map<number, FuelAnomaly[]>();
     for (const a of anomalies) {
       const existing = map.get(a.fuelRecordId) ?? [];
       existing.push(a);
@@ -204,6 +206,7 @@ export function FuelFeed({
                 showVehicle={showVehicle}
                 anomalies={anomalyMap.get(record.id)}
                 fuelTypeLabels={fuelTypeLabels}
+                co2Factors={co2Factors}
               />
             ))}
           </div>
@@ -236,8 +239,8 @@ export function UnifiedFuelFeed({
 }: UnifiedFuelFeedProps) {
   const grouped = groupFeedByDate(items);
   const anomalyMap = useMemo(() => {
-    if (!anomalies) return new Map<string, FuelAnomaly[]>();
-    const map = new Map<string, FuelAnomaly[]>();
+    if (!anomalies) return new Map<number, FuelAnomaly[]>();
+    const map = new Map<number, FuelAnomaly[]>();
     for (const a of anomalies) {
       const existing = map.get(a.fuelRecordId) ?? [];
       existing.push(a);
@@ -387,6 +390,11 @@ function KmReadingFeedItem({
 // Individual feed item (fuel record card)
 // ---------------------------------------------------------------------------
 
+const co2Fmt = new Intl.NumberFormat("it-IT", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 function FuelFeedItemCard({
   record,
   variant,
@@ -394,6 +402,7 @@ function FuelFeedItemCard({
   showVehicle,
   anomalies: recordAnomalies,
   fuelTypeLabels = {},
+  co2Factors = {},
 }: {
   record: FuelRecordWithDetails;
   variant: FuelFeedVariant;
@@ -401,6 +410,7 @@ function FuelFeedItemCard({
   showVehicle: boolean;
   anomalies?: FuelAnomaly[];
   fuelTypeLabels?: Record<string, string>;
+  co2Factors?: Record<string, number>;
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -530,6 +540,26 @@ function FuelFeedItemCard({
                 <span>
                   {kmFmt.format(record.odometerKm)} km
                 </span>
+                {(() => {
+                  const factor = co2Factors[record.fuelType] ?? 0;
+                  const co2 = record.quantityLiters * factor;
+                  return co2 > 0 ? (
+                    <>
+                      <span className="text-muted-foreground/50">|</span>
+                      <span className="tabular-nums">
+                        {co2Fmt.format(co2)} kg CO2e
+                      </span>
+                    </>
+                  ) : null;
+                })()}
+                {record.fuelCard && (
+                  <>
+                    <span className="text-muted-foreground/50">|</span>
+                    <span className="font-mono text-xs">
+                      Carta {record.fuelCard.cardNumber}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
 

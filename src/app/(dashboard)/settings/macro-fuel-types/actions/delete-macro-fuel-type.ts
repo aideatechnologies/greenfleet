@@ -14,8 +14,8 @@ import { auditCreate } from "@/lib/services/audit-service";
 import { logger } from "@/lib/utils/logger";
 
 export async function deleteMacroFuelTypeAction(
-  id: string
-): Promise<ActionResult<{ id: string }>> {
+  id: number
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
@@ -39,7 +39,7 @@ export async function deleteMacroFuelTypeAction(
         userId: ctx.userId,
         action: "macro_fuel_type.deleted",
         entityType: "MacroFuelType",
-        entityId: id,
+        entityId: String(id),
         data: {
           name: deleted.name,
           scope: deleted.scope,

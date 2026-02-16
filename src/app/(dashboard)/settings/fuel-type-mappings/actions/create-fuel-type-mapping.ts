@@ -47,7 +47,7 @@ export async function createFuelTypeMappingAction(
         userId: ctx.userId,
         action: "fuel_type_mapping.created",
         entityType: "FuelTypeMacroMapping",
-        entityId: mapping.id,
+        entityId: String(mapping.id),
         data: {
           vehicleFuelType: parsed.data.vehicleFuelType,
           macroFuelTypeId: parsed.data.macroFuelTypeId,

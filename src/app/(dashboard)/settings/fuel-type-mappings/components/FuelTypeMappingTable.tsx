@@ -36,16 +36,16 @@ import { FuelTypeMappingForm } from "./FuelTypeMappingForm";
 import { SCOPE_LABELS, type EmissionScope } from "@/types/emission";
 
 type MacroFuelTypeRef = {
-  id: string;
+  id: number;
   name: string;
   scope: number;
   unit: string;
 };
 
 type FuelTypeMappingRow = {
-  id: string;
+  id: number;
   vehicleFuelType: string;
-  macroFuelTypeId: string;
+  macroFuelTypeId: number;
   scope: number;
   description?: string;
   macroFuelType: MacroFuelTypeRef;
@@ -63,9 +63,9 @@ export function FuelTypeMappingTable({
   const router = useRouter();
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean;
-    id: string;
+    id: number;
     label: string;
-  }>({ open: false, id: "", label: "" });
+  }>({ open: false, id: 0, label: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleDelete() {
@@ -82,7 +82,7 @@ export function FuelTypeMappingTable({
       toast.error("Errore nell'eliminazione");
     } finally {
       setIsLoading(false);
-      setDeleteDialog({ open: false, id: "", label: "" });
+      setDeleteDialog({ open: false, id: 0, label: "" });
     }
   }
 

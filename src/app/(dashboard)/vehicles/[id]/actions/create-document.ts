@@ -38,10 +38,11 @@ export async function createDocumentAction(
   }
 
   // Extract form fields
-  const vehicleId = formData.get("vehicleId") as string;
+  const vehicleIdRaw = formData.get("vehicleId");
+  const vehicleId = vehicleIdRaw ? Number(vehicleIdRaw) : NaN;
   const file = formData.get("file") as File | null;
 
-  if (!vehicleId) {
+  if (!vehicleIdRaw || isNaN(vehicleId)) {
     return {
       success: false,
       error: "ID veicolo mancante",
@@ -96,7 +97,7 @@ export async function createDocumentAction(
 
   try {
     // Upload file
-    const uploadResult = await uploadFile(file, tenantId, vehicleId);
+    const uploadResult = await uploadFile(file, tenantId, String(vehicleId));
 
     // Create DB record
     const document = await createDocument(prisma, {

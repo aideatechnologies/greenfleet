@@ -50,7 +50,7 @@ import { createEmissionFactorAction } from "../actions/create-emission-factor";
 import { updateEmissionFactorAction } from "../actions/update-emission-factor";
 
 type MacroFuelTypeRef = {
-  id: string;
+  id: number;
   name: string;
   scope: number;
   unit: string;
@@ -83,7 +83,7 @@ type EmissionFactorFormProps =
   | {
       mode: "edit";
       trigger: ReactNode;
-      factorId: string;
+      factorId: number;
       defaultValues: CreateEmissionFactorInput;
       macroFuelTypes: MacroFuelTypeRef[];
       fuelTypeOptions?: FuelTypeOption[];
@@ -191,7 +191,7 @@ export function EmissionFactorForm(props: EmissionFactorFormProps) {
                   <FormLabel>Macro Tipo Carburante</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={field.value ? String(field.value) : undefined}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -200,7 +200,7 @@ export function EmissionFactorForm(props: EmissionFactorFormProps) {
                     </FormControl>
                     <SelectContent>
                       {props.macroFuelTypes.map((mft) => (
-                        <SelectItem key={mft.id} value={mft.id}>
+                        <SelectItem key={mft.id} value={String(mft.id)}>
                           {mft.name} (Scope {mft.scope}, {mft.unit})
                         </SelectItem>
                       ))}

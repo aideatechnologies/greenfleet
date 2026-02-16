@@ -169,7 +169,7 @@ async function main() {
   const vehicles = await prisma.tenantVehicle.findMany({
     where: { tenantId: org.id },
   });
-  const plateToVehicle = new Map<string, { id: string; licensePlate: string }>();
+  const plateToVehicle = new Map<string, { id: number; licensePlate: string }>();
   for (const v of vehicles) {
     if (v.licensePlate) {
       plateToVehicle.set(v.licensePlate.toUpperCase(), {
@@ -191,7 +191,7 @@ async function main() {
   // 7. Process rows
   type KmReadingInput = {
     tenantId: string;
-    vehicleId: string;
+    vehicleId: number;
     userId: string;
     date: Date;
     odometerKm: number;

@@ -44,7 +44,7 @@ export type UpdateDocumentInput = z.infer<typeof updateDocumentSchema>;
 // ---------------------------------------------------------------------------
 
 export const documentFilterSchema = z.object({
-  vehicleId: z.string().min(1, { error: "Il veicolo e obbligatorio" }),
+  vehicleId: z.coerce.number({ error: "Il veicolo e obbligatorio" }),
   documentType: z
     .enum(DOCUMENT_TYPE_VALUES as unknown as [string, ...string[]])
     .optional(),

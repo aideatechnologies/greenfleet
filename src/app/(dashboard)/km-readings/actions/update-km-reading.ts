@@ -15,7 +15,7 @@ import { getPrismaForTenant } from "@/lib/db/client";
 import { logger } from "@/lib/utils/logger";
 
 export async function updateKmReadingAction(
-  recordId: string,
+  recordId: number,
   input: unknown
 ): Promise<ActionResult<KmReadingWithDetails>> {
   const authResult = await requireAuth();

@@ -100,7 +100,7 @@ export function diffObjects(
 export type CreateAuditLogInput = {
   action: AuditAction;
   entityType: string;
-  entityId: string;
+  entityId: string | number;
   userId: string;
   userName: string;
   changes: AuditChange[];
@@ -121,7 +121,7 @@ export function createAuditLog(
         tenantId: "", // Overwritten by tenant extension
         action: input.action,
         entityType: input.entityType,
-        entityId: input.entityId,
+        entityId: String(input.entityId),
         userId: input.userId,
         userName: input.userName,
         changes: JSON.stringify(input.changes),
@@ -158,7 +158,7 @@ export async function auditCreate(
     userName?: string;
     action: AuditAction;
     entityType: string;
-    entityId: string;
+    entityId: string | number;
     data: Record<string, unknown>;
     source?: string;
     metadata?: Record<string, unknown>;
@@ -180,7 +180,7 @@ export async function auditCreate(
         userId: params.userId,
         action: params.action,
         entityType: params.entityType,
-        entityId: params.entityId,
+        entityId: String(params.entityId),
         changes: JSON.stringify(changes),
         source: params.source ?? null,
       },
@@ -190,7 +190,7 @@ export async function auditCreate(
     createAuditLog(prisma, {
       action: params.action,
       entityType: params.entityType,
-      entityId: params.entityId,
+      entityId: String(params.entityId),
       userId: params.userId,
       userName: params.userName ?? params.userId,
       changes,
@@ -219,7 +219,7 @@ export async function auditUpdate(
     userName?: string;
     action: AuditAction;
     entityType: string;
-    entityId: string;
+    entityId: string | number;
     changes: AuditChange[];
     source?: string;
     metadata?: Record<string, unknown>;
@@ -236,7 +236,7 @@ export async function auditUpdate(
         userId: params.userId,
         action: params.action,
         entityType: params.entityType,
-        entityId: params.entityId,
+        entityId: String(params.entityId),
         changes: JSON.stringify(params.changes),
         source: params.source ?? null,
       },
@@ -246,7 +246,7 @@ export async function auditUpdate(
     createAuditLog(prisma, {
       action: params.action,
       entityType: params.entityType,
-      entityId: params.entityId,
+      entityId: String(params.entityId),
       userId: params.userId,
       userName: params.userName ?? params.userId,
       changes: params.changes,
@@ -312,7 +312,7 @@ export async function getAuditEntries(
     prisma.auditLog.count({ where }),
   ]);
 
-  const entries: AuditLogEntry[] = data.map((row) => ({
+  const entries: AuditLogEntry[] = data.map((row): AuditLogEntry => ({
     id: row.id,
     action: row.action as AuditAction,
     entityType: row.entityType,

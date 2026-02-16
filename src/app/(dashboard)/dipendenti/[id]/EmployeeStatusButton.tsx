@@ -37,8 +37,8 @@ export function EmployeeStatusButton({
     setIsLoading(true);
     try {
       const result = isActive
-        ? await deactivateEmployeeAction(employeeId)
-        : await reactivateEmployeeAction(employeeId);
+        ? await deactivateEmployeeAction(Number(employeeId))
+        : await reactivateEmployeeAction(Number(employeeId));
 
       if (result.success) {
         toast.success(

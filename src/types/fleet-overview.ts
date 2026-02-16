@@ -59,7 +59,7 @@ export const FLEET_CONTRACT_STATUS_LABELS: Record<FleetContractStatus, string> =
 // ---------------------------------------------------------------------------
 
 export type FleetVehicleOverview = {
-  id: string;
+  id: number;
   licensePlate: string;
   make: string;
   model: string;
@@ -67,13 +67,13 @@ export type FleetVehicleOverview = {
   vehicleStatus: FleetVehicleStatus;
   assignmentStatus: AssignmentStatus;
   assignedEmployee: {
-    id: string;
+    id: number;
     firstName: string;
     lastName: string;
     isPool: boolean;
   } | null;
   activeContract: {
-    id: string;
+    id: number;
     type: ContractType;
     endDate: Date | null;
   } | null;
@@ -102,14 +102,14 @@ export const EMPLOYEE_OVERVIEW_STATUS_LABELS: Record<EmployeeOverviewStatus, str
 // ---------------------------------------------------------------------------
 
 export type FleetEmployeeOverview = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   email: string | null;
   isPool: boolean;
   isActive: boolean;
   assignedVehicle: {
-    id: string;
+    id: number;
     licensePlate: string;
     make: string;
     model: string;

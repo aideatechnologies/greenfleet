@@ -23,7 +23,11 @@ export default async function EditFuelRecordPage({
     redirect("/fuel-records");
   }
 
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) {
+    notFound();
+  }
   const prisma = getPrismaForTenant(tenantId);
 
   const record = await prisma.fuelRecord.findFirst({
@@ -42,13 +46,14 @@ export default async function EditFuelRecordPage({
   }
 
   const defaultValues = {
-    vehicleId: record.vehicleId,
+    vehicleId: String(record.vehicleId),
     date: record.date,
     fuelType: record.fuelType,
     quantityLiters: record.quantityLiters,
     quantityKwh: record.quantityKwh ?? undefined,
     amountEur: record.amountEur,
     odometerKm: record.odometerKm,
+    fuelCardId: record.fuelCardId != null ? String(record.fuelCardId) : undefined,
     notes: record.notes ?? undefined,
   };
 
@@ -62,6 +67,10 @@ export default async function EditFuelRecordPage({
         >
           Rifornimenti
         </Link>
+        <ChevronRight className="h-4 w-4" />
+        <span className="text-muted-foreground">
+          {record.vehicle.licensePlate}
+        </span>
         <ChevronRight className="h-4 w-4" />
         <span className="text-foreground">Modifica</span>
       </nav>
@@ -82,9 +91,9 @@ export default async function EditFuelRecordPage({
 
       <FuelRecordForm
         mode="edit"
-        recordId={id}
+        recordId={String(id)}
         defaultValues={defaultValues}
-        defaultVehicleId={record.vehicleId}
+        defaultVehicleId={String(record.vehicleId)}
       />
     </div>
   );

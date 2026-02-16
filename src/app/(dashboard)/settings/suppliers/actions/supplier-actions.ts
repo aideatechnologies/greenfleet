@@ -67,7 +67,7 @@ export async function createSupplierAction(
 }
 
 export async function updateSupplierAction(
-  id: string,
+  id: number,
   input: unknown
 ): Promise<ActionResult<SupplierWithType>> {
   const authResult = await requireAuth();
@@ -117,7 +117,7 @@ export async function updateSupplierAction(
 }
 
 export async function toggleSupplierActiveAction(
-  id: string,
+  id: number,
   isActive: boolean
 ): Promise<ActionResult<SupplierWithType>> {
   const authResult = await requireAuth();

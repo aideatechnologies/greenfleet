@@ -20,9 +20,9 @@ export const createFuelCardSchema = z
       .min(1, { error: "La societa emittente e obbligatoria" })
       .max(100, { error: "La societa emittente non puo superare 100 caratteri" }),
     supplierId: z
-      .string()
+      .coerce.number()
       .optional()
-      .transform((val) => (val === "" ? undefined : val)),
+      .transform((val) => (val === 0 ? undefined : val)),
     expiryDate: z.coerce
       .date({ error: "Data scadenza non valida" })
       .optional(),
@@ -35,13 +35,13 @@ export const createFuelCardSchema = z
       { error: "Tipo assegnazione non valido" }
     ),
     assignedVehicleId: z
-      .string()
+      .coerce.number()
       .optional()
-      .transform((val) => (val === "" ? undefined : val)),
+      .transform((val) => (val === 0 ? undefined : val)),
     assignedEmployeeId: z
-      .string()
+      .coerce.number()
       .optional()
-      .transform((val) => (val === "" ? undefined : val)),
+      .transform((val) => (val === 0 ? undefined : val)),
     notes: z
       .string()
       .max(500, { error: "Le note non possono superare 500 caratteri" })
@@ -92,7 +92,7 @@ export const fuelCardFilterSchema = z.object({
   assignmentType: z
     .enum(FUEL_CARD_ASSIGNMENT_TYPE_VALUES as unknown as [string, ...string[]])
     .optional(),
-  supplierId: z.string().optional(),
+  supplierId: z.coerce.number().optional(),
   page: z.coerce.number().min(1).default(1),
   pageSize: z.coerce.number().min(1).max(100).default(DEFAULT_PAGE_SIZE),
 });

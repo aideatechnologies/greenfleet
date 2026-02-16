@@ -91,7 +91,7 @@ export async function savePresetAction(
 // ---------------------------------------------------------------------------
 
 export async function deletePresetAction(
-  presetId: string
+  presetId: number
 ): Promise<ActionResult<null>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;

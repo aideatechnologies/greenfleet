@@ -18,7 +18,7 @@ import { logger } from "@/lib/utils/logger";
 const AUDITABLE_FIELDS = ["gwpValue", "source", "isActive"];
 
 export async function updateGwpConfigAction(
-  id: string,
+  id: number,
   input: unknown
 ): Promise<ActionResult<GwpConfig>> {
   const authResult = await requireAuth();
@@ -68,7 +68,7 @@ export async function updateGwpConfigAction(
         userId: ctx.userId,
         action: "gwp_config.updated",
         entityType: "GwpConfig",
-        entityId: id,
+        entityId: String(id),
         changes,
       });
     }

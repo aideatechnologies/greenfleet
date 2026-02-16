@@ -3,7 +3,7 @@ import { getDocumentsByVehicle, getDocumentSummary } from "@/lib/services/vehicl
 import { DocumentTable } from "./DocumentTable";
 
 type DocumentTabProps = {
-  vehicleId: string;
+  vehicleId: number;
   tenantId: string;
   canEdit: boolean;
 };

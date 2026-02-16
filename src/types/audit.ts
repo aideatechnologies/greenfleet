@@ -49,7 +49,7 @@ export interface AuditChange {
 // ---------------------------------------------------------------------------
 
 export interface AuditLogEntry {
-  id: string;
+  id: number;
   action: AuditAction;
   entityType: string;
   entityId: string;

@@ -12,8 +12,8 @@ import { getPrismaForTenant } from "@/lib/db/client";
 import { logger } from "@/lib/utils/logger";
 
 export async function deleteFuelRecordAction(
-  recordId: string
-): Promise<ActionResult<{ id: string }>> {
+  recordId: number
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;

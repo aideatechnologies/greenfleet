@@ -13,8 +13,8 @@ import { auditCreate } from "@/lib/services/audit-service";
 import { logger } from "@/lib/utils/logger";
 
 export async function deleteFuelTypeMappingAction(
-  id: string
-): Promise<ActionResult<{ id: string }>> {
+  id: number
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
@@ -38,7 +38,7 @@ export async function deleteFuelTypeMappingAction(
         userId: ctx.userId,
         action: "fuel_type_mapping.deleted",
         entityType: "FuelTypeMacroMapping",
-        entityId: id,
+        entityId: String(id),
         data: {
           vehicleFuelType: deleted.vehicleFuelType,
           macroFuelTypeId: deleted.macroFuelTypeId,

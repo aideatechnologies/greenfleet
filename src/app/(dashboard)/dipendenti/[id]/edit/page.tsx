@@ -11,7 +11,10 @@ export default async function EditEmployeePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) notFound();
+
   const ctx = await getSessionContext();
   if (!ctx || !ctx.organizationId) {
     redirect("/login");
@@ -62,13 +65,15 @@ export default async function EditEmployeePage({
 
       <EmployeeForm
         mode="edit"
-        employeeId={id}
+        employeeId={String(id)}
         defaultValues={{
           firstName: employee.firstName,
           lastName: employee.lastName,
           email: employee.email ?? "",
           phone: employee.phone ?? "",
           fiscalCode: employee.fiscalCode ?? "",
+          matricola: employee.matricola ?? "",
+          avgMonthlyKm: employee.avgMonthlyKm ?? undefined,
         }}
       />
     </div>

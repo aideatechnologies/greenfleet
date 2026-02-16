@@ -13,7 +13,7 @@ export type AnomalyType =
   | "negative_km";
 
 export type FuelAnomaly = {
-  fuelRecordId: string;
+  fuelRecordId: number;
   type: AnomalyType;
   message: string;
   severity: AnomalySeverity;
@@ -34,7 +34,7 @@ const SUSPICIOUS_QUANTITY_LITERS = 200;
 // ---------------------------------------------------------------------------
 
 type FuelRecordForAnomaly = {
-  id: string;
+  id: number;
   odometerKm: number;
   quantityLiters: number;
   date: Date;
@@ -116,7 +116,7 @@ export function checkFuelRecordAnomaly(
  */
 export async function detectFuelAnomalies(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   tenantId: string
 ): Promise<FuelAnomaly[]> {
   // Fetch all fuel records for the vehicle, ordered by date ASC

@@ -13,8 +13,8 @@ import { auditCreate } from "@/lib/services/audit-service";
 import { logger } from "@/lib/utils/logger";
 
 export async function deleteGwpConfigAction(
-  id: string
-): Promise<ActionResult<{ id: string }>> {
+  id: number
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
@@ -38,7 +38,7 @@ export async function deleteGwpConfigAction(
         userId: ctx.userId,
         action: "gwp_config.deleted",
         entityType: "GwpConfig",
-        entityId: id,
+        entityId: String(id),
         data: {
           gasName: deleted.gasName,
           gwpValue: deleted.gwpValue,

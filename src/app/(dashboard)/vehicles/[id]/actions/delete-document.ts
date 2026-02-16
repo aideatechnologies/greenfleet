@@ -13,8 +13,8 @@ import { getPrismaForTenant } from "@/lib/db/client";
 import { logger } from "@/lib/utils/logger";
 
 export async function deleteDocumentAction(
-  documentId: string,
-  vehicleId: string
+  documentId: number,
+  vehicleId: number
 ): Promise<ActionResult<{ deleted: true }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;

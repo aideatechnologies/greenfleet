@@ -107,7 +107,7 @@ async function main() {
     const typeMap = new Map(types.map((t) => [t.code, t.id]));
 
     // Get suppliers without a type (use raw query since field is now required in schema)
-    const untyped = await prisma.$queryRaw<{ id: string; name: string }[]>`
+    const untyped = await prisma.$queryRaw<{ id: number; name: string }[]>`
       SELECT id, name FROM Suppliers
       WHERE tenant_id = ${tenantId} AND supplier_type_id IS NULL
     `;

@@ -11,7 +11,9 @@ type PageProps = {
 };
 
 export default async function ImportDetailPage({ params }: PageProps) {
-  const { importId } = await params;
+  const { importId: rawImportId } = await params;
+  const importId = Number(rawImportId);
+  if (Number.isNaN(importId)) notFound();
 
   const ctx = await getSessionContext();
   if (!ctx || !ctx.organizationId) redirect("/login");

@@ -96,7 +96,7 @@ export function KmReadingTable({
   // Delete confirm dialog state
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
-    readingId: string;
+    readingId: number | string;
     vehicleInfo: string;
   }>({ open: false, readingId: "", vehicleInfo: "" });
   const [isDeleting, setIsDeleting] = useState(false);
@@ -141,7 +141,7 @@ export function KmReadingTable({
   async function handleConfirmDelete() {
     setIsDeleting(true);
     try {
-      const result = await deleteKmReadingAction(confirmDialog.readingId);
+      const result = await deleteKmReadingAction(Number(confirmDialog.readingId));
       if (result.success) {
         toast.success("Rilevazione km eliminata");
         router.refresh();
@@ -158,7 +158,7 @@ export function KmReadingTable({
 
   // Calculate delta km for each reading (difference from previous reading)
   const deltaKmMap = useMemo(() => {
-    const map = new Map<string, number | null>();
+    const map = new Map<number | string, number | null>();
     // Readings come sorted by date DESC from server, we need ascending for delta
     const sorted = [...readings].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()

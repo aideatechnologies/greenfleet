@@ -7,7 +7,7 @@ import { prisma } from "@/lib/db/client";
 import { logger } from "@/lib/utils/logger";
 
 export type AvailableCatalogVehicle = {
-  id: string;
+  id: number;
   marca: string;
   modello: string;
   allestimento: string | null;
@@ -21,7 +21,7 @@ export type AvailableCatalogVehicle = {
 };
 
 export async function getAvailableCatalogVehiclesAction(
-  excludeIds: string[]
+  excludeIds: number[]
 ): Promise<ActionResult<AvailableCatalogVehicle[]>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;

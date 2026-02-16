@@ -4,11 +4,18 @@ import type { ActionResult } from "@/types/action-result";
 import { ErrorCode } from "@/types/action-result";
 import { requireAuth } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
-import { getSuppliersByTypeCode } from "@/lib/services/supplier-service";
-import type { SupplierOptionItem } from "@/components/forms/SupplierSelector";
 
-export async function getNltSuppliersAction(): Promise<
-  ActionResult<SupplierOptionItem[]>
+export type FuelCardOptionItem = {
+  id: string;
+  cardNumber: string;
+  issuer: string;
+};
+
+/**
+ * Get active fuel cards for the fuel record form (optional association).
+ */
+export async function getFuelCardsForFuelRecordAction(): Promise<
+  ActionResult<FuelCardOptionItem[]>
 > {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -25,24 +32,28 @@ export async function getNltSuppliersAction(): Promise<
 
   try {
     const prisma = getPrismaForTenant(tenantId);
-    const suppliers = await getSuppliersByTypeCode(prisma, "NLT");
+    const fuelCards = await prisma.fuelCard.findMany({
+      where: { status: "ACTIVE" },
+      orderBy: { cardNumber: "asc" },
+      select: {
+        id: true,
+        cardNumber: true,
+        issuer: true,
+      },
+    });
 
     return {
       success: true,
-      data: suppliers.map((s) => ({
-        id: String(s.id),
-        name: s.name,
-        vatNumber: s.vatNumber,
-        supplierType: {
-          code: s.supplierType.code,
-          label: s.supplierType.label,
-        },
+      data: fuelCards.map((fc) => ({
+        id: String(fc.id),
+        cardNumber: fc.cardNumber,
+        issuer: fc.issuer,
       })),
     };
   } catch {
     return {
       success: false,
-      error: "Errore nel caricamento dei fornitori",
+      error: "Errore nel caricamento delle carte carburante",
       code: ErrorCode.INTERNAL,
     };
   }

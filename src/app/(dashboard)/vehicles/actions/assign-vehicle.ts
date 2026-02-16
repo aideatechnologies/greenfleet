@@ -11,7 +11,7 @@ import { logger } from "@/lib/utils/logger";
 
 export async function assignVehicleAction(
   input: unknown
-): Promise<ActionResult<{ id: string }>> {
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;

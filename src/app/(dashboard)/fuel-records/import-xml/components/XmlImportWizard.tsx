@@ -305,7 +305,7 @@ function computeSummary(lines: ImportLineWithMatch[]) {
 export function XmlImportWizard() {
   const [step, setStep] = useState(0);
   const [templates, setTemplates] = useState<XmlTemplateWithSupplier[]>([]);
-  const [selectedTemplateId, setSelectedTemplateId] = useState("");
+  const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(null);
   const [fileName, setFileName] = useState("");
   const [xmlContent, setXmlContent] = useState("");
   const [requireManualConfirm, setRequireManualConfirm] = useState(false);
@@ -353,7 +353,7 @@ export function XmlImportWizard() {
           const result = await detectFatturaAction(content);
           if (result.success) {
             setDetection(result.data.detection);
-            if (result.data.suggestedTemplateId) {
+            if (result.data.suggestedTemplateId != null) {
               setSelectedTemplateId(result.data.suggestedTemplateId);
               toast.success(
                 `Fornitore rilevato: ${result.data.detection.supplierName ?? result.data.detection.supplierVat} — template "${result.data.suggestedTemplateName}" selezionato automaticamente`
@@ -376,7 +376,7 @@ export function XmlImportWizard() {
 
   // ---- Start import ----
   const handleStartImport = useCallback(() => {
-    if (!selectedTemplateId) {
+    if (selectedTemplateId == null) {
       toast.error("Seleziona un template");
       return;
     }
@@ -416,7 +416,7 @@ export function XmlImportWizard() {
 
   // ---- Confirm/Reject/Skip single line ----
   const handleLineAction = useCallback(
-    (lineId: string, action: "confirm" | "reject" | "skip") => {
+    (lineId: number, action: "confirm" | "reject" | "skip") => {
       startTransition(async () => {
         const result = await confirmLineAction(lineId, action);
         if (result.success) {
@@ -512,7 +512,7 @@ export function XmlImportWizard() {
     return computeSummary(importData.lines);
   }, [importData]);
 
-  const canStartImport = xmlContent.length > 0 && selectedTemplateId.length > 0;
+  const canStartImport = xmlContent.length > 0 && selectedTemplateId != null;
 
   // ========================================================================
   // STEP 0: Upload & Configure
@@ -597,15 +597,15 @@ export function XmlImportWizard() {
             <div className="space-y-2">
               <Label>Template di estrazione</Label>
               <Select
-                value={selectedTemplateId}
-                onValueChange={setSelectedTemplateId}
+                value={selectedTemplateId != null ? String(selectedTemplateId) : ""}
+                onValueChange={(v) => setSelectedTemplateId(Number(v))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Seleziona un template..." />
                 </SelectTrigger>
                 <SelectContent>
                   {templates.map((t) => (
-                    <SelectItem key={t.id} value={t.id}>
+                    <SelectItem key={t.id} value={String(t.id)}>
                       {t.name} ({t.supplier.name})
                     </SelectItem>
                   ))}
@@ -969,7 +969,7 @@ function ImportLineRow({
   isPending,
 }: {
   line: ImportLineWithMatch;
-  onAction: (lineId: string, action: "confirm" | "reject" | "skip") => void;
+  onAction: (lineId: number, action: "confirm" | "reject" | "skip") => void;
   isPending: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);

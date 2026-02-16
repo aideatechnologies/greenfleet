@@ -9,8 +9,8 @@ import { auditCreate } from "@/lib/services/audit-service";
 import { logger } from "@/lib/utils/logger";
 
 export async function deleteEmissionTargetAction(
-  targetId: string
-): Promise<ActionResult<{ id: string }>> {
+  targetId: number
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
@@ -58,7 +58,7 @@ export async function deleteEmissionTargetAction(
       userId: ctx.userId,
       action: "emission_target.deleted",
       entityType: "EmissionTarget",
-      entityId: targetId,
+      entityId: String(targetId),
       data: {
         scope: existing.scope,
         carlistId: existing.carlistId,

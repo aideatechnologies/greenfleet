@@ -23,7 +23,7 @@ const drillDownSchema = z.object({
     z.literal("CARLIST"),
     z.literal("VEHICLE"),
   ]),
-  id: z.string().nullable(),
+  id: z.number().nullable(),
   startDate: z.string({ error: "La data di inizio e obbligatoria" }),
   endDate: z.string({ error: "La data di fine e obbligatoria" }),
 });
@@ -34,7 +34,7 @@ const drillDownSchema = z.object({
 
 export async function drillDown(
   level: DrillDownLevel,
-  id: string | null,
+  id: number | null,
   startDate: string,
   endDate: string
 ): Promise<ActionResult<DrillDownResult>> {
@@ -140,7 +140,7 @@ export async function drillDown(
 // ---------------------------------------------------------------------------
 
 export async function getVehicleDetailAction(
-  vehicleId: string,
+  vehicleId: number,
   startDate: string,
   endDate: string
 ): Promise<ActionResult<VehicleEmissionDetail>> {

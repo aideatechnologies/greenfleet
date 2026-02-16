@@ -27,7 +27,7 @@ export function getExpiryStatus(expiryDate: Date): DocumentExpiryStatus {
 
 export async function getDocumentsByVehicle(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   filters?: {
     documentType?: string;
     expiryStatus?: "all" | "expiring" | "expired";
@@ -65,7 +65,7 @@ export async function getDocumentsByVehicle(
 
 export async function getDocumentById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<VehicleDocument | null> {
   return prisma.vehicleDocument.findFirst({
     where: { id },
@@ -77,7 +77,7 @@ export async function getDocumentById(
 // ---------------------------------------------------------------------------
 
 export type CreateDocumentData = CreateDocumentInput & {
-  vehicleId: string;
+  vehicleId: number;
   fileName: string;
   fileUrl: string;
   fileMimeType: string;
@@ -118,7 +118,7 @@ export type UpdateDocumentData = UpdateDocumentInput & {
 
 export async function updateDocument(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: UpdateDocumentData
 ): Promise<VehicleDocument> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -148,7 +148,7 @@ export async function updateDocument(
 
 export async function deleteDocument(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<VehicleDocument> {
   return prisma.vehicleDocument.delete({
     where: { id },
@@ -191,7 +191,7 @@ export type DocumentSummary = {
 
 export async function getDocumentSummary(
   prisma: PrismaClientWithTenant,
-  vehicleId: string
+  vehicleId: number
 ): Promise<DocumentSummary> {
   const documents = await prisma.vehicleDocument.findMany({
     where: { vehicleId },

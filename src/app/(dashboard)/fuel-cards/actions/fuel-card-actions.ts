@@ -67,7 +67,7 @@ export async function createFuelCardAction(
 }
 
 export async function updateFuelCardAction(
-  id: string,
+  id: number,
   input: unknown
 ): Promise<ActionResult<FuelCardWithDetails>> {
   const authResult = await requireAuth();
@@ -117,7 +117,7 @@ export async function updateFuelCardAction(
 }
 
 export async function toggleFuelCardStatusAction(
-  id: string,
+  id: number,
   status: string
 ): Promise<ActionResult<FuelCardWithDetails>> {
   const authResult = await requireAuth();

@@ -71,7 +71,7 @@ export async function createFuelCard(
 
 export async function updateFuelCard(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: UpdateFuelCardInput
 ): Promise<FuelCardWithDetails> {
   return prisma.fuelCard.update({
@@ -97,7 +97,7 @@ export async function updateFuelCard(
 
 export async function getFuelCardById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<FuelCardWithDetails | null> {
   const result = await prisma.fuelCard.findFirst({
     where: { id },
@@ -160,7 +160,7 @@ export async function getFuelCards(
 
 export async function getFuelCardsByVehicle(
   prisma: PrismaClientWithTenant,
-  vehicleId: string
+  vehicleId: number
 ): Promise<FuelCardWithDetails[]> {
   const results = await prisma.fuelCard.findMany({
     where: { assignedVehicleId: vehicleId },
@@ -176,7 +176,7 @@ export async function getFuelCardsByVehicle(
 
 export async function getFuelCardsByEmployee(
   prisma: PrismaClientWithTenant,
-  employeeId: string
+  employeeId: number
 ): Promise<FuelCardWithDetails[]> {
   const results = await prisma.fuelCard.findMany({
     where: { assignedEmployeeId: employeeId },
@@ -192,7 +192,7 @@ export async function getFuelCardsByEmployee(
 
 export async function toggleFuelCardStatus(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   status: string
 ): Promise<FuelCardWithDetails> {
   return prisma.fuelCard.update({

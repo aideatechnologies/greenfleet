@@ -11,7 +11,7 @@ import { getPrismaForTenant } from "@/lib/db/client";
 import { logger } from "@/lib/utils/logger";
 
 export async function updateCarlistAction(
-  id: string,
+  id: number,
   input: unknown
 ): Promise<ActionResult<Carlist>> {
   const authResult = await requireAuth();

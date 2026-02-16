@@ -47,6 +47,10 @@ import {
   type VehicleOptionItem,
 } from "@/components/forms/VehicleSelector";
 import { getTenantVehiclesForFuelAction } from "../actions/get-tenant-vehicles";
+import {
+  getFuelCardsForFuelRecordAction,
+  type FuelCardOptionItem,
+} from "../actions/get-fuel-cards";
 import { createFuelRecordAction } from "../actions/create-fuel-record";
 import { updateFuelRecordAction } from "../actions/update-fuel-record";
 
@@ -62,6 +66,7 @@ type FormValues = {
   quantityKwh?: number | null;
   amountEur: number;
   odometerKm: number;
+  fuelCardId?: string | null;
   notes?: string;
 };
 
@@ -93,6 +98,7 @@ export function FuelRecordForm({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [vehicles, setVehicles] = useState<VehicleOptionItem[]>([]);
+  const [fuelCards, setFuelCards] = useState<FuelCardOptionItem[]>([]);
 
   const isEdit = mode === "edit";
   const schema = isEdit ? updateFuelRecordSchema : createFuelRecordSchema;
@@ -107,24 +113,31 @@ export function FuelRecordForm({
       quantityKwh: undefined,
       amountEur: undefined as unknown as number,
       odometerKm: undefined as unknown as number,
+      fuelCardId: undefined,
       notes: "",
     },
     mode: "onBlur",
   });
 
-  // Load vehicles for selector
+  // Load vehicles and fuel cards for selectors
   useEffect(() => {
-    async function loadVehicles() {
-      const result = await getTenantVehiclesForFuelAction();
-      if (result.success) {
-        setVehicles(result.data);
+    async function loadOptions() {
+      const [vehiclesResult, fuelCardsResult] = await Promise.all([
+        getTenantVehiclesForFuelAction(),
+        getFuelCardsForFuelRecordAction(),
+      ]);
+      if (vehiclesResult.success) {
+        setVehicles(vehiclesResult.data);
         // If driver has only one vehicle, auto-select it
-        if (isDriver && result.data.length === 1 && !initialDefaults) {
-          form.setValue("vehicleId", result.data[0].id);
+        if (isDriver && vehiclesResult.data.length === 1 && !initialDefaults) {
+          form.setValue("vehicleId", vehiclesResult.data[0].id);
         }
       }
+      if (fuelCardsResult.success) {
+        setFuelCards(fuelCardsResult.data);
+      }
     }
-    loadVehicles();
+    loadOptions();
   }, [isDriver, form, initialDefaults]);
 
   const watchedFuelType = form.watch("fuelType");
@@ -134,7 +147,7 @@ export function FuelRecordForm({
       try {
         if (isEdit && recordId) {
           const result = await updateFuelRecordAction(
-            recordId,
+            Number(recordId),
             values as UpdateFuelRecordInput
           );
           if (result.success) {
@@ -396,6 +409,44 @@ export function FuelRecordForm({
               </FormItem>
             )}
           />
+
+          {/* Fuel card selector */}
+          {fuelCards.length > 0 && (
+            <FormField
+              control={form.control}
+              name="fuelCardId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Carta carburante</FormLabel>
+                  <Select
+                    onValueChange={(val) =>
+                      field.onChange(val === "__none__" ? undefined : val)
+                    }
+                    value={field.value ?? "__none__"}
+                  >
+                    <FormControl>
+                      <SelectTrigger
+                        className={cn(
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <SelectValue placeholder="Nessuna carta" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="__none__">Nessuna carta</SelectItem>
+                      {fuelCards.map((fc) => (
+                        <SelectItem key={fc.id} value={fc.id}>
+                          {fc.cardNumber} ({fc.issuer})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           {/* Notes */}
           <FormField

@@ -55,7 +55,7 @@ export const reportParamsSchema = z
     }),
     aggregationLevel: aggregationLevelSchema,
     periodGranularity: periodGranularitySchema.optional(),
-    carlistId: z.string().optional(),
+    carlistId: z.coerce.number().optional(),
     vehicleFilters: vehicleFiltersSchema.optional(),
   })
   .refine(

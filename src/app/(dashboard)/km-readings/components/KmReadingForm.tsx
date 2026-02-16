@@ -109,10 +109,15 @@ export function KmReadingForm({
     async function loadVehicles() {
       const result = await getTenantVehiclesForKmAction();
       if (result.success) {
-        setVehicles(result.data);
+        const mapped: VehicleOptionItem[] = result.data.map((v) => ({
+          id: String(v.id),
+          licensePlate: v.licensePlate,
+          catalogVehicle: v.catalogVehicle,
+        }));
+        setVehicles(mapped);
         // If driver has only one vehicle, auto-select it
-        if (isDriver && result.data.length === 1 && !initialDefaults) {
-          form.setValue("vehicleId", result.data[0].id);
+        if (isDriver && mapped.length === 1 && !initialDefaults) {
+          form.setValue("vehicleId", mapped[0].id);
         }
       }
     }
@@ -127,7 +132,7 @@ export function KmReadingForm({
     }
 
     async function loadLastOdometer() {
-      const result = await getLastOdometerAction(watchedVehicleId);
+      const result = await getLastOdometerAction(Number(watchedVehicleId));
       if (result.success) {
         setLastOdometer(result.data);
       }
@@ -140,7 +145,7 @@ export function KmReadingForm({
       try {
         if (isEdit && recordId) {
           const result = await updateKmReadingAction(
-            recordId,
+            Number(recordId),
             values as UpdateKmReadingInput
           );
           if (result.success) {

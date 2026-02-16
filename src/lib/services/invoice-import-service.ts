@@ -17,9 +17,9 @@ import {
 // ---------------------------------------------------------------------------
 
 export type InvoiceImportWithLines = {
-  id: string;
+  id: number;
   tenantId: string;
-  templateId: string;
+  templateId: number;
   userId: string;
   fileName: string;
   fileHash: string | null;
@@ -38,15 +38,15 @@ export type InvoiceImportWithLines = {
   updatedAt: Date;
   completedAt: Date | null;
   template: {
-    id: string;
+    id: number;
     name: string;
-    supplier: { id: string; name: string };
+    supplier: { id: number; name: string };
   };
   lines: ImportLineWithMatch[];
 };
 
 export type ImportLineWithMatch = {
-  id: string;
+  id: number;
   lineNumber: number;
   licensePlate: string | null;
   date: Date | null;
@@ -57,11 +57,11 @@ export type ImportLineWithMatch = {
   odometerKm: number | null;
   description: string | null;
   matchStatus: string;
-  matchedFuelRecordId: string | null;
-  createdFuelRecordId: string | null;
+  matchedFuelRecordId: number | null;
+  createdFuelRecordId: number | null;
   matchScore: number | null;
   matchDetails: string | null;
-  resolvedVehicleId: string | null;
+  resolvedVehicleId: number | null;
   extractionErrors: string | null;
 };
 
@@ -200,7 +200,7 @@ function toImportLine(row: any): ImportLineWithMatch {
 export async function createImport(
   prisma: PrismaClientWithTenant,
   data: {
-    templateId: string;
+    templateId: number;
     userId: string;
     fileName: string;
     xmlContent: string;
@@ -231,7 +231,7 @@ export async function createImport(
 
 export async function processImport(
   prisma: PrismaClientWithTenant,
-  importId: string,
+  importId: number,
   xmlContent: string,
   templateConfig: TemplateConfig,
   matchingConfig?: MatchingTolerances
@@ -361,7 +361,7 @@ export async function processImport(
 
 export async function getImportById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<InvoiceImportWithLines | null> {
   const result = await prisma.invoiceImport.findFirst({
     where: { id },
@@ -431,7 +431,7 @@ export async function getImports(
 
 export async function confirmLine(
   prisma: PrismaClientWithTenant,
-  lineId: string,
+  lineId: number,
   action: "confirm" | "reject" | "skip"
 ): Promise<void> {
   switch (action) {
@@ -467,7 +467,7 @@ export async function confirmLine(
 
 export async function confirmAllAutoMatched(
   prisma: PrismaClientWithTenant,
-  importId: string
+  importId: number
 ): Promise<number> {
   const result = await prisma.invoiceImportLine.updateMany({
     where: {
@@ -488,7 +488,7 @@ export async function confirmAllAutoMatched(
 
 export async function finalizeImport(
   prisma: PrismaClientWithTenant,
-  importId: string
+  importId: number
 ): Promise<InvoiceImportWithLines> {
   // Count lines by status for final totals
   const lines = await prisma.invoiceImportLine.findMany({

@@ -143,7 +143,7 @@ export async function getTenantVehicles(
  */
 export async function getTenantVehicleById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<TenantVehicleWithDetails | null> {
   const result = await prisma.tenantVehicle.findFirst({
     where: { id },
@@ -161,7 +161,7 @@ export async function getTenantVehicleById(
  */
 export async function updateTenantVehicle(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: Omit<UpdateTenantVehicleInput, "id">
 ): Promise<TenantVehicleWithDetails> {
   const updateData: Record<string, unknown> = {};

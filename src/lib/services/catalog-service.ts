@@ -131,7 +131,7 @@ export async function getFilterOptions(): Promise<CatalogFilterOptions> {
 // ---------------------------------------------------------------------------
 
 export async function getCatalogVehicleById(
-  id: string
+  id: number
 ): Promise<CatalogVehicleWithEngines | null> {
   return prisma.catalogVehicle.findUnique({
     where: { id },

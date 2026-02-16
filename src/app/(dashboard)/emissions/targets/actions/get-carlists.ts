@@ -6,7 +6,7 @@ import { requireAuth } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
 
 export type CarlistOption = {
-  id: string;
+  id: number;
   name: string;
 };
 

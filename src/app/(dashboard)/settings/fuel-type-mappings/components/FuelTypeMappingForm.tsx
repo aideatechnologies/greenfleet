@@ -40,7 +40,7 @@ import { createFuelTypeMappingAction } from "../actions/create-fuel-type-mapping
 import { updateFuelTypeMappingAction } from "../actions/update-fuel-type-mapping";
 
 type MacroFuelTypeRef = {
-  id: string;
+  id: number;
   name: string;
   scope: number;
   unit: string;
@@ -48,7 +48,7 @@ type MacroFuelTypeRef = {
 
 type EditValues = {
   vehicleFuelType: string;
-  macroFuelTypeId: string;
+  macroFuelTypeId: number;
   scope: number;
   description: string;
 };
@@ -64,7 +64,7 @@ type FuelTypeMappingFormProps =
   | {
       mode: "edit";
       trigger: ReactNode;
-      mappingId: string;
+      mappingId: number;
       defaultValues: EditValues;
       macroFuelTypes: MacroFuelTypeRef[];
     };
@@ -197,7 +197,7 @@ export function FuelTypeMappingForm(props: FuelTypeMappingFormProps) {
                   <FormLabel>Macro Tipo Carburante</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={field.value ? String(field.value) : undefined}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -206,7 +206,7 @@ export function FuelTypeMappingForm(props: FuelTypeMappingFormProps) {
                     </FormControl>
                     <SelectContent>
                       {props.macroFuelTypes.map((mft) => (
-                        <SelectItem key={mft.id} value={mft.id}>
+                        <SelectItem key={mft.id} value={String(mft.id)}>
                           {mft.name} (Scope {mft.scope})
                         </SelectItem>
                       ))}

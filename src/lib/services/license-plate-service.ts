@@ -21,7 +21,7 @@ export type LicensePlateHistoryRecord = LicensePlateHistory;
 export async function replatVehicle(
   db: PrismaClientWithTenant,
   data: {
-    vehicleId: string;
+    vehicleId: number;
     newPlateNumber: string;
     effectiveDate: Date;
     notes?: string;
@@ -95,7 +95,7 @@ export async function replatVehicle(
  */
 export async function getPlateHistory(
   db: PrismaClientWithTenant,
-  vehicleId: string
+  vehicleId: number
 ): Promise<LicensePlateHistoryRecord[]> {
   const records = await db.licensePlateHistory.findMany({
     where: { vehicleId },
@@ -113,7 +113,7 @@ export async function getPlateHistory(
  */
 export async function getCurrentPlate(
   db: PrismaClientWithTenant,
-  vehicleId: string
+  vehicleId: number
 ): Promise<LicensePlateHistoryRecord | null> {
   const record = await db.licensePlateHistory.findFirst({
     where: {
@@ -134,7 +134,7 @@ export async function getCurrentPlate(
  */
 export async function initializePlateHistory(
   db: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   plateNumber: string,
   startDate: Date
 ): Promise<LicensePlateHistoryRecord> {

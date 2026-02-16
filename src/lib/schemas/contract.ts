@@ -7,7 +7,13 @@ import { CONTRACT_TYPE_VALUES, CONTRACT_STATUS_VALUES } from "@/types/contract";
 // ---------------------------------------------------------------------------
 
 const contractBase = z.object({
-  vehicleId: z.string().min(1, { error: "Il veicolo e obbligatorio" }),
+  vehicleId: z.coerce.number({ error: "Il veicolo e obbligatorio" }),
+  contractKm: z
+    .number()
+    .int({ error: "I km contratto devono essere un numero intero" })
+    .nonnegative({ error: "I km contratto non possono essere negativi" })
+    .nullable()
+    .optional(),
   notes: z
     .string()
     .max(1000, { error: "Le note non possono superare 1000 caratteri" })
@@ -33,7 +39,7 @@ const proprietarioSchema = contractBase.extend({
 
 const breveTermineSchema = contractBase.extend({
   type: z.literal("BREVE_TERMINE"),
-  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   dailyRate: z
@@ -48,7 +54,7 @@ const breveTermineSchema = contractBase.extend({
 
 const lungoTermineSchema = contractBase.extend({
   type: z.literal("LUNGO_TERMINE"),
-  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   monthlyRate: z
@@ -74,7 +80,7 @@ const lungoTermineSchema = contractBase.extend({
 
 const leasingFinanziarioSchema = contractBase.extend({
   type: z.literal("LEASING_FINANZIARIO"),
-  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   monthlyRate: z
@@ -125,6 +131,12 @@ export type ContractInput = z.input<typeof contractSchema>;
 // ---------------------------------------------------------------------------
 
 const updateBase = z.object({
+  contractKm: z
+    .number()
+    .int({ error: "I km contratto devono essere un numero intero" })
+    .nonnegative({ error: "I km contratto non possono essere negativi" })
+    .nullable()
+    .optional(),
   notes: z
     .string()
     .max(1000, { error: "Le note non possono superare 1000 caratteri" })
@@ -146,7 +158,7 @@ const updateProprietarioSchema = updateBase.extend({
 
 const updateBreveTermineSchema = updateBase.extend({
   type: z.literal("BREVE_TERMINE"),
-  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   dailyRate: z
@@ -161,7 +173,7 @@ const updateBreveTermineSchema = updateBase.extend({
 
 const updateLungoTermineSchema = updateBase.extend({
   type: z.literal("LUNGO_TERMINE"),
-  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   monthlyRate: z
@@ -187,7 +199,7 @@ const updateLungoTermineSchema = updateBase.extend({
 
 const updateLeasingFinanziarioSchema = updateBase.extend({
   type: z.literal("LEASING_FINANZIARIO"),
-  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   monthlyRate: z

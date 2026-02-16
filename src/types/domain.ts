@@ -37,19 +37,19 @@ export const EXPIRY_THRESHOLDS = {
 
 export type ContractStatusRow = {
   vehicle: {
-    id: string;
+    id: number;
     licensePlate: string;
     make: string;
     model: string;
     trim?: string;
   };
   activeContract: {
-    id: string;
+    id: number;
     type: ContractType;
     startDate: Date | null;
     endDate: Date | null;
     supplierName: string | null;
-    supplierId: string | null;
+    supplierId: number | null;
     monthlyRate: number | null;
     dailyRate: number | null;
     purchasePrice: number | null;

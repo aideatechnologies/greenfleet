@@ -30,7 +30,7 @@ export function CloseContractButton({ contractId }: CloseContractButtonProps) {
   function handleClose() {
     startTransition(async () => {
       try {
-        const result = await closeContractAction(contractId);
+        const result = await closeContractAction(Number(contractId));
         if (result.success) {
           toast.success("Contratto chiuso con successo");
           setOpen(false);

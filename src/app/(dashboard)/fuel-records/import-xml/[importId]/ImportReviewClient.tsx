@@ -162,7 +162,7 @@ export function ImportReviewClient({ importData: initialData }: ImportReviewClie
 
   // ---- Confirm/Reject/Skip single line ----
   const handleLineAction = useCallback(
-    (lineId: string, action: "confirm" | "reject" | "skip") => {
+    (lineId: number, action: "confirm" | "reject" | "skip") => {
       startTransition(async () => {
         const result = await confirmLineAction(lineId, action);
         if (result.success) {
@@ -444,7 +444,7 @@ function ImportLineRow({
   isPending,
 }: {
   line: ImportLineWithMatch;
-  onAction: (lineId: string, action: "confirm" | "reject" | "skip") => void;
+  onAction: (lineId: number, action: "confirm" | "reject" | "skip") => void;
   isPending: boolean;
 }) {
   const isActionable =

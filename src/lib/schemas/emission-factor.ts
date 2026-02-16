@@ -7,8 +7,7 @@ import { DEFAULT_PAGE_SIZE } from "@/lib/utils/constants";
 
 export const createEmissionFactorSchema = z.object({
   macroFuelTypeId: z
-    .string()
-    .min(1, { error: "Il macro tipo carburante e obbligatorio" }),
+    .coerce.number({ error: "Il macro tipo carburante e obbligatorio" }),
   fuelType: z
     .string()
     .max(100, { error: "Il tipo carburante non puo superare 100 caratteri" })
@@ -57,7 +56,7 @@ export type CreateEmissionFactorData = z.output<typeof createEmissionFactorSchem
 // ---------------------------------------------------------------------------
 
 export const updateEmissionFactorSchema = z.object({
-  macroFuelTypeId: z.string().min(1).optional(),
+  macroFuelTypeId: z.coerce.number().optional(),
   fuelType: z
     .string()
     .max(100)
@@ -82,7 +81,7 @@ export type UpdateEmissionFactorData = z.output<typeof updateEmissionFactorSchem
 // ---------------------------------------------------------------------------
 
 export const emissionFactorFilterSchema = z.object({
-  macroFuelTypeId: z.string().optional(),
+  macroFuelTypeId: z.coerce.number().optional(),
   dateFrom: z.coerce.date().optional(),
   dateTo: z.coerce.date().optional(),
   page: z.coerce.number().min(1).default(1),

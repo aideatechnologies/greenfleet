@@ -62,7 +62,7 @@ export async function getEmployees(
  */
 export async function getEmployeeById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<Employee | null> {
   return prisma.employee.findFirst({
     where: { id },
@@ -86,6 +86,8 @@ export async function createEmployee(
       email: data.email || null,
       phone: data.phone || null,
       fiscalCode: data.fiscalCode || null,
+      matricola: (data as Record<string, unknown>).matricola as string | undefined ?? null,
+      avgMonthlyKm: (data as Record<string, unknown>).avgMonthlyKm as number | undefined ?? null,
     },
   });
 }
@@ -96,7 +98,7 @@ export async function createEmployee(
  */
 export async function updateEmployee(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: CreateEmployeeInput
 ): Promise<Employee> {
   // Guard: Pool record cannot be modified
@@ -113,6 +115,8 @@ export async function updateEmployee(
       email: data.email || null,
       phone: data.phone || null,
       fiscalCode: data.fiscalCode || null,
+      matricola: (data as Record<string, unknown>).matricola as string | undefined ?? null,
+      avgMonthlyKm: (data as Record<string, unknown>).avgMonthlyKm as number | undefined ?? null,
     },
   });
 }
@@ -123,7 +127,7 @@ export async function updateEmployee(
  */
 export async function deactivateEmployee(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<Employee> {
   // Guard: Pool record cannot be deactivated
   const existing = await prisma.employee.findFirst({ where: { id } });
@@ -142,7 +146,7 @@ export async function deactivateEmployee(
  */
 export async function reactivateEmployee(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<Employee> {
   return prisma.employee.update({
     where: { id },

@@ -4,14 +4,10 @@ import type { ActionResult } from "@/types/action-result";
 import { ErrorCode } from "@/types/action-result";
 import { requireAuth } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
-import type { CatalogVehicle, TenantVehicle } from "@/generated/prisma/client";
-
-export type VehicleOption = TenantVehicle & {
-  catalogVehicle: CatalogVehicle;
-};
+import type { VehicleOptionItem } from "@/components/forms/VehicleSelector";
 
 export async function getTenantVehiclesAction(): Promise<
-  ActionResult<VehicleOption[]>
+  ActionResult<VehicleOptionItem[]>
 > {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -36,7 +32,15 @@ export async function getTenantVehiclesAction(): Promise<
 
     return {
       success: true,
-      data: vehicles as unknown as VehicleOption[],
+      data: vehicles.map((v) => ({
+        id: String(v.id),
+        licensePlate: v.licensePlate,
+        catalogVehicle: {
+          marca: v.catalogVehicle.marca,
+          modello: v.catalogVehicle.modello,
+          allestimento: v.catalogVehicle.allestimento,
+        },
+      })),
     };
   } catch {
     return {

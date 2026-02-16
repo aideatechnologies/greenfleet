@@ -31,7 +31,7 @@ export type CarlistWithVehicles = Carlist & {
 };
 
 export type CarlistOption = {
-  id: string;
+  id: number;
   name: string;
 };
 
@@ -111,7 +111,7 @@ export async function getCarlists(
 
 export async function getCarlistById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<CarlistWithVehicles | null> {
   const result = await prisma.carlist.findFirst({
     where: { id },
@@ -160,7 +160,7 @@ export async function createCarlist(
 
 export async function updateCarlist(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   input: UpdateCarlistInput
 ): Promise<ActionResult<Carlist>> {
   // Verify carlist exists
@@ -208,8 +208,8 @@ export async function updateCarlist(
 
 export async function deleteCarlist(
   prisma: PrismaClientWithTenant,
-  id: string
-): Promise<ActionResult<{ id: string }>> {
+  id: number
+): Promise<ActionResult<{ id: number }>> {
   const carlist = await prisma.carlist.findFirst({
     where: { id },
   });
@@ -235,8 +235,8 @@ export async function deleteCarlist(
 
 export async function addCatalogVehicles(
   prisma: PrismaClientWithTenant,
-  carlistId: string,
-  catalogVehicleIds: string[],
+  carlistId: number,
+  catalogVehicleIds: number[],
   userId: string
 ): Promise<ActionResult<{ added: number }>> {
   // Verify carlist exists
@@ -285,8 +285,8 @@ export async function addCatalogVehicles(
 
 export async function removeCatalogVehicles(
   prisma: PrismaClientWithTenant,
-  carlistId: string,
-  catalogVehicleIds: string[]
+  carlistId: number,
+  catalogVehicleIds: number[]
 ): Promise<ActionResult<{ removed: number }>> {
   const carlist = await prisma.carlist.findFirst({
     where: { id: carlistId },
@@ -316,7 +316,7 @@ export async function removeCatalogVehicles(
 
 export async function getCarlistsForCatalogVehicle(
   prisma: PrismaClientWithTenant,
-  catalogVehicleId: string
+  catalogVehicleId: number
 ): Promise<Carlist[]> {
   const entries = await prisma.carlistVehicle.findMany({
     where: { catalogVehicleId },

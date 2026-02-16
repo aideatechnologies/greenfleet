@@ -31,7 +31,7 @@ export async function getMacroFuelTypes(
 
 export async function getMacroFuelTypeById(
   prisma: PrismaClient,
-  id: string
+  id: number
 ): Promise<MacroFuelType | null> {
   return prisma.macroFuelType.findUnique({
     where: { id },
@@ -63,7 +63,7 @@ export async function createMacroFuelType(
 
 export async function updateMacroFuelType(
   prisma: PrismaClient,
-  id: string,
+  id: number,
   input: UpdateMacroFuelTypeData
 ): Promise<MacroFuelType> {
   const existing = await prisma.macroFuelType.findUnique({
@@ -93,7 +93,7 @@ export async function updateMacroFuelType(
 
 export async function deleteMacroFuelType(
   prisma: PrismaClient,
-  id: string
+  id: number
 ): Promise<MacroFuelType> {
   const existing = await prisma.macroFuelType.findUnique({
     where: { id },

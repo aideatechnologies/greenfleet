@@ -383,7 +383,7 @@ export async function getFleetSummaryKPIs(
 // ---------------------------------------------------------------------------
 
 type RawFleetVehicle = {
-  id: string;
+  id: number;
   licensePlate: string;
   status: string;
   catalogVehicle: {
@@ -392,31 +392,31 @@ type RawFleetVehicle = {
     allestimento: string | null;
   };
   assignedEmployee: {
-    id: string;
+    id: number;
     firstName: string;
     lastName: string;
     isPool: boolean;
   } | null;
   contracts: Array<{
-    id: string;
+    id: number;
     type: string;
     endDate: Date | null;
   }>;
   documents: Array<{
-    id: string;
+    id: number;
     expiryDate: Date;
   }>;
 };
 
 type RawEmployee = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   email: string | null;
   isPool: boolean;
   isActive: boolean;
   tenantVehicles: Array<{
-    id: string;
+    id: number;
     licensePlate: string;
     catalogVehicle: {
       marca: string;

@@ -49,7 +49,7 @@ import type { Employee } from "@/generated/prisma/client";
 // Form-specific schema (vehicleId is passed as prop)
 const assignFormSchema = z.object({
   employeeId: z
-    .string()
+    .coerce.number({ error: "Seleziona un dipendente" })
     .min(1, { error: "Seleziona un dipendente" }),
   startDate: z.coerce.date({
     error: "Data di inizio assegnazione non valida",
@@ -63,13 +63,13 @@ const assignFormSchema = z.object({
 
 // Explicit form values type to avoid Zod input/output type mismatches
 type FormValues = {
-  employeeId: string;
+  employeeId: number;
   startDate: Date;
   notes: string | undefined;
 };
 
 type AssignmentDialogProps = {
-  vehicleId: string;
+  vehicleId: number;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
@@ -87,9 +87,9 @@ export function AssignmentDialog({
   const [loadingEmployees, setLoadingEmployees] = useState(false);
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(assignFormSchema) as Resolver<FormValues>,
+    resolver: zodResolver(assignFormSchema) as unknown as Resolver<FormValues>,
     defaultValues: {
-      employeeId: "",
+      employeeId: 0,
       startDate: new Date(),
       notes: "",
     },
@@ -117,7 +117,7 @@ export function AssignmentDialog({
   useEffect(() => {
     if (open) {
       form.reset({
-        employeeId: "",
+        employeeId: 0,
         startDate: new Date(),
         notes: "",
       });

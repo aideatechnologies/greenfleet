@@ -1,5 +1,6 @@
 import type {
   FuelRecord,
+  FuelCard,
   TenantVehicle,
   CatalogVehicle,
 } from "@/generated/prisma/client";
@@ -16,6 +17,7 @@ export type FuelRecordWithDetails = FuelRecord & {
   vehicle: TenantVehicle & {
     catalogVehicle: CatalogVehicle;
   };
+  fuelCard: FuelCard | null;
 };
 
 // ---------------------------------------------------------------------------
@@ -28,6 +30,7 @@ const INCLUDE_DETAILS = {
       catalogVehicle: true,
     },
   },
+  fuelCard: true,
 } as const;
 
 // Auditable fields for change tracking
@@ -52,10 +55,10 @@ const AUDITABLE_FIELDS = [
  */
 export async function validateOdometer(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   date: Date,
   odometerKm: number,
-  excludeRecordId?: string
+  excludeRecordId?: number
 ): Promise<string | null> {
   // Find the most recent fuel record BEFORE this date for this vehicle
   const previousRecord = await prisma.fuelRecord.findFirst({
@@ -125,6 +128,7 @@ export async function createFuelRecord(
       tenantId: "", // Overwritten by tenant extension
       vehicleId: input.vehicleId,
       userId,
+      fuelCardId: (input as Record<string, unknown>).fuelCardId as number | undefined ?? null,
       date: input.date,
       fuelType: input.fuelType,
       quantityLiters: input.quantityLiters,
@@ -165,7 +169,7 @@ export async function createFuelRecord(
 
 export async function updateFuelRecord(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   input: UpdateFuelRecordData,
   userId: string
 ): Promise<FuelRecordWithDetails> {
@@ -207,6 +211,7 @@ export async function updateFuelRecord(
       amountEur: input.amountEur,
       odometerKm: input.odometerKm,
       notes: input.notes ?? null,
+      fuelCardId: (input as Record<string, unknown>).fuelCardId as number | undefined ?? null,
     },
     include: INCLUDE_DETAILS,
   });
@@ -230,7 +235,7 @@ export async function updateFuelRecord(
 
 export async function deleteFuelRecord(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   userId: string
 ): Promise<void> {
   const existing = await prisma.fuelRecord.findFirst({
@@ -271,7 +276,7 @@ export async function deleteFuelRecord(
 
 export async function getFuelRecordsByVehicle(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   pagination: { page: number; pageSize: number }
 ): Promise<PaginatedResult<FuelRecordWithDetails>> {
   const { page, pageSize } = pagination;
@@ -353,7 +358,7 @@ export async function getFuelRecords(
 
 export async function getFuelRecordById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<FuelRecordWithDetails | null> {
   const record = await prisma.fuelRecord.findFirst({
     where: { id },
@@ -370,7 +375,7 @@ export async function getFuelRecordById(
 export type FuelFeedItem =
   | {
       type: "fuel_record";
-      id: string;
+      id: number;
       date: Date;
       odometerKm: number;
       fuelType: string;
@@ -383,7 +388,7 @@ export type FuelFeedItem =
     }
   | {
       type: "km_reading";
-      id: string;
+      id: number;
       date: Date;
       odometerKm: number;
       notes: string | null;
@@ -393,7 +398,7 @@ export type FuelFeedItem =
 
 export async function getVehicleFeed(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   pagination: { page: number; pageSize: number }
 ): Promise<PaginatedResult<FuelFeedItem>> {
   const { page, pageSize } = pagination;

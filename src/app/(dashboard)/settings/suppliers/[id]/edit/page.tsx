@@ -5,14 +5,16 @@ import { getSessionContext, isTenantAdmin } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
 import { getSupplierById } from "@/lib/services/supplier-service";
 import { SupplierForm } from "../../components/SupplierForm";
-import type { CreateSupplierInput } from "@/lib/schemas/supplier";
 
 export default async function EditSupplierPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) notFound();
+
   const ctx = await getSessionContext();
   if (!ctx || !ctx.organizationId) redirect("/login");
 
@@ -24,8 +26,8 @@ export default async function EditSupplierPage({
   const supplier = await getSupplierById(prisma, id);
   if (!supplier) notFound();
 
-  const defaultValues: CreateSupplierInput = {
-    supplierTypeId: supplier.supplierTypeId,
+  const defaultValues = {
+    supplierTypeId: String(supplier.supplierTypeId),
     name: supplier.name,
     vatNumber: supplier.vatNumber ?? "",
     address: supplier.address ?? "",
@@ -55,7 +57,7 @@ export default async function EditSupplierPage({
         </p>
       </div>
 
-      <SupplierForm mode="edit" supplierId={id} defaultValues={defaultValues} />
+      <SupplierForm mode="edit" supplierId={String(id)} defaultValues={defaultValues} />
     </div>
   );
 }

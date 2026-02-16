@@ -17,7 +17,7 @@ export type LastOdometerResult = {
  * Used as a hint in the km reading form.
  */
 export async function getLastOdometerAction(
-  vehicleId: string
+  vehicleId: number
 ): Promise<ActionResult<LastOdometerResult>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;

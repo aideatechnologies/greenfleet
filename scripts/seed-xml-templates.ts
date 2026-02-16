@@ -456,7 +456,7 @@ async function main() {
     const essoSupplier = await findSupplier("08510870960");
 
     type PresetDef = {
-      supplierId: string | null;
+      supplierId: number | null;
       fieldName: string;
       name: string;
       patterns: { label?: string; regex: string; regexGroup?: number }[];

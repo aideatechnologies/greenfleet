@@ -43,7 +43,7 @@ type CarlistFormProps =
     }
   | {
       mode: "edit";
-      carlistId: string;
+      carlistId: number;
       defaultValues: CreateCarlistInput;
       open: boolean;
       onOpenChange: (open: boolean) => void;

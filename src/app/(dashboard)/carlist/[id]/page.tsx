@@ -19,7 +19,10 @@ export default async function CarlistDetailPage({
     redirect("/login");
   }
 
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) notFound();
+
   const tenantId = ctx.organizationId;
   const canEdit = await isTenantAdmin(ctx, tenantId);
 

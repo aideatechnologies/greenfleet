@@ -369,7 +369,7 @@ export function validateImportRows(
   mapping: ColumnMapping,
   _headers: string[],
   config: { numberFormat: "IT" | "EN" },
-  vehiclePlateMap: Map<string, string> // normalized plate -> vehicleId
+  vehiclePlateMap: Map<string, number> // normalized plate -> vehicleId
 ): FuelRecordImportValidation[] {
   return rows.map((row, rowIndex) => {
     const data: Record<string, string> = {};

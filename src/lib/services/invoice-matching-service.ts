@@ -6,7 +6,7 @@ import type { ExtractedLine, MatchingTolerances } from "@/types/xml-template";
 // ---------------------------------------------------------------------------
 
 export type FuelRecordCandidate = {
-  id: string;
+  id: number;
   date: Date;
   quantity: number | null;
   totalCost: number | null;
@@ -26,10 +26,10 @@ export type MatchResult = {
   lineNumber: number;
   extractedLine: ExtractedLine;
   matchStatus: "AUTO_MATCHED" | "SUGGESTED" | "UNMATCHED" | "ERROR";
-  matchedFuelRecordId: string | null;
+  matchedFuelRecordId: number | null;
   matchScore: number | null;
   matchDetails: MatchScoreBreakdown | null;
-  resolvedVehicleId: string | null;
+  resolvedVehicleId: number | null;
   candidateCount: number;
   error?: string;
 };
@@ -263,7 +263,7 @@ function daysBetween(a: Date, b: Date): number {
 export async function resolveLicensePlate(
   prisma: PrismaClientWithTenant,
   licensePlate: string
-): Promise<string | null> {
+): Promise<number | null> {
   const normalized = normalizePlate(licensePlate);
   if (!normalized) return null;
 
@@ -305,7 +305,7 @@ export async function resolveLicensePlate(
  */
 export async function findCandidateFuelRecords(
   prisma: PrismaClientWithTenant,
-  vehicleId: string,
+  vehicleId: number,
   date: Date | null,
   toleranceDays: number
 ): Promise<FuelRecordCandidate[]> {
@@ -560,7 +560,7 @@ export async function matchInvoiceLines(
   const results: MatchResult[] = [];
 
   // Cache delle risoluzioni targa per evitare query duplicate
-  const plateCache = new Map<string, string | null>();
+  const plateCache = new Map<string, number | null>();
 
   for (const line of lines) {
     try {
@@ -582,7 +582,7 @@ export async function matchInvoiceLines(
       }
 
       const normalizedPlate = normalizePlate(rawPlate);
-      let vehicleId: string | null;
+      let vehicleId: number | null;
 
       if (plateCache.has(normalizedPlate)) {
         vehicleId = plateCache.get(normalizedPlate)!;

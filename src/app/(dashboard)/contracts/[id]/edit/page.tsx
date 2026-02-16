@@ -12,7 +12,10 @@ export default async function EditContractPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) notFound();
+
   const ctx = await getSessionContext();
   if (!ctx || !ctx.organizationId) {
     redirect("/login");
@@ -75,10 +78,10 @@ export default async function EditContractPage({
       </div>
 
       <EditContractClient
-        contractId={id}
+        contractId={String(id)}
         contractType={contractType}
         defaultValues={defaultValues}
-        defaultVehicleId={contract.vehicleId}
+        defaultVehicleId={String(contract.vehicleId)}
       />
     </div>
   );
@@ -95,7 +98,8 @@ function buildDefaultValues(
 ) {
   const base = {
     type: contractType,
-    vehicleId: contract.vehicleId as string,
+    vehicleId: String(contract.vehicleId),
+    contractKm: (contract.contractKm as number | null) ?? undefined,
     notes: (contract.notes as string) ?? "",
   };
 
@@ -112,7 +116,7 @@ function buildDefaultValues(
     case "BREVE_TERMINE":
       return {
         ...base,
-        supplierId: (contract.supplierId as string) ?? "",
+        supplierId: contract.supplierId != null ? String(contract.supplierId) : "",
         startDate: contract.startDate
           ? new Date(contract.startDate as string)
           : undefined,
@@ -125,7 +129,7 @@ function buildDefaultValues(
     case "LUNGO_TERMINE":
       return {
         ...base,
-        supplierId: (contract.supplierId as string) ?? "",
+        supplierId: contract.supplierId != null ? String(contract.supplierId) : "",
         startDate: contract.startDate
           ? new Date(contract.startDate as string)
           : undefined,
@@ -140,7 +144,7 @@ function buildDefaultValues(
     case "LEASING_FINANZIARIO":
       return {
         ...base,
-        supplierId: (contract.supplierId as string) ?? "",
+        supplierId: contract.supplierId != null ? String(contract.supplierId) : "",
         startDate: contract.startDate
           ? new Date(contract.startDate as string)
           : undefined,

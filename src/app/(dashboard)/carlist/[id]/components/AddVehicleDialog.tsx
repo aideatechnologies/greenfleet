@@ -27,8 +27,8 @@ import { addCatalogVehiclesToCarlistAction } from "../../actions/manage-vehicles
 // ---------------------------------------------------------------------------
 
 type AddVehicleDialogProps = {
-  carlistId: string;
-  existingCatalogVehicleIds: string[];
+  carlistId: number;
+  existingCatalogVehicleIds: number[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
@@ -47,7 +47,7 @@ export function AddVehicleDialog({
   const [vehicles, setVehicles] = useState<AvailableCatalogVehicle[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [isSubmitting, startSubmitTransition] = useTransition();
 
   // Load vehicles when dialog opens
@@ -88,7 +88,7 @@ export function AddVehicleDialog({
     );
   });
 
-  function toggleVehicle(vehicleId: string) {
+  function toggleVehicle(vehicleId: number) {
     setSelectedIds((prev) => {
       const next = new Set(prev);
       if (next.has(vehicleId)) {

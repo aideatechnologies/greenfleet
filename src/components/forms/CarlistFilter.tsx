@@ -45,7 +45,7 @@ export function CarlistFilter({
       <SelectContent>
         <SelectItem value="all">{placeholder}</SelectItem>
         {options.map((option) => (
-          <SelectItem key={option.id} value={option.id}>
+          <SelectItem key={option.id} value={String(option.id)}>
             {option.name}
           </SelectItem>
         ))}

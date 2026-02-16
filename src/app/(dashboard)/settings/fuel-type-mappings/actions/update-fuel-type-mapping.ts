@@ -17,7 +17,7 @@ import { logger } from "@/lib/utils/logger";
 const AUDITABLE_FIELDS = ["macroFuelTypeId", "description"];
 
 export async function updateFuelTypeMappingAction(
-  id: string,
+  id: number,
   input: unknown
 ): Promise<ActionResult<FuelTypeMacroMapping>> {
   const authResult = await requireAuth();
@@ -70,7 +70,7 @@ export async function updateFuelTypeMappingAction(
         userId: ctx.userId,
         action: "fuel_type_mapping.updated",
         entityType: "FuelTypeMacroMapping",
-        entityId: id,
+        entityId: String(id),
         changes,
       });
     }

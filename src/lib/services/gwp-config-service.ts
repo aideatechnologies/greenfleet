@@ -32,7 +32,7 @@ export async function getGwpConfigs(
 
 export async function getGwpConfigById(
   prisma: PrismaClient,
-  id: string
+  id: number
 ): Promise<GwpConfig | null> {
   return prisma.gwpConfig.findUnique({
     where: { id },
@@ -62,7 +62,7 @@ export async function createGwpConfig(
 
 export async function updateGwpConfig(
   prisma: PrismaClient,
-  id: string,
+  id: number,
   input: UpdateGwpConfigData
 ): Promise<GwpConfig> {
   const existing = await prisma.gwpConfig.findUnique({
@@ -89,7 +89,7 @@ export async function updateGwpConfig(
 
 export async function deleteGwpConfig(
   prisma: PrismaClient,
-  id: string
+  id: number
 ): Promise<GwpConfig> {
   const existing = await prisma.gwpConfig.findUnique({
     where: { id },

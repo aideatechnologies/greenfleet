@@ -115,7 +115,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
     updateSearchParams({ page: page > 1 ? String(page) : null });
   }
 
-  async function handleToggleActive(id: string, currentlyActive: boolean) {
+  async function handleToggleActive(id: number, currentlyActive: boolean) {
     const result = await toggleSupplierActiveAction(id, !currentlyActive);
     if (result.success) {
       toast.success(currentlyActive ? "Fornitore disattivato" : "Fornitore riattivato");
@@ -275,7 +275,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
           <SelectContent>
             <SelectItem value="all">Tutti i tipi</SelectItem>
             {supplierTypes.map((type) => (
-              <SelectItem key={type.id} value={type.id}>
+              <SelectItem key={type.id} value={String(type.id)}>
                 {type.label}
               </SelectItem>
             ))}

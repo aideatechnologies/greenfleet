@@ -4,18 +4,34 @@ import type { ActionResult } from "@/types/action-result";
 import { ErrorCode } from "@/types/action-result";
 import { requireAuth, isDriver } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
-import type { CatalogVehicle, TenantVehicle } from "@/generated/prisma/client";
+import type { VehicleOptionItem } from "@/components/forms/VehicleSelector";
 
-export type VehicleOption = TenantVehicle & {
-  catalogVehicle: CatalogVehicle;
-};
+function mapVehicles(vehicles: Array<{
+  id: number;
+  licensePlate: string;
+  catalogVehicle: {
+    marca: string;
+    modello: string;
+    allestimento: string | null;
+  };
+}>): VehicleOptionItem[] {
+  return vehicles.map((v) => ({
+    id: String(v.id),
+    licensePlate: v.licensePlate,
+    catalogVehicle: {
+      marca: v.catalogVehicle.marca,
+      modello: v.catalogVehicle.modello,
+      allestimento: v.catalogVehicle.allestimento,
+    },
+  }));
+}
 
 /**
  * Get tenant vehicles for the fuel record form.
  * If the user is a Driver, returns only the vehicle assigned to them.
  */
 export async function getTenantVehiclesForFuelAction(): Promise<
-  ActionResult<VehicleOption[]>
+  ActionResult<VehicleOptionItem[]>
 > {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
@@ -35,8 +51,6 @@ export async function getTenantVehiclesForFuelAction(): Promise<
 
     // If user is a Driver, we need to find their assigned vehicle
     if (isDriver(ctx)) {
-      // Find the employee linked to this user's email
-      // Drivers see only vehicles assigned to them via the assignment
       const vehicles = await prisma.tenantVehicle.findMany({
         where: {
           status: "ACTIVE",
@@ -52,7 +66,7 @@ export async function getTenantVehiclesForFuelAction(): Promise<
 
       return {
         success: true,
-        data: vehicles as unknown as VehicleOption[],
+        data: mapVehicles(vehicles),
       };
     }
 
@@ -65,7 +79,7 @@ export async function getTenantVehiclesForFuelAction(): Promise<
 
     return {
       success: true,
-      data: vehicles as unknown as VehicleOption[],
+      data: mapVehicles(vehicles),
     };
   } catch {
     return {

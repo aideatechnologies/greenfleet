@@ -71,7 +71,10 @@ export default async function ContractDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) notFound();
+
   const ctx = await getSessionContext();
   if (!ctx || !ctx.organizationId) {
     redirect("/login");
@@ -152,7 +155,7 @@ export default async function ContractDetailPage({
                 Modifica
               </Link>
             </Button>
-            <CloseContractButton contractId={id} />
+            <CloseContractButton contractId={String(id)} />
           </div>
         )}
       </div>

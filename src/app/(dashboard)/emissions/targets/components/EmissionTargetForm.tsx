@@ -67,7 +67,7 @@ type EmissionTargetFormProps =
     }
   | {
       mode: "edit";
-      targetId: string;
+      targetId: number;
       defaultValues: CreateEmissionTargetInput;
       open: boolean;
       onOpenChange: (open: boolean) => void;
@@ -209,8 +209,8 @@ export function EmissionTargetForm(props: EmissionTargetFormProps) {
                   <FormItem>
                     <FormLabel>Carlist *</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
-                      value={field.value ?? ""}
+                      onValueChange={(v) => field.onChange(Number(v))}
+                      value={field.value != null ? String(field.value) : ""}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -219,7 +219,7 @@ export function EmissionTargetForm(props: EmissionTargetFormProps) {
                       </FormControl>
                       <SelectContent>
                         {carlists.map((cl) => (
-                          <SelectItem key={cl.id} value={cl.id}>
+                          <SelectItem key={cl.id} value={String(cl.id)}>
                             {cl.name}
                           </SelectItem>
                         ))}

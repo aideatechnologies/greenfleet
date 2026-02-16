@@ -53,7 +53,7 @@ export async function createEmissionFactorAction(
         userId: ctx.userId,
         action: "emission_factor.created",
         entityType: "EmissionFactor",
-        entityId: factor.id,
+        entityId: String(factor.id),
         data: {
           macroFuelTypeId: parsed.data.macroFuelTypeId,
           fuelType: parsed.data.fuelType ?? null,

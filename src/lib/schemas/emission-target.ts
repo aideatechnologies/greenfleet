@@ -17,8 +17,7 @@ export const createEmissionTargetSchema = z
       error: "L'ambito del target e obbligatorio",
     }),
     carlistId: z
-      .string()
-      .min(1, { error: "La carlist e obbligatoria quando l'ambito e Carlist" })
+      .coerce.number({ error: "La carlist e obbligatoria quando l'ambito e Carlist" })
       .optional(),
     targetValue: z
       .number({ error: "Il valore obiettivo e obbligatorio" })
@@ -64,13 +63,12 @@ export type CreateEmissionTargetData = z.output<
 
 export const updateEmissionTargetSchema = z
   .object({
-    id: z.string().min(1, { error: "L'ID del target e obbligatorio" }),
+    id: z.coerce.number({ error: "L'ID del target e obbligatorio" }),
     scope: z.enum(TARGET_SCOPE_VALUES, {
       error: "L'ambito del target e obbligatorio",
     }),
     carlistId: z
-      .string()
-      .min(1, { error: "La carlist e obbligatoria quando l'ambito e Carlist" })
+      .coerce.number({ error: "La carlist e obbligatoria quando l'ambito e Carlist" })
       .optional(),
     targetValue: z
       .number({ error: "Il valore obiettivo e obbligatorio" })

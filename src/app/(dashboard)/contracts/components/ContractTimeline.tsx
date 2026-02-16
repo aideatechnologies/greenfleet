@@ -131,7 +131,7 @@ function getDateRange(contract: ContractWithDetails): string {
 
 type ContractTimelineProps = {
   contracts: ContractWithDetails[];
-  vehicleId: string;
+  vehicleId: number | string;
 };
 
 // ---------------------------------------------------------------------------

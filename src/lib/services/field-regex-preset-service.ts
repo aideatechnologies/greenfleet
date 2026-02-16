@@ -11,7 +11,7 @@ import type {
 
 export type CreatePresetInput = {
   tenantId: string;
-  supplierId?: string | null;
+  supplierId?: number | null;
   fieldName: string;
   name: string;
   patterns: RegexPattern[];
@@ -32,7 +32,7 @@ export type UpdatePresetInput = {
 
 export async function getPresets(
   prisma: PrismaClientWithTenant,
-  filters?: { supplierId?: string | null; fieldName?: string }
+  filters?: { supplierId?: number | null; fieldName?: string }
 ) {
   return prisma.fieldRegexPreset.findMany({
     where: {
@@ -44,7 +44,7 @@ export async function getPresets(
   });
 }
 
-export async function getPresetById(prisma: PrismaClientWithTenant, id: string) {
+export async function getPresetById(prisma: PrismaClientWithTenant, id: number) {
   return prisma.fieldRegexPreset.findUnique({ where: { id } });
 }
 
@@ -67,7 +67,7 @@ export async function createPreset(
 
 export async function updatePreset(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: UpdatePresetInput
 ) {
   return prisma.fieldRegexPreset.update({
@@ -81,7 +81,7 @@ export async function updatePreset(
   });
 }
 
-export async function deletePreset(prisma: PrismaClientWithTenant, id: string) {
+export async function deletePreset(prisma: PrismaClientWithTenant, id: number) {
   return prisma.fieldRegexPreset.delete({ where: { id } });
 }
 
@@ -94,7 +94,7 @@ export async function deletePreset(prisma: PrismaClientWithTenant, id: string) {
  */
 export async function getPresetsForField(
   prisma: PrismaClientWithTenant,
-  supplierId: string | null,
+  supplierId: number | null,
   fieldName: string
 ): Promise<RegexPattern[]> {
   const where = {
@@ -138,7 +138,7 @@ export async function getPresetsForField(
 export async function resolveTemplatePresets(
   prisma: PrismaClientWithTenant,
   config: TemplateConfig,
-  supplierId: string | null
+  supplierId: number | null
 ): Promise<TemplateConfig> {
   const enriched: TemplateConfig = JSON.parse(JSON.stringify(config));
 

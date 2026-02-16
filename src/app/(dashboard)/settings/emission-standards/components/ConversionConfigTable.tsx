@@ -39,7 +39,7 @@ import { ConversionConfigForm } from "./ConversionConfigForm";
 import { formatNumber } from "@/lib/utils/format";
 
 type ConversionConfigRow = {
-  id: string;
+  id: number;
   name: string;
   nedcToWltpFactor: number;
   wltpToNedcFactor: number;
@@ -55,9 +55,9 @@ export function ConversionConfigTable({
   const router = useRouter();
   const [deleteDialog, setDeleteDialog] = useState<{
     open: boolean;
-    id: string;
+    id: number;
     name: string;
-  }>({ open: false, id: "", name: "" });
+  }>({ open: false, id: 0, name: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleDelete() {
@@ -74,11 +74,11 @@ export function ConversionConfigTable({
       toast.error("Errore nell'eliminazione");
     } finally {
       setIsLoading(false);
-      setDeleteDialog({ open: false, id: "", name: "" });
+      setDeleteDialog({ open: false, id: 0, name: "" });
     }
   }
 
-  async function handleSetDefault(id: string) {
+  async function handleSetDefault(id: number) {
     try {
       const result = await setDefaultConversionConfig(id);
       if (result.success) {

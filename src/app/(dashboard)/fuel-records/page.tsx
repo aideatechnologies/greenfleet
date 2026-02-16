@@ -6,6 +6,7 @@ import { getFuelRecords } from "@/lib/services/fuel-record-service";
 import { fuelRecordFilterSchema } from "@/lib/schemas/fuel-record";
 import { getSessionContext, isTenantAdmin, isDriver } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
+import { getFuelTypeCO2eFactors } from "@/lib/services/emission-resolution-service";
 import { FuelFeed } from "@/components/data-display/FuelFeed";
 import { FuelRecordFilters } from "./components/FuelRecordFilters";
 import { FuelRecordTable } from "./components/FuelRecordTable";
@@ -46,7 +47,11 @@ export default async function FuelRecordsPage({
   });
 
   const prisma = getPrismaForTenant(tenantId);
-  const result = await getFuelRecords(prisma, filters);
+  const [result, co2FactorsMap] = await Promise.all([
+    getFuelRecords(prisma, filters),
+    getFuelTypeCO2eFactors(prisma, new Date()),
+  ]);
+  const co2Factors = Object.fromEntries(co2FactorsMap);
 
   return (
     <div className="space-y-4">
@@ -85,6 +90,7 @@ export default async function FuelRecordsPage({
           records={result.data}
           pagination={result.pagination}
           canEdit={canEdit}
+          co2Factors={co2Factors}
         />
       ) : (
         <>
@@ -93,6 +99,7 @@ export default async function FuelRecordsPage({
             variant="full"
             canEdit={!driverMode && canEdit}
             showVehicle={true}
+            co2Factors={co2Factors}
           />
 
           {/* Pagination info */}

@@ -62,7 +62,7 @@ type FormValues = {
 };
 
 type ReplatDialogProps = {
-  vehicleId: string;
+  vehicleId: number;
   currentPlate: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;

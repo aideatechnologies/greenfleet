@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const replatVehicleSchema = z.object({
-  vehicleId: z.string().min(1, { error: "Veicolo obbligatorio" }),
+  vehicleId: z.coerce.number({ error: "Veicolo obbligatorio" }),
   newPlateNumber: z
     .string()
     .min(2, { error: "Targa obbligatoria" })
@@ -18,7 +18,7 @@ export const replatVehicleSchema = z.object({
 export type ReplatVehicleInput = z.input<typeof replatVehicleSchema>;
 
 export const addInitialPlateSchema = z.object({
-  vehicleId: z.string().min(1, { error: "Veicolo obbligatorio" }),
+  vehicleId: z.coerce.number({ error: "Veicolo obbligatorio" }),
   plateNumber: z
     .string()
     .min(2, { error: "Targa obbligatoria" })

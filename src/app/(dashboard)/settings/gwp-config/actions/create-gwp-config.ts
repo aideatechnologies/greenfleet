@@ -47,7 +47,7 @@ export async function createGwpConfigAction(
         userId: ctx.userId,
         action: "gwp_config.created",
         entityType: "GwpConfig",
-        entityId: config.id,
+        entityId: String(config.id),
         data: {
           gasName: parsed.data.gasName,
           gwpValue: parsed.data.gwpValue,

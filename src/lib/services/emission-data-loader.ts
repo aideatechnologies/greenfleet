@@ -57,7 +57,7 @@ export type VehicleEmissionData =
  */
 export async function getVehicleEmissionData(
   prisma: PrismaClient,
-  vehicleId: string,
+  vehicleId: number,
   periodStart: Date,
   periodEnd: Date
 ): Promise<VehicleEmissionData> {

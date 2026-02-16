@@ -1,12 +1,11 @@
 import { z } from "zod";
-import { DEFAULT_PAGE_SIZE, UNCATALOGED_VEHICLE_ID } from "@/lib/utils/constants";
+import { DEFAULT_PAGE_SIZE } from "@/lib/utils/constants";
 import { VEHICLE_STATUS_VALUES } from "@/types/vehicle";
 
 export const createTenantVehicleSchema = z.object({
   catalogVehicleId: z
-    .string()
-    .optional()
-    .default(UNCATALOGED_VEHICLE_ID),
+    .coerce.number()
+    .optional(),
   licensePlate: z
     .string()
     .min(2, { error: "La targa deve avere almeno 2 caratteri" })
@@ -21,9 +20,9 @@ export const createTenantVehicleSchema = z.object({
     })
     .default("ACTIVE"),
   assignedEmployeeId: z
-    .string()
+    .coerce.number()
     .optional()
-    .transform((val) => (val === "" ? undefined : val)),
+    .transform((val) => (val === 0 ? undefined : val)),
   notes: z
     .string()
     .max(500, { error: "Le note non possono superare 500 caratteri" })
@@ -32,8 +31,8 @@ export const createTenantVehicleSchema = z.object({
 });
 
 export const updateTenantVehicleSchema = z.object({
-  id: z.string().min(1, { error: "ID veicolo obbligatorio" }),
-  catalogVehicleId: z.string().optional(),
+  id: z.coerce.number({ error: "ID veicolo obbligatorio" }),
+  catalogVehicleId: z.coerce.number().optional(),
   licensePlate: z
     .string()
     .min(2, { error: "La targa deve avere almeno 2 caratteri" })
@@ -51,10 +50,9 @@ export const updateTenantVehicleSchema = z.object({
     })
     .optional(),
   assignedEmployeeId: z
-    .string()
+    .coerce.number()
     .nullable()
-    .optional()
-    .transform((val) => (val === "" ? null : val)),
+    .optional(),
   notes: z
     .string()
     .max(500, { error: "Le note non possono superare 500 caratteri" })

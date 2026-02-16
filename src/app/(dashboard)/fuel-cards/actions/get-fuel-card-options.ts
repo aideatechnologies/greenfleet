@@ -49,7 +49,7 @@ export async function getFuelCardOptionsAction(): Promise<ActionResult<FuelCardO
       success: true,
       data: {
         suppliers: suppliers.map((s) => ({
-          id: s.id,
+          id: String(s.id),
           name: s.name,
           vatNumber: s.vatNumber,
           supplierType: {
@@ -58,7 +58,7 @@ export async function getFuelCardOptionsAction(): Promise<ActionResult<FuelCardO
           },
         })),
         vehicles: vehicles.map((v) => ({
-          id: v.id,
+          id: String(v.id),
           licensePlate: v.licensePlate,
           catalogVehicle: {
             marca: v.catalogVehicle.marca,
@@ -67,7 +67,7 @@ export async function getFuelCardOptionsAction(): Promise<ActionResult<FuelCardO
           },
         })),
         employees: employees.map((e) => ({
-          id: e.id,
+          id: String(e.id),
           firstName: e.firstName,
           lastName: e.lastName,
           email: e.email,

@@ -69,9 +69,9 @@ describe("Tenant Extension — tenantId Injection Logic", () => {
 
   it("should inject tenantId into empty where clause", () => {
     const tenantId = "test-tenant-123";
-    const args = { where: undefined };
+    const args: { where: Record<string, unknown> | undefined } = { where: undefined };
 
-    const result = { ...args.where, tenantId };
+    const result = { ...(args.where ?? {}), tenantId };
 
     expect(result).toEqual({
       tenantId: "test-tenant-123",

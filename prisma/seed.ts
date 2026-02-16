@@ -97,7 +97,7 @@ const DEFAULT_ENABLED = [
 // ---------------------------------------------------------------------------
 // Sentinel CatalogVehicle for uncataloged vehicles
 // ---------------------------------------------------------------------------
-const UNCATALOGED_VEHICLE_ID = "uncataloged-vehicle-sentinel";
+const UNCATALOGED_VEHICLE_ID = 0;
 
 // ---------------------------------------------------------------------------
 // Main seed function (idempotent)
@@ -277,7 +277,7 @@ async function main() {
 
   const fuelTypeMappingsData: Array<{
     vehicleFuelType: string;
-    macroFuelTypeId: string;
+    macroFuelTypeId: number;
     scope: number;
     description: string;
   }> = [

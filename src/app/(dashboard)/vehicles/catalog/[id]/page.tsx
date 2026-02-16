@@ -15,7 +15,10 @@ export default async function CatalogVehicleDetailPage({
     redirect("/login");
   }
 
-  const { id } = await params;
+  const { id: rawId } = await params;
+  const id = Number(rawId);
+  if (Number.isNaN(id)) notFound();
+
   const vehicle = await getCatalogVehicleById(id);
 
   if (!vehicle) {

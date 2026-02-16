@@ -2,11 +2,9 @@ import { z } from "zod";
 
 export const assignVehicleSchema = z.object({
   vehicleId: z
-    .string()
-    .min(1, { error: "Il veicolo e obbligatorio" }),
+    .coerce.number({ error: "Il veicolo e obbligatorio" }),
   employeeId: z
-    .string()
-    .min(1, { error: "Il dipendente e obbligatorio" }),
+    .coerce.number({ error: "Il dipendente e obbligatorio" }),
   startDate: z.coerce.date({
     error: "Data di inizio assegnazione non valida",
   }),
@@ -19,8 +17,7 @@ export const assignVehicleSchema = z.object({
 
 export const unassignVehicleSchema = z.object({
   vehicleId: z
-    .string()
-    .min(1, { error: "Il veicolo e obbligatorio" }),
+    .coerce.number({ error: "Il veicolo e obbligatorio" }),
   endDate: z.coerce.date({
     error: "Data di fine assegnazione non valida",
   }),

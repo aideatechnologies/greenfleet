@@ -75,7 +75,7 @@ export async function getEmissionFactors(
 
 export async function getEmissionFactorById(
   prisma: PrismaClient,
-  id: string
+  id: number
 ): Promise<EmissionFactor | null> {
   return prisma.emissionFactor.findUnique({
     where: { id },
@@ -117,7 +117,7 @@ export async function createEmissionFactor(
 
 export async function updateEmissionFactor(
   prisma: PrismaClient,
-  id: string,
+  id: number,
   input: UpdateEmissionFactorData
 ): Promise<EmissionFactor> {
   const existing = await prisma.emissionFactor.findUnique({
@@ -167,7 +167,7 @@ export async function updateEmissionFactor(
 
 export async function deleteEmissionFactor(
   prisma: PrismaClient,
-  id: string
+  id: number
 ): Promise<EmissionFactor> {
   const existing = await prisma.emissionFactor.findUnique({
     where: { id },
@@ -234,7 +234,7 @@ export async function getEffectiveEmissionFactor(
  */
 export async function getEffectiveEmissionFactorV2(
   prisma: PrismaClient,
-  macroFuelTypeId: string,
+  macroFuelTypeId: number,
   referenceDate: Date
 ): Promise<EmissionFactor> {
   const factor = await prisma.emissionFactor.findFirst({

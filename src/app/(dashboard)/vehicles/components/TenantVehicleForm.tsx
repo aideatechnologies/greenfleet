@@ -48,16 +48,16 @@ import type { Employee } from "@/generated/prisma/client";
 
 // Explicit form values type to avoid Zod input/output type mismatches
 type FormValues = {
-  catalogVehicleId: string;
+  catalogVehicleId: number;
   licensePlate: string;
   registrationDate: Date;
   status: string;
-  assignedEmployeeId: string | undefined;
+  assignedEmployeeId: number | undefined;
   notes: string | undefined;
 };
 
 type TenantVehicleFormProps = {
-  catalogVehicleId: string;
+  catalogVehicleId: number;
 };
 
 export function TenantVehicleForm({
@@ -70,7 +70,7 @@ export function TenantVehicleForm({
   const [employeeOpen, setEmployeeOpen] = useState(false);
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(createTenantVehicleSchema) as Resolver<FormValues>,
+    resolver: zodResolver(createTenantVehicleSchema) as unknown as Resolver<FormValues>,
     defaultValues: {
       catalogVehicleId,
       licensePlate: "",

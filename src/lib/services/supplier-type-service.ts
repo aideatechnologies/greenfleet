@@ -28,7 +28,7 @@ export async function getSupplierTypes(
 
 export async function getSupplierTypeById(
   prisma: PrismaClientWithTenant,
-  id: string
+  id: number
 ): Promise<SupplierType | null> {
   return prisma.supplierType.findFirst({ where: { id } });
 }
@@ -69,7 +69,7 @@ export async function createSupplierType(
 
 export async function updateSupplierType(
   prisma: PrismaClientWithTenant,
-  id: string,
+  id: number,
   data: UpdateSupplierTypeInput
 ): Promise<SupplierType> {
   return prisma.supplierType.update({

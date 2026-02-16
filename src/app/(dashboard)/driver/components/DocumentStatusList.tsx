@@ -13,7 +13,7 @@ import { DOCUMENT_TYPE_LABELS, type DocumentType } from "@/types/document";
 // ---------------------------------------------------------------------------
 
 interface DocumentItem {
-  id: string;
+  id: number;
   documentType: string;
   description: string | null;
   expiryDate: Date;

@@ -20,7 +20,7 @@ export const exportParamsSchema = z.object({
     .default("true")
     .transform((v) => v === "true"),
   csvSeparator: z.string().default(";"),
-  carlistId: z.string().optional(),
+  carlistId: z.coerce.number().optional(),
 });
 
 export type ExportParamsInput = z.input<typeof exportParamsSchema>;

@@ -8,11 +8,11 @@ import { calculateScopedEmissions } from "@/lib/services/emission-calculator";
 // ---------------------------------------------------------------------------
 
 export type DriverVehicleData = {
-  id: string;
+  id: number;
   licensePlate: string;
   status: string;
   catalogVehicle: {
-    id: string;
+    id: number;
     marca: string;
     modello: string;
     allestimento: string | null;
@@ -27,19 +27,19 @@ export type DriverVehicleData = {
     potenzaCv: number | null;
   } | null;
   assignedEmployee: {
-    id: string;
+    id: number;
     firstName: string;
     lastName: string;
   };
   documents: Array<{
-    id: string;
+    id: number;
     documentType: string;
     description: string | null;
     expiryDate: Date;
     fileName: string;
   }>;
   contracts: Array<{
-    id: string;
+    id: number;
     type: string;
     status: string;
     supplier: string | null;
@@ -253,11 +253,11 @@ export async function getDriverDashboardData(
 
   // 5. Build result
   const rawVehicle = vehicle as unknown as {
-    id: string;
+    id: number;
     licensePlate: string;
     status: string;
     catalogVehicle: {
-      id: string;
+      id: number;
       marca: string;
       modello: string;
       allestimento: string | null;
@@ -272,19 +272,19 @@ export async function getDriverDashboardData(
       }>;
     };
     assignedEmployee: {
-      id: string;
+      id: number;
       firstName: string;
       lastName: string;
     };
     documents: Array<{
-      id: string;
+      id: number;
       documentType: string;
       description: string | null;
       expiryDate: Date;
       fileName: string;
     }>;
     contracts: Array<{
-      id: string;
+      id: number;
       type: string;
       status: string;
       supplier: string | null;

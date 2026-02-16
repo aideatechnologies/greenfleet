@@ -10,8 +10,7 @@ export const createFuelTypeMappingSchema = z.object({
     .min(1, { error: "Il tipo carburante veicolo e obbligatorio" })
     .max(100, { error: "Il tipo carburante non puo superare 100 caratteri" }),
   macroFuelTypeId: z
-    .string()
-    .min(1, { error: "Il macro tipo carburante e obbligatorio" }),
+    .coerce.number({ error: "Il macro tipo carburante e obbligatorio" }),
   scope: z
     .number()
     .int()
@@ -32,8 +31,7 @@ export type CreateFuelTypeMappingData = z.output<typeof createFuelTypeMappingSch
 
 export const updateFuelTypeMappingSchema = z.object({
   macroFuelTypeId: z
-    .string()
-    .min(1, { error: "Il macro tipo carburante e obbligatorio" }),
+    .coerce.number({ error: "Il macro tipo carburante e obbligatorio" }),
   description: z
     .string()
     .max(100, { error: "La descrizione non puo superare 100 caratteri" })

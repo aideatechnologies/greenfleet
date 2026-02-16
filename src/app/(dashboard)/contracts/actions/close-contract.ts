@@ -13,7 +13,7 @@ import { getPrismaForTenant } from "@/lib/db/client";
 import { logger } from "@/lib/utils/logger";
 
 export async function closeContractAction(
-  contractId: string
+  contractId: number
 ): Promise<ActionResult<ContractWithDetails>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;

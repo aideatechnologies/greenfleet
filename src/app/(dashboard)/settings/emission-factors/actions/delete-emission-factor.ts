@@ -13,8 +13,8 @@ import { auditCreate } from "@/lib/services/audit-service";
 import { logger } from "@/lib/utils/logger";
 
 export async function deleteEmissionFactorAction(
-  id: string
-): Promise<ActionResult<{ id: string }>> {
+  id: number
+): Promise<ActionResult<{ id: number }>> {
   const authResult = await requireAuth();
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
@@ -40,7 +40,7 @@ export async function deleteEmissionFactorAction(
         userId: ctx.userId,
         action: "emission_factor.deleted",
         entityType: "EmissionFactor",
-        entityId: id,
+        entityId: String(id),
         data: {
           macroFuelTypeId: deleted.macroFuelTypeId,
           co2: deleted.co2,

@@ -12,7 +12,7 @@ export interface DateRange {
 }
 
 export interface TenantMetricsRow {
-  id: string;
+  id: number;
   tenantId: string;
   date: Date;
   queryCount: number;
