@@ -112,7 +112,7 @@ function buildDefaultValues(
     case "BREVE_TERMINE":
       return {
         ...base,
-        supplier: (contract.supplier as string) ?? "",
+        supplierId: (contract.supplierId as string) ?? "",
         startDate: contract.startDate
           ? new Date(contract.startDate as string)
           : undefined,
@@ -125,7 +125,7 @@ function buildDefaultValues(
     case "LUNGO_TERMINE":
       return {
         ...base,
-        supplier: (contract.supplier as string) ?? "",
+        supplierId: (contract.supplierId as string) ?? "",
         startDate: contract.startDate
           ? new Date(contract.startDate as string)
           : undefined,
@@ -140,7 +140,7 @@ function buildDefaultValues(
     case "LEASING_FINANZIARIO":
       return {
         ...base,
-        leasingCompany: (contract.leasingCompany as string) ?? "",
+        supplierId: (contract.supplierId as string) ?? "",
         startDate: contract.startDate
           ? new Date(contract.startDate as string)
           : undefined,

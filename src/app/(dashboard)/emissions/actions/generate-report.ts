@@ -2,7 +2,7 @@
 
 import type { ActionResult } from "@/types/action-result";
 import { ErrorCode } from "@/types/action-result";
-import type { ReportResult } from "@/types/report";
+import type { ReportResult, VehicleFilters } from "@/types/report";
 import { reportParamsSchema } from "@/lib/schemas/report";
 import { getAggregatedEmissions } from "@/lib/services/report-service";
 import { requireAuth } from "@/lib/auth/permissions";
@@ -18,6 +18,7 @@ type GenerateReportInput = {
   aggregationLevel: string;
   periodGranularity?: string;
   carlistId?: string;
+  vehicleFilters?: VehicleFilters;
 };
 
 // ---------------------------------------------------------------------------
@@ -59,6 +60,7 @@ export async function generateReportAction(
     aggregationLevel: input.aggregationLevel,
     periodGranularity: input.periodGranularity,
     carlistId: input.carlistId,
+    vehicleFilters: input.vehicleFilters,
   });
 
   if (!parsed.success) {

@@ -1,5 +1,7 @@
 import type {
   Contract,
+  Supplier,
+  SupplierType,
   TenantVehicle,
   CatalogVehicle,
 } from "@/generated/prisma/client";
@@ -22,6 +24,7 @@ export type ContractWithDetails = Contract & {
   vehicle: TenantVehicle & {
     catalogVehicle: CatalogVehicle;
   };
+  supplierRef?: (Supplier & { supplierType: SupplierType }) | null;
 };
 
 // ---------------------------------------------------------------------------
@@ -32,6 +35,11 @@ const INCLUDE_DETAILS = {
   vehicle: {
     include: {
       catalogVehicle: true,
+    },
+  },
+  supplierRef: {
+    include: {
+      supplierType: true,
     },
   },
 } as const;
@@ -60,14 +68,14 @@ export async function createContract(
       createData.residualValue = data.residualValue ?? null;
       break;
     case "BREVE_TERMINE":
-      createData.supplier = data.supplier;
+      createData.supplierId = data.supplierId;
       createData.startDate = data.startDate;
       createData.endDate = data.endDate;
       createData.dailyRate = data.dailyRate;
       createData.includedKm = data.includedKm ?? null;
       break;
     case "LUNGO_TERMINE":
-      createData.supplier = data.supplier;
+      createData.supplierId = data.supplierId;
       createData.startDate = data.startDate;
       createData.endDate = data.endDate;
       createData.monthlyRate = data.monthlyRate;
@@ -76,7 +84,7 @@ export async function createContract(
       createData.includedServices = data.includedServices ?? null;
       break;
     case "LEASING_FINANZIARIO":
-      createData.leasingCompany = data.leasingCompany;
+      createData.supplierId = data.supplierId;
       createData.startDate = data.startDate;
       createData.endDate = data.endDate;
       createData.monthlyRate = data.monthlyRate;
@@ -194,14 +202,14 @@ export async function updateContract(
       updateData.residualValue = data.residualValue ?? null;
       break;
     case "BREVE_TERMINE":
-      updateData.supplier = data.supplier;
+      updateData.supplierId = data.supplierId;
       updateData.startDate = data.startDate;
       updateData.endDate = data.endDate;
       updateData.dailyRate = data.dailyRate;
       updateData.includedKm = data.includedKm ?? null;
       break;
     case "LUNGO_TERMINE":
-      updateData.supplier = data.supplier;
+      updateData.supplierId = data.supplierId;
       updateData.startDate = data.startDate;
       updateData.endDate = data.endDate;
       updateData.monthlyRate = data.monthlyRate;
@@ -210,7 +218,7 @@ export async function updateContract(
       updateData.includedServices = data.includedServices ?? null;
       break;
     case "LEASING_FINANZIARIO":
-      updateData.leasingCompany = data.leasingCompany;
+      updateData.supplierId = data.supplierId;
       updateData.startDate = data.startDate;
       updateData.endDate = data.endDate;
       updateData.monthlyRate = data.monthlyRate;
@@ -403,7 +411,7 @@ export async function getContractStatusOverview(
   prisma: PrismaClientWithTenant,
   filters?: ContractStatusOverviewFilters
 ): Promise<ContractStatusOverviewResult> {
-  // Single query: all vehicles with their ACTIVE contracts
+  // Single query: all vehicles with their ACTIVE contracts + supplier
   const vehicles = await prisma.tenantVehicle.findMany({
     where: {
       status: "ACTIVE", // Only active vehicles
@@ -413,6 +421,9 @@ export async function getContractStatusOverview(
       contracts: {
         where: { status: "ACTIVE" },
         take: 1, // At most 1 active contract per vehicle (business rule)
+        include: {
+          supplierRef: true,
+        },
       },
     },
     orderBy: { licensePlate: "asc" },
@@ -452,8 +463,11 @@ export async function getContractStatusOverview(
         type: contract.type as ContractType,
         startDate: contract.startDate,
         endDate: contract.endDate,
-        supplier: contract.supplier,
-        leasingCompany: contract.leasingCompany,
+        supplierName: (contract as unknown as { supplierRef?: { name: string } | null }).supplierRef?.name
+          ?? contract.leasingCompany
+          ?? contract.supplier
+          ?? null,
+        supplierId: contract.supplierId,
         monthlyRate: contract.monthlyRate,
         dailyRate: contract.dailyRate,
         purchasePrice: contract.purchasePrice,

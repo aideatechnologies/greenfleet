@@ -1,0 +1,104 @@
+# generated: 2026-02-08
+# project: Greenfleet
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog -> in-progress: Automatically when first story is created (via create-story)
+#   - in-progress -> done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-02-08
+project: Greenfleet
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Piattaforma Multi-Tenant & Autenticazione
+  epic-1: done
+  1-1-scaffold-progetto-con-autenticazione-base: done
+  1-2-gestione-multi-tenant-con-organizzazioni: done
+  1-3-isolamento-dati-tenant-e-rls: done
+  1-4-gestione-utenti-e-ruoli-rbac: done
+  1-5-configurazione-feature-per-tenant: done
+  1-6-seed-data-e-demo-tenant: done
+  epic-1-retrospective: optional
+
+  # Epic 2: Catalogo Veicoli Globale
+  epic-2: done
+  2-1-schema-catalogo-e-import-dati-infocardata: done
+  2-2-ricerca-e-selezione-veicoli-dal-catalogo: done
+  2-3-integrazione-immagini-codall: done
+  2-4-inserimento-manuale-veicoli: done
+  2-5-gestione-standard-emissioni-wltp-vs-nedc: done
+  epic-2-retrospective: optional
+
+  # Epic 3: Gestione Flotta Operativa
+  epic-3: done
+  3-1-crud-dipendenti: done
+  3-2-import-dipendenti-da-csv-excel: done
+  3-3-aggiunta-veicolo-operativo-da-catalogo: done
+  3-4-assegnazione-dipendenti-a-veicoli: done
+  3-5-pool-pseudo-driver-per-veicoli-condivisi: done
+  3-6-storico-targhe-e-ritargatura: done
+  3-7-documenti-veicolo: done
+  3-8-gestione-carlist: done
+  3-9-vista-stato-flotta-complessiva: done
+  epic-3-retrospective: optional
+
+  # Epic 4: Contratti Veicoli
+  epic-4: done
+  4-1-creazione-contratti-con-tipi-specifici: done
+  4-2-successione-temporale-contratti-nesting: done
+  4-3-vista-stato-contrattuale: done
+  epic-4-retrospective: optional
+
+  # Epic 5: Rifornimenti & Rilevazioni Chilometriche
+  epic-5: done
+  5-1-inserimento-manuale-rifornimento: done
+  5-2-import-rifornimenti-da-csv-excel: done
+  5-3-rilevazioni-chilometriche-dedicate: done
+  5-4-visualizzazione-e-correzione-rifornimenti-e-km: done
+  epic-5-retrospective: optional
+
+  # Epic 6: Calcolo Emissioni & Reportistica
+  epic-6: done
+  6-1-gestione-fattori-di-emissione: done
+  6-2-calcolo-emissioni-teoriche-e-reali-con-delta: done
+  6-3-target-emissioni-per-flotta-e-carlist: done
+  6-4-aggregazione-emissioni-e-report: done
+  6-5-drill-down-e-progresso-target: done
+  6-6-export-report-certificabili-pdf-e-csv: done
+  epic-6-retrospective: optional
+
+  # Epic 7: Dashboard & Esperienza Utente Finale
+  epic-7: done
+  7-1-dashboard-fleet-manager: done
+  7-2-dashboard-personale-driver: done
+  7-3-design-system-greenfleet-e-layout-applicazione: done
+  7-4-audit-trail-completo-e-metriche-tenant: done
+  epic-7-retrospective: optional

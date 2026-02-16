@@ -259,6 +259,19 @@ export function ContractTable({
         },
       },
       {
+        id: "supplier",
+        header: "Fornitore",
+        cell: ({ row }) => {
+          const c = row.original;
+          const name = c.supplierRef?.name ?? c.leasingCompany ?? c.supplier;
+          return (
+            <span className="text-sm">
+              {name || "-"}
+            </span>
+          );
+        },
+      },
+      {
         id: "dates",
         header: "Date",
         cell: ({ row }) => (

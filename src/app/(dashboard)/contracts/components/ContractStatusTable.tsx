@@ -94,8 +94,7 @@ function getDaysToExpiryColor(days: number | null): string {
 
 function getSupplierDisplay(row: ContractStatusRow): string {
   if (!row.activeContract) return "-";
-  const { supplier, leasingCompany } = row.activeContract;
-  return leasingCompany || supplier || "-";
+  return row.activeContract.supplierName || "-";
 }
 
 // ---------------------------------------------------------------------------

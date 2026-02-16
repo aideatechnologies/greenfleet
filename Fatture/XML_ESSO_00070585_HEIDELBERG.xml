@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><ns0:FatturaElettronica xmlns:ns0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2" versione="FPR12">
+<FatturaElettronicaHeader>
+<DatiTrasmissione>
+<IdTrasmittente><IdPaese>IT</IdPaese><IdCodice>05006900962</IdCodice></IdTrasmittente>
+<ProgressivoInvio>2300070585</ProgressivoInvio>
+<FormatoTrasmissione>FPR12</FormatoTrasmissione>
+<CodiceDestinatario>0000000</CodiceDestinatario>
+<PECDestinatario>HEIDELBERGITALIA@LEGALMAIL.IT</PECDestinatario>
+</DatiTrasmissione>
+<CedentePrestatore>
+<DatiAnagrafici>
+<IdFiscaleIVA><IdPaese>IT</IdPaese><IdCodice>08510870960</IdCodice></IdFiscaleIVA>
+<CodiceFiscale>08510870960</CodiceFiscale>
+<Anagrafica><Denominazione>WEX Europe Services SRL</Denominazione></Anagrafica>
+<RegimeFiscale>RF01</RegimeFiscale>
+</DatiAnagrafici>
+<Sede><Indirizzo>Via Carlo Veneziani, 58</Indirizzo><CAP>00148</CAP><Comune>Roma</Comune><Provincia>RM</Provincia><Nazione>IT</Nazione></Sede>
+</CedentePrestatore>
+<CessionarioCommittente>
+<DatiAnagrafici>
+<IdFiscaleIVA><IdPaese>IT</IdPaese><IdCodice>00891950156</IdCodice></IdFiscaleIVA>
+<Anagrafica><Denominazione>HEIDELBERG ITALIA SRL</Denominazione></Anagrafica>
+</DatiAnagrafici>
+<Sede><Indirizzo>VIA TRENTO 61</Indirizzo><CAP>20021</CAP><Comune>OSPIATE DI BOLLATE   MI</Comune><Nazione>IT</Nazione></Sede>
+</CessionarioCommittente>
+</FatturaElettronicaHeader>
+<FatturaElettronicaBody>
+<DatiGenerali>
+<DatiGeneraliDocumento>
+<TipoDocumento>TD01</TipoDocumento>
+<Divisa>EUR</Divisa>
+<Data>2023-02-15</Data>
+<Numero>00070585</Numero>
+<ImportoTotaleDocumento>1047.91</ImportoTotaleDocumento>
+</DatiGeneraliDocumento>
+<DatiOrdineAcquisto>
+<IdDocumento>00070585</IdDocumento>
+<Data>2023-02-15</Data>
+</DatiOrdineAcquisto>
+</DatiGenerali>
+<DatiBeniServizi>
+<DettaglioLinee>
+<NumeroLinea>0001</NumeroLinea>
+<Descrizione>AdBlue (cisterna)    in data 08.02.23 con carta 7033167200254244329-GA727GS         scontrino N.000238 c/o 105063 BOLLATE</Descrizione>
+<PrezzoUnitario>22.13</PrezzoUnitario>
+<PrezzoTotale>22.13</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0002</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 08.02.23 con carta 7033167200254244329-GA727GS         scontrino N.009006 c/o 105063 BOLLATE PREZZO POMPA EUR/100L 190,59   Sconto  1,50   </Descrizione>
+<Quantita>38.80</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.54974227</PrezzoUnitario>
+<PrezzoTotale>60.13</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0003</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 09.02.23 con carta 7033167200254244246-FY257TK         scontrino N.006939 c/o 105631 PIACENZA PREZZO POMPA EUR/100L 179,91   Sconto  1,50   </Descrizione>
+<Quantita>50.07</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.46235271</PrezzoUnitario>
+<PrezzoTotale>73.22</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0004</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 11.02.23 con carta 7033167200254244246-FY257TK         scontrino N.002983 c/o 106383 CASELLE MAPPA PREZZO POMPA EUR/100L 183,91   Sconto  1,50   </Descrizione>
+<Quantita>43.50</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.49517241</PrezzoUnitario>
+<PrezzoTotale>65.04</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0005</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 14.02.23 con carta 7033167200254244337-GA771FA         scontrino N.003071 c/o 105063 BOLLATE PREZZO POMPA EUR/100L 187,58   Sconto  1,50   </Descrizione>
+<Quantita>26.74</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.52505610</PrezzoUnitario>
+<PrezzoTotale>40.78</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0006</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 13.02.23 con carta 7033167200254244204-FY718KN         scontrino N.008940 c/o 346825 ARESE PREZZO POMPA EUR/100L 183,89   Sconto  1,50   </Descrizione>
+<Quantita>27.19</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.49503494</PrezzoUnitario>
+<PrezzoTotale>40.65</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0007</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 09.02.23 con carta 7033167200254244311-FZ265SW         scontrino N.014584 c/o 105046 COLOGNO MONZE PREZZO POMPA EUR/100L 192,61   Sconto  1,50   </Descrizione>
+<Quantita>48.44</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.56647399</PrezzoUnitario>
+<PrezzoTotale>75.88</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0008</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>E-DIESEL             in data 13.02.23 con carta 7033167200254243917-FR099VZ         scontrino N.023142 c/o 105178 RHO PREZZO POMPA EUR/100L 197,89   Sconto  1,50   </Descrizione>
+<Quantita>35.04</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.60987443</PrezzoUnitario>
+<PrezzoTotale>56.41</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0009</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 07.02.23 con carta 7033167200254244477-GE915MK         scontrino N.022838 c/o 105178 RHO PREZZO POMPA EUR/100L 186,89   Sconto  1,50   </Descrizione>
+<Quantita>43.34</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.51961237</PrezzoUnitario>
+<PrezzoTotale>65.86</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0010</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 06.02.23 con carta 7033167200254244394-GC272FS         scontrino N.015440 c/o 105173 VIGEVANO PREZZO POMPA EUR/100L 212,83   Sconto  1,50   </Descrizione>
+<Quantita>34.77</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.73224044</PrezzoUnitario>
+<PrezzoTotale>60.23</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0011</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 09.02.23 con carta 7033167200254244394-GC272FS         scontrino N.024859 c/o 106485 QUATTORDIO PREZZO POMPA EUR/100L 202,89   Sconto  1,50   </Descrizione>
+<Quantita>37.02</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.65072934</PrezzoUnitario>
+<PrezzoTotale>61.11</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0012</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>E-DIESEL             in data 10.02.23 con carta 7033167200254244394-GC272FS         scontrino N.034832 c/o 322280 NOVATE MILANE PREZZO POMPA EUR/100L 201,20   Sconto  1,50   </Descrizione>
+<Quantita>39.27</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.63687293</PrezzoUnitario>
+<PrezzoTotale>64.28</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0013</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 07.02.23 con carta 7033167200254244295-FZ352HR         scontrino N.010439 c/o 105010 PESSANO CON B PREZZO POMPA EUR/100L 188,91   Sconto  1,50   </Descrizione>
+<Quantita>42.37</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.53622846</PrezzoUnitario>
+<PrezzoTotale>65.09</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0014</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 14.02.23 con carta 7033167200254244212-FY570KT         scontrino N.027808 c/o 105520 OSIO SOPRA PREZZO POMPA EUR/100L 184,20   Sconto  1,50   </Descrizione>
+<Quantita>28.23</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.49734325</PrezzoUnitario>
+<PrezzoTotale>42.27</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>0015</NumeroLinea>
+<CodiceArticolo><CodiceTipo>CARB</CodiceTipo><CodiceValore>27101943</CodiceValore></CodiceArticolo>
+<Descrizione>gasolio autotrazion  in data 14.02.23 con carta 7033167200254244410-GC271FS         scontrino N.034165 c/o 105754 ERBUSCO PREZZO POMPA EUR/100L 184,20   Sconto  1,50   </Descrizione>
+<Quantita>43.98</Quantita>
+<UnitaMisura>LT</UnitaMisura>
+<PrezzoUnitario>1.49749886</PrezzoUnitario>
+<PrezzoTotale>65.86</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DatiRiepilogo>
+<AliquotaIVA>22.00</AliquotaIVA>
+<ImponibileImporto>858.94</ImponibileImporto>
+<Imposta>188.97</Imposta>
+<EsigibilitaIVA>I</EsigibilitaIVA>
+</DatiRiepilogo>
+</DatiBeniServizi>
+<DatiPagamento>
+<CondizioniPagamento>TP02</CondizioniPagamento>
+<DettaglioPagamento>
+<ModalitaPagamento>MP21</ModalitaPagamento>
+<DataScadenzaPagamento>2023-03-17</DataScadenzaPagamento>
+<ImportoPagamento>1047.91</ImportoPagamento>
+<IstitutoFinanziario>Bank of America</IstitutoFinanziario>
+<IBAN>IT91V0338001600000014421013</IBAN>
+<BIC>BOFAIT2XXXX</BIC>
+<ScontoPagamentoAnticipato>0.00</ScontoPagamentoAnticipato>
+<PenalitaPagamentiRitardati>0.00</PenalitaPagamentiRitardati>
+</DettaglioPagamento>
+</DatiPagamento>
+</FatturaElettronicaBody>
+</ns0:FatturaElettronica>

@@ -163,6 +163,7 @@ model CatalogVehicle {
   normativa            String?
   capacitaSerbatoioL   Float?    @map("capacita_serbatoio_l")
   isHybrid             Boolean   @default(false) @map("is_hybrid")
+  prezzoListino        Float?    @map("prezzo_listino")
   source               String    @default("INFOCARDATA")
   imageUrl             String?   @map("image_url")
   codiceAllestimento   String?   @map("codice_allestimento")
@@ -389,28 +390,51 @@ model Contract {
   @@map("contracts")
 }
 
+// Tipi Fornitore (tenant-scoped) — NLT, Carburante, Altro, custom
+model SupplierType {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  code        String   @db.NVarChar(50)    // es. "NLT", "CARBURANTE", "ALTRO"
+  label       String   @db.NVarChar(100)   // es. "Noleggio Lungo Termine", "Carburante"
+  description String?  @db.NVarChar(500)
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  suppliers Supplier[]
+
+  @@unique([tenantId, code], map: "uq_supplier_type_tenant_code")
+  @@index([tenantId], map: "idx_supplier_types_tenant_id")
+  @@map("SupplierTypes")
+}
+
 // Fornitori (tenant-scoped) — NLT, carburante, ecc.
 model Supplier {
-  id           String   @id @default(cuid())
-  tenantId     String   @map("tenant_id")
-  type         String   // "NLT" | "CARBURANTE" | "ALTRO"
-  name         String   @db.NVarChar(200)
-  vatNumber    String?  @map("vat_number") @db.NVarChar(20)
-  address      String?  @db.NVarChar(500)
-  pec          String?  @db.NVarChar(100)
-  contactName  String?  @map("contact_name") @db.NVarChar(100)
-  contactPhone String?  @map("contact_phone") @db.NVarChar(50)
-  contactEmail String?  @map("contact_email") @db.NVarChar(100)
-  notes        String?  @db.NVarChar(1000)
-  isActive     Boolean  @default(true) @map("is_active")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id             String   @id @default(cuid())
+  tenantId       String   @map("tenant_id")
+  supplierTypeId String   @map("supplier_type_id")
+  name           String   @db.NVarChar(200)
+  vatNumber      String?  @map("vat_number") @db.NVarChar(20)
+  address        String?  @db.NVarChar(500)
+  pec            String?  @db.NVarChar(100)
+  contactName    String?  @map("contact_name") @db.NVarChar(100)
+  contactPhone   String?  @map("contact_phone") @db.NVarChar(50)
+  contactEmail   String?  @map("contact_email") @db.NVarChar(100)
+  notes          String?  @db.NVarChar(1000)
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
 
-  contracts Contract[]
-  fuelCards  FuelCard[]
+  supplierType SupplierType @relation(fields: [supplierTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  contracts    Contract[]
+  fuelCards    FuelCard[]
+  xmlTemplates SupplierXmlTemplate[]
+  regexPresets FieldRegexPreset[]
 
   @@unique([tenantId, vatNumber], map: "uq_supplier_tenant_vat")
   @@index([tenantId], map: "idx_suppliers_tenant_id")
+  @@index([supplierTypeId], map: "idx_suppliers_supplier_type_id")
   @@map("Suppliers")
 }
 
@@ -726,4 +750,126 @@ model EmissionTarget {
   @@index([tenantId, scope, period], map: "idx_emission_targets_tenant_scope_period")
   @@index([carlistId], map: "idx_emission_targets_carlist")
   @@map("EmissionTargets")
+}
+
+// Template estrazione XML per fornitori carburante (tenant-scoped)
+model SupplierXmlTemplate {
+  id              String   @id @default(cuid())
+  tenantId        String   @map("tenant_id")
+  supplierId      String   @map("supplier_id")
+  name            String   @db.NVarChar(200)
+  description     String?  @db.NVarChar(500)
+  templateConfig  String   @map("template_config") @db.NVarChar(Max)  // JSON TemplateConfig
+  matchingConfig  String?  @map("matching_config") @db.NVarChar(Max)  // JSON MatchingTolerances
+  sampleXml       String?  @map("sample_xml") @db.NVarChar(Max)
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  supplier       Supplier        @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  invoiceImports InvoiceImport[]
+
+  @@index([tenantId], map: "idx_xml_templates_tenant_id")
+  @@index([supplierId], map: "idx_xml_templates_supplier_id")
+  @@map("SupplierXmlTemplates")
+}
+
+// Import fatture XML (tenant-scoped)
+model InvoiceImport {
+  id                   String    @id @default(cuid())
+  tenantId             String    @map("tenant_id")
+  templateId           String    @map("template_id")
+  userId               String    @map("user_id")
+  fileName             String    @map("file_name") @db.NVarChar(255)
+  fileHash             String?   @map("file_hash") @db.NVarChar(64)
+  supplierVatNumber    String?   @map("supplier_vat_number") @db.NVarChar(20)
+  invoiceNumber        String?   @map("invoice_number") @db.NVarChar(50)
+  invoiceDate          DateTime? @map("invoice_date")
+  status               String    @default("PENDING")
+  totalLinesExtracted  Int       @default(0) @map("total_lines_extracted")
+  totalLinesMatched    Int       @default(0) @map("total_lines_matched")
+  totalLinesCreated    Int       @default(0) @map("total_lines_created")
+  totalLinesSkipped    Int       @default(0) @map("total_lines_skipped")
+  totalLinesError      Int       @default(0) @map("total_lines_error")
+  requireManualConfirm Boolean   @default(false) @map("require_manual_confirm")
+  processingLog        String?   @map("processing_log") @db.NVarChar(Max)
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  completedAt          DateTime? @map("completed_at")
+
+  template SupplierXmlTemplate @relation(fields: [templateId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lines    InvoiceImportLine[]
+
+  @@index([tenantId], map: "idx_invoice_imports_tenant_id")
+  @@index([status], map: "idx_invoice_imports_status")
+  @@index([fileHash], map: "idx_invoice_imports_file_hash")
+  @@map("InvoiceImports")
+}
+
+// Righe importate da fatture XML (tenant-scoped)
+model InvoiceImportLine {
+  id                  String    @id @default(cuid())
+  tenantId            String    @map("tenant_id")
+  importId            String    @map("import_id")
+  lineNumber          Int       @map("line_number")
+  licensePlate        String?   @map("license_plate") @db.NVarChar(50)
+  date                DateTime?
+  fuelType            String?   @map("fuel_type") @db.NVarChar(50)
+  quantity            Float?
+  amount              Float?
+  cardNumber          String?   @map("card_number") @db.NVarChar(50)
+  odometerKm          Int?      @map("odometer_km")
+  description         String?   @db.NVarChar(500)
+  rawXml              String?   @map("raw_xml") @db.NVarChar(Max)
+  matchStatus         String    @default("UNMATCHED") @map("match_status")
+  matchedFuelRecordId String?   @map("matched_fuel_record_id")
+  createdFuelRecordId String?   @map("created_fuel_record_id")
+  matchScore          Float?    @map("match_score")
+  matchDetails        String?   @map("match_details") @db.NVarChar(Max)
+  resolvedVehicleId   String?   @map("resolved_vehicle_id")
+  extractionErrors    String?   @map("extraction_errors") @db.NVarChar(Max)
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  import InvoiceImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId], map: "idx_import_lines_tenant_id")
+  @@index([importId], map: "idx_import_lines_import_id")
+  @@index([matchStatus], map: "idx_import_lines_match_status")
+  @@map("InvoiceImportLines")
+}
+
+// Preset filtri report emissioni (tenant-scoped)
+model ReportFilterPreset {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  name        String
+  filters     String   @map("filters") // JSON serializzato
+  createdById String   @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+  @@map("report_filter_presets")
+}
+
+// Preset regex multi-pattern per estrazione campi XML (tenant-scoped)
+model FieldRegexPreset {
+  id          String   @id @default(cuid())
+  tenantId    String   @map("tenant_id")
+  supplierId  String?  @map("supplier_id")  // null = globale (tutti i fornitori)
+  fieldName   String   @map("field_name") @db.NVarChar(50)
+  name        String   @db.NVarChar(200)
+  patterns    String   @db.NVarChar(Max)    // JSON: RegexPattern[]
+  priority    Int      @default(0)          // minore = provato prima
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  supplier    Supplier? @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([tenantId, fieldName], map: "idx_regex_presets_tenant_field")
+  @@index([supplierId], map: "idx_regex_presets_supplier_id")
+  @@map("FieldRegexPresets")
 }

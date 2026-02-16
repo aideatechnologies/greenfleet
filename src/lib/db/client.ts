@@ -33,6 +33,7 @@ function parseDatabaseUrl(url: string) {
     options: {
       encrypt: params.encrypt === "true",
       trustServerCertificate: params.trustservercertificate === "true",
+      requestTimeout: 30000, // 30s — default tedious 15s is too tight for nested includes
     },
   };
 }

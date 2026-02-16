@@ -1,0 +1,1069 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:FatturaElettronica xmlns:p="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" versione="FPR12" xsi:schemaLocation="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2 http://www.fatturapa.gov.it/export/fatturazione/sdi/fatturapa/v1.2/Schema_del_file_xml_FatturaPA_versione_1.2.1a.xsd">
+<FatturaElettronicaHeader>
+<DatiTrasmissione>
+<IdTrasmittente>
+<IdPaese>IT</IdPaese> 
+<IdCodice>05262890014</IdCodice>
+</IdTrasmittente>
+<ProgressivoInvio>C009542403</ProgressivoInvio>
+<FormatoTrasmissione>FPR12</FormatoTrasmissione>
+<CodiceDestinatario>SN4CSRI</CodiceDestinatario>
+</DatiTrasmissione>
+<CedentePrestatore>
+<DatiAnagrafici>
+<IdFiscaleIVA>
+<IdPaese>IT</IdPaese>
+<IdCodice>00891951006</IdCodice>
+</IdFiscaleIVA>
+<CodiceFiscale>00435970587</CodiceFiscale>
+<Anagrafica> 
+<Denominazione>KUWAIT PETROLEUM ITALIA SPA</Denominazione>
+ </Anagrafica> 
+<RegimeFiscale>RF01</RegimeFiscale>
+</DatiAnagrafici>
+<Sede>
+ <Indirizzo> VIA DELL'OCEANO INDIANO</Indirizzo>
+<NumeroCivico>13</NumeroCivico>
+ <CAP>00144</CAP>
+ <Comune>ROMA</Comune>
+ <Provincia>RM</Provincia> 
+ <Nazione>IT</Nazione>
+</Sede>
+<IscrizioneREA>
+<Ufficio>RM</Ufficio>
+<NumeroREA>73832</NumeroREA>
+<CapitaleSociale>130000000.00</CapitaleSociale>
+<StatoLiquidazione>LN</StatoLiquidazione>
+</IscrizioneREA>
+<Contatti>
+<Telefono>06 5208 81 </Telefono>
+<Fax>06 5208 8655</Fax>
+</Contatti>
+</CedentePrestatore>
+<CessionarioCommittente>
+<DatiAnagrafici>
+<IdFiscaleIVA>
+<IdPaese>IT</IdPaese>
+<IdCodice>11885710969</IdCodice>
+</IdFiscaleIVA>
+<CodiceFiscale>11885710969</CodiceFiscale>
+<Anagrafica>
+<Denominazione>LVMH PROF. COSM. IT SRL PCD</Denominazione>
+</Anagrafica>
+</DatiAnagrafici>
+<Sede>
+<Indirizzo>via vezza d&apos;oglio 7</Indirizzo>
+<CAP>20139</CAP>
+<Comune>MILANO</Comune>
+<Provincia>MI</Provincia>
+<Nazione>IT</Nazione>
+</Sede>
+</CessionarioCommittente>
+<TerzoIntermediarioOSoggettoEmittente>
+<DatiAnagrafici>
+<IdFiscaleIVA>
+<IdPaese>IT</IdPaese>
+<IdCodice>05262890014</IdCodice>
+</IdFiscaleIVA>
+<Anagrafica>
+<Denominazione>Intesa S.p.A.</Denominazione>
+</Anagrafica>
+</DatiAnagrafici>
+</TerzoIntermediarioOSoggettoEmittente>
+</FatturaElettronicaHeader>
+<FatturaElettronicaBody>
+<DatiGenerali>
+  <DatiGeneraliDocumento>
+ <TipoDocumento>TD01</TipoDocumento>
+ <Divisa>EUR</Divisa>
+ <Data>2024-12-31</Data>
+ <Numero>PJ09316746</Numero>
+ <ImportoTotaleDocumento>2266.80</ImportoTotaleDocumento>
+</DatiGeneraliDocumento>
+</DatiGenerali>
+<DatiBeniServizi>
+<DettaglioLinee>
+<NumeroLinea>1</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>45.48</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-18</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-18</DataFinePeriodo>
+ <PrezzoUnitario>1.44289171</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>64.71311475</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR027EW</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>2</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27102011.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>GASOLIO</Descrizione>
+ <Quantita>34.78</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-18</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-18</DataFinePeriodo>
+ <PrezzoUnitario>1.34333846</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>46.72131148</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA657PL</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>3</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27102011.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>GASOLIO</Descrizione>
+ <Quantita>37.42</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-23</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-23</DataFinePeriodo>
+ <PrezzoUnitario>1.57829704</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>58.31147541</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA657PL</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>4</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27102011.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>GASOLIO</Descrizione>
+ <Quantita>45.21</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-17</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-17</DataFinePeriodo>
+ <PrezzoUnitario>1.36091906</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>60.62295082</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GF385CN</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>5</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27102011.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>GASOLIO</Descrizione>
+ <Quantita>40.15</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-26</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-26</DataFinePeriodo>
+ <PrezzoUnitario>1.32820897</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>52.52459016</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GF385CN</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>6</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>26.53</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-16</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-16</DataFinePeriodo>
+ <PrezzoUnitario>1.45110490</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>37.96721311</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FV246SV</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>7</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>27.33</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-17</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-17</DataFinePeriodo>
+ <PrezzoUnitario>1.45120213</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>39.11475410</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GS389LT</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>8</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>35.02</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-23</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-23</DataFinePeriodo>
+ <PrezzoUnitario>1.39368810</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>48.10655738</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GS389LT</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>9</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>26.67</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-27</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-27</DataFinePeriodo>
+ <PrezzoUnitario>1.38456054</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>36.92622951</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GS389LT</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>10</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>32.42</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-19</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-19</DataFinePeriodo>
+ <PrezzoUnitario>1.44188469</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>46.74590164</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR176FA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>11</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>33.52</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-18</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-18</DataFinePeriodo>
+ <PrezzoUnitario>1.61508392</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>53.46721311</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL768FD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>12</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>27.05</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-20</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-20</DataFinePeriodo>
+ <PrezzoUnitario>1.38844277</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>37.55737705</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL768FD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>13</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>37.15</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-23</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-23</DataFinePeriodo>
+ <PrezzoUnitario>1.45944576</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>53.47540984</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GN837SR</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>14</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>26.51</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-28</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-28</DataFinePeriodo>
+ <PrezzoUnitario>1.45815684</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>38.65573770</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GN837SR</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>15</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>35.78</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-17</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-17</DataFinePeriodo>
+ <PrezzoUnitario>1.42537731</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>51.00000000</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL508HY</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>16</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>33.26</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-31</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-31</DataFinePeriodo>
+ <PrezzoUnitario>1.40891929</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>46.86065574</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL508HY</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>17</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27102011.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>GASOLIO</Descrizione>
+ <Quantita>38.49</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-23</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-23</DataFinePeriodo>
+ <PrezzoUnitario>1.37738897</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>52.24590164</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GE530CB</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>18</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>32.23</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-21</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-21</DataFinePeriodo>
+ <PrezzoUnitario>1.70512179</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>54.31147541</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GN855DH</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>19</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>33.02</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-18</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-18</DataFinePeriodo>
+ <PrezzoUnitario>1.74622653</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>57.00000000</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GS048PA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>20</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>34.35</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-18</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-18</DataFinePeriodo>
+ <PrezzoUnitario>1.74620326</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>59.29508197</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GS048PA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>21</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>29.90</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-17</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-17</DataFinePeriodo>
+ <PrezzoUnitario>1.42660124</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>42.05737705</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL774FD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>22</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>27.20</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-20</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-20</DataFinePeriodo>
+ <PrezzoUnitario>1.42670203</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>38.26229508</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL774FD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>23</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>18.28</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-22</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-22</DataFinePeriodo>
+ <PrezzoUnitario>1.39272519</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>25.45901639</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL774FD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>24</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>17.25</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-28</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-28</DataFinePeriodo>
+ <PrezzoUnitario>1.42650986</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>24.26229508</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL774FD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>25</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>27.60</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-30</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-30</DataFinePeriodo>
+ <PrezzoUnitario>1.42650986</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>38.81967213</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GL774FD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>26</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>19.26</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-20</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-20</DataFinePeriodo>
+ <PrezzoUnitario>1.45932043</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>27.72131148</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR020YH</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>27</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>36.34</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-30</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-30</DataFinePeriodo>
+ <PrezzoUnitario>1.64784088</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>59.15573770</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR020YH</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>28</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>35.34</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-17</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-17</DataFinePeriodo>
+ <PrezzoUnitario>1.64797926</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>57.53278689</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GT518ZS</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>29</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>35.71</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-23</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-23</DataFinePeriodo>
+ <PrezzoUnitario>1.44997728</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>51.77868852</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GT518ZS</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>30</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>20.41</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-17</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-17</DataFinePeriodo>
+ <PrezzoUnitario>1.43372342</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>29.26229508</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR451SM</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>31</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>30.17</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-20</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-20</DataFinePeriodo>
+ <PrezzoUnitario>1.49633356</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>44.54098361</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GP223FX</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>32</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>31.30</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-20</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-20</DataFinePeriodo>
+ <PrezzoUnitario>1.70360132</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>52.69672131</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GP223FX</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>33</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>RET</CodiceTipo>
+ <CodiceValore>0.717</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>RICARICA ELETTRICA</Descrizione>
+ <Quantita>10.72</Quantita>
+ <UnitaMisura>W</UnitaMisura>
+ <DataInizioPeriodo>2024-12-20</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-20</DataFinePeriodo>
+ <PrezzoUnitario>0.58722780</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>6.29508197</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GP677MF</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>34</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>28.83</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-21</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-21</DataFinePeriodo>
+ <PrezzoUnitario>1.43350221</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.00</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>41.32786885</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GP677MF</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>35</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>36.17</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-18</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-18</DataFinePeriodo>
+ <PrezzoUnitario>1.66432983</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>59.47540984</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM903LD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>36</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>39.63</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-20</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-20</DataFinePeriodo>
+ <PrezzoUnitario>1.67651125</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>65.64754098</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM903LD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>37</NumeroLinea>
+<CodiceArticolo> 
+ <CodiceTipo>CARB</CodiceTipo>
+ <CodiceValore>27101245.000</CodiceValore>
+</CodiceArticolo>
+ <Descrizione>SUPER SENZA PB</Descrizione>
+ <Quantita>30.02</Quantita>
+ <UnitaMisura>L</UnitaMisura>
+ <DataInizioPeriodo>2024-12-23</DataInizioPeriodo>
+ <DataFinePeriodo>2024-12-23</DataFinePeriodo>
+ <PrezzoUnitario>1.63968524</PrezzoUnitario>
+<ScontoMaggiorazione>
+ <Tipo>SC</Tipo>
+ <Importo>0.02</Importo>
+</ScontoMaggiorazione>
+ <PrezzoTotale>48.62295082</PrezzoTotale>
+ <AliquotaIVA>22.00</AliquotaIVA>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM903LD</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>38</NumeroLinea> 
+<CodiceArticolo>
+<CodiceTipo>FEE</CodiceTipo>
+<CodiceValore>0</CodiceValore>
+</CodiceArticolo>
+<Descrizione>FEE</Descrizione>
+<Quantita>1.00</Quantita> 
+<UnitaMisura>-</UnitaMisura>
+<DataInizioPeriodo>2024-12-31</DataInizioPeriodo>
+<DataFinePeriodo>2024-12-31</DataFinePeriodo>
+<PrezzoUnitario>149.49000000</PrezzoUnitario>
+<ScontoMaggiorazione>
+<Tipo>SC</Tipo>
+<Importo>0.00</Importo>
+</ScontoMaggiorazione>
+<PrezzoTotale>149.49000000</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DatiRiepilogo>
+ <AliquotaIVA>22.00</AliquotaIVA>
+ <ImponibileImporto>1858.03</ImponibileImporto>
+ <Imposta>408.77</Imposta>
+</DatiRiepilogo>
+</DatiBeniServizi>
+<DatiPagamento>
+ <CondizioniPagamento>TP02</CondizioniPagamento>
+<DettaglioPagamento>
+ <Beneficiario>KUWAIT PETROLEUM ITALIA S.P.A.</Beneficiario>
+ <ModalitaPagamento>MP19</ModalitaPagamento>
+<DataRiferimentoTerminiPagamento>2024-12-31</DataRiferimentoTerminiPagamento>
+<GiorniTerminiPagamento>30</GiorniTerminiPagamento>
+ <ImportoPagamento>2266.80</ImportoPagamento>
+ <IstitutoFinanziario>BANCA DI CREDITO COOPERATIVO DI ROMA </IstitutoFinanziario>
+ <IBAN>IT28T0832703226000000004200</IBAN>
+ <ABI>08327</ABI>
+ <CAB>03226</CAB>
+</DettaglioPagamento>
+</DatiPagamento>
+<Allegati>
+ <NomeAttachment>KUPIT_FATTSDI.IT02.Cards_2024_PJ09316746_C009542403_TRS.zip</NomeAttachment>
+ <AlgoritmoCompressione>ZIP</AlgoritmoCompressione>
+ <FormatoAttachment>CSV</FormatoAttachment>
+<Attachment>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
+</Attachment>
+</Allegati>
+<Allegati>
+ <NomeAttachment>KUPIT_FATTSDI.IT02.Cards_2024_PJ09316746_C009542403_ACC.zip</NomeAttachment>
+ <AlgoritmoCompressione>ZIP</AlgoritmoCompressione>
+ <FormatoAttachment>CSV</FormatoAttachment>
+<Attachment>UEsDBBQAAAAIAGS3Ilq7hcvC2AAAADgBAAA7ABwAS1VQSVRfRkFUVFNESS5JVDAy
+LkNhcmRzXzIwMjRfUEowOTMxNjc0Nl9DMDA5NTQyNDAzX0FDQy5jc3ZVVAkAAysM
+d2crDHdndXgLAAEE9AEAAAT2AQAAVY0/b4MwEMX3fIrbupwi/wNj3eRItEJChRaa
+oZubMFhKcQXm+9duwlDdcu/d773rl3ANMQZ629wcfXRP0Pq4eGq+f8KS/OZs//bZ
+f/nbtNtgLxe/Ojq5dQJ/P4O7wTylLrh6SDGYdiqLddu5VPMPfUBjiPDsYtwWd3ix
+Q9c2HXFTIitICoNGUGFQGRKaoZLEBUemCPIcho++foehfv200J/IKIM6IUetSqwE
+SV4gY0krybMuDUddPbJjN9q2TkeuiuyKI9MlakVSq/wvtTCBoqCKixy+p34BUEsB
+Ah4DFAAAAAgAZLciWruFy8LYAAAAOAEAADsAGAAAAAAAAQAAAKSBAAAAAEtVUElU
+X0ZBVFRTREkuSVQwMi5DYXJkc18yMDI0X1BKMDkzMTY3NDZfQzAwOTU0MjQwM19B
+Q0MuY3N2VVQFAAMrDHdndXgLAAEE9AEAAAT2AQAAUEsFBgAAAAABAAEAgQAAAE0B
+AAAAAA==
+</Attachment>
+</Allegati>
+<Allegati>
+ <NomeAttachment>KUPIT_FATTSDI.IT02.Cards_2024_PJ09316746_C009542403_FEE.zip</NomeAttachment>
+ <AlgoritmoCompressione>ZIP</AlgoritmoCompressione>
+ <FormatoAttachment>CSV</FormatoAttachment>
+<Attachment>UEsDBBQAAAAIAGS3Ilqllg0cugAAAHoBAAA7ABwAS1VQSVRfRkFUVFNESS5JVDAy
+LkNhcmRzXzIwMjRfUEowOTMxNjc0Nl9DMDA5NTQyNDAzX0ZFRS5jc3ZVVAkAAysM
+d2crDHdndXgLAAEE9AEAAAT2AQAAdY7NCsIwEITvfYp9gCKxVkVyrAoFK4UePKdx
+0YU2kfwU8elNqgdFm8OSnS+TmUKfZ1AJUhyKcG18yxs0Az1IQyGMI2upF3DCln+v
+UHfe8lIN4eFWS9+jciK4FI4+IVHw5oYWIRBLHcENDciI3roh7ON/0fLSS2V15x39
+qxAjD3S5uilYGz2NQpLvp/DujjKkDvguVn0Urssj7MmS1DxhLGOLVb7M15y9Dmfp
+15hnWfqrjmPB0nzzsSdPUEsBAh4DFAAAAAgAZLciWqWWDRy6AAAAegEAADsAGAAA
+AAAAAQAAAKSBAAAAAEtVUElUX0ZBVFRTREkuSVQwMi5DYXJkc18yMDI0X1BKMDkz
+MTY3NDZfQzAwOTU0MjQwM19GRUUuY3N2VVQFAAMrDHdndXgLAAEE9AEAAAT2AQAA
+UEsFBgAAAAABAAEAgQAAAC8BAAAAAA==
+</Attachment>
+</Allegati>
+</FatturaElettronicaBody>
+</p:FatturaElettronica>

@@ -3,6 +3,7 @@
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -11,8 +12,6 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
   type ChartConfig,
 } from "@/components/ui/chart";
 import {
@@ -23,21 +22,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { EmissionBreakdown } from "@/types/report";
-
-// ---------------------------------------------------------------------------
-// Chart config
-// ---------------------------------------------------------------------------
-
-const chartConfig = {
-  value: {
-    label: "Emissioni Reali",
-    color: "var(--color-chart-actual)",
-  },
-  percentage: {
-    label: "Percentuale",
-    color: "var(--color-chart-theoretical)",
-  },
-} satisfies ChartConfig;
 
 // ---------------------------------------------------------------------------
 // Tooltip formatter
@@ -127,6 +111,15 @@ export function EmissionBreakdownChart({
     fill: getFuelColor(item.categoryId, index),
   }));
 
+  // Build dynamic chart config for legend
+  const dynamicConfig: ChartConfig = {};
+  for (const item of enrichedData) {
+    dynamicConfig[item.categoryId] = {
+      label: item.category,
+      color: item.fill,
+    };
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -136,7 +129,19 @@ export function EmissionBreakdownChart({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        {/* Color legend */}
+        <div className="mb-3 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+          {enrichedData.map((item) => (
+            <span key={item.categoryId} className="flex items-center gap-1.5">
+              <span
+                className="inline-block size-2.5 rounded-sm"
+                style={{ backgroundColor: item.fill }}
+              />
+              {item.category} ({fmtIt.format(item.percentage)}%)
+            </span>
+          ))}
+        </div>
+        <ChartContainer config={dynamicConfig} className="h-[300px] w-full">
           <BarChart
             data={enrichedData}
             margin={{ top: 5, right: 10, left: 10, bottom: 0 }}
@@ -166,11 +171,10 @@ export function EmissionBreakdownChart({
                 />
               }
             />
-            <ChartLegend content={<ChartLegendContent />} />
+            {/* Legend rendered above the chart */}
             <Bar
               dataKey="value"
               radius={[4, 4, 0, 0]}
-              fill="var(--color-value)"
               className={onBarClick ? "cursor-pointer" : ""}
               onClick={(barData) => {
                 if (onBarClick && barData?.categoryId) {
@@ -178,7 +182,11 @@ export function EmissionBreakdownChart({
                 }
               }}
               activeBar={{ opacity: onBarClick ? 0.8 : 1 }}
-            />
+            >
+              {enrichedData.map((entry) => (
+                <Cell key={entry.categoryId} fill={entry.fill} />
+              ))}
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>

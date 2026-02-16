@@ -614,6 +614,15 @@ async function phase2(orgId: string): Promise<Map<string, string>> {
     });
   }
 
+  // Resolve SupplierType IDs
+  const supplierTypes = await prisma.supplierType.findMany({
+    where: { tenantId: orgId },
+  });
+  const typeMap = new Map(supplierTypes.map((t) => [t.code, t.id]));
+  if (!typeMap.has("NLT") || !typeMap.has("CARBURANTE") || !typeMap.has("ALTRO")) {
+    throw new Error("Missing SupplierType records. Run migrate-supplier-types.ts first.");
+  }
+
   // Maps for later phases: vatNumber -> supplierId, name -> supplierId
   const supplierByVat = new Map<string, string>();
   const supplierByName = new Map<string, string>();
@@ -642,7 +651,7 @@ async function phase2(orgId: string): Promise<Map<string, string>> {
           },
           update: {
             name: sup.name,
-            type: sup.type,
+            supplierTypeId: typeMap.get(sup.type)!,
             address: sup.address,
             pec: sup.pec,
             contactName: sup.contactName,
@@ -653,7 +662,7 @@ async function phase2(orgId: string): Promise<Map<string, string>> {
           },
           create: {
             tenantId: orgId,
-            type: sup.type,
+            supplierTypeId: typeMap.get(sup.type)!,
             name: sup.name,
             vatNumber: sup.vatNumber,
             address: sup.address,
@@ -680,7 +689,7 @@ async function phase2(orgId: string): Promise<Map<string, string>> {
           await prisma.supplier.update({
             where: { id: existing.id },
             data: {
-              type: sup.type,
+              supplierTypeId: typeMap.get(sup.type)!,
               address: sup.address,
               pec: sup.pec,
               contactName: sup.contactName,
@@ -696,7 +705,7 @@ async function phase2(orgId: string): Promise<Map<string, string>> {
           const created = await prisma.supplier.create({
             data: {
               tenantId: orgId,
-              type: sup.type,
+              supplierTypeId: typeMap.get(sup.type)!,
               name: sup.name,
               vatNumber: null,
               address: sup.address,

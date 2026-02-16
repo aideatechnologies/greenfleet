@@ -39,6 +39,21 @@ export type EmissionsTrendPoint = {
   value: number; // kgCO2e
 };
 
+export type EmissionsTrendFilter = {
+  scope?: number;      // 1 or 2 — undefined = all scopes
+  fuelTypes?: string[]; // MacroFuelType names — undefined = all
+};
+
+export type EmissionFilterOption = {
+  value: string;
+  label: string;
+};
+
+export type EmissionFilterOptions = {
+  fuelTypes: EmissionFilterOption[];
+  scopes: EmissionFilterOption[];
+};
+
 export type FleetDelta = {
   theoretical: number; // kgCO2e
   real: number; // kgCO2e
@@ -324,6 +339,155 @@ export async function getEmissionsTrend(
 }
 
 // ---------------------------------------------------------------------------
+// getFilteredEmissionsTrend
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns monthly emissions trend filtered by optional scope and fuel types.
+ */
+export async function getFilteredEmissionsTrend(
+  tenantId: string,
+  months: number = 12,
+  filters?: EmissionsTrendFilter,
+  now: Date = new Date()
+): Promise<EmissionsTrendPoint[]> {
+  const tenantPrisma = getPrismaForTenant(tenantId);
+  const result: EmissionsTrendPoint[] = [];
+
+  for (let i = months - 1; i >= 0; i--) {
+    const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const monthEnd = new Date(
+      now.getFullYear(),
+      now.getMonth() - i + 1,
+      0,
+      23, 59, 59, 999
+    );
+
+    const monthLabel = MONTH_LABELS[monthStart.getMonth()];
+
+    try {
+      const emissions = await calculateFilteredPeriodEmissions(
+        tenantPrisma,
+        monthStart,
+        monthEnd,
+        filters
+      );
+      result.push({ month: monthLabel, value: emissions });
+    } catch {
+      result.push({ month: monthLabel, value: 0 });
+    }
+  }
+
+  return result;
+}
+
+// ---------------------------------------------------------------------------
+// calculateFilteredPeriodEmissions (with scope/fuelType filters)
+// ---------------------------------------------------------------------------
+
+async function calculateFilteredPeriodEmissions(
+  tenantPrisma: ReturnType<typeof getPrismaForTenant>,
+  startDate: Date,
+  endDate: Date,
+  filters?: EmissionsTrendFilter
+): Promise<number> {
+  const fuelRecords = await tenantPrisma.fuelRecord.findMany({
+    where: {
+      date: { gte: startDate, lte: endDate },
+    },
+    select: {
+      quantityLiters: true,
+      quantityKwh: true,
+      fuelType: true,
+      date: true,
+    },
+  });
+
+  if (fuelRecords.length === 0) return 0;
+
+  // Group by fuel type
+  const fuelByType = new Map<string, { litres: number; kwh: number }>();
+  for (const record of fuelRecords) {
+    const current = fuelByType.get(record.fuelType) ?? { litres: 0, kwh: 0 };
+    current.litres += record.quantityLiters;
+    current.kwh += record.quantityKwh ?? 0;
+    fuelByType.set(record.fuelType, current);
+  }
+
+  const medianDate = new Date(
+    (startDate.getTime() + endDate.getTime()) / 2
+  );
+
+  const allContexts = await resolveAllEmissionContextsBulk(
+    prisma as unknown as PrismaClient,
+    medianDate
+  );
+
+  let totalKgCO2e = 0;
+  for (const [fuelType, quantities] of fuelByType) {
+    const contexts = allContexts.get(fuelType);
+    if (!contexts || contexts.length === 0) continue;
+
+    for (const ctx of contexts) {
+      // Scope filter: skip if scope doesn't match
+      if (filters?.scope && ctx.macroFuelType.scope !== filters.scope) {
+        continue;
+      }
+
+      // Fuel type filter: skip if macro fuel type name doesn't match
+      if (filters?.fuelTypes && filters.fuelTypes.length > 0) {
+        if (!filters.fuelTypes.includes(ctx.macroFuelType.name)) {
+          continue;
+        }
+      }
+
+      const quantity = ctx.macroFuelType.scope === 1
+        ? quantities.litres
+        : quantities.kwh;
+
+      const result = calculateScopedEmissions({
+        quantity,
+        gasFactors: ctx.gasFactors,
+        gwpValues: ctx.gwpValues,
+      });
+      totalKgCO2e += result.totalCO2e;
+    }
+  }
+
+  return round2(totalKgCO2e);
+}
+
+// ---------------------------------------------------------------------------
+// getEmissionFilterOptions
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns available filter options (fuel types + scopes) for the tenant.
+ */
+export async function getEmissionFilterOptions(): Promise<EmissionFilterOptions> {
+  const macroFuelTypes = await (prisma as unknown as PrismaClient).macroFuelType.findMany({
+    select: { name: true, scope: true },
+    orderBy: { name: "asc" },
+  });
+
+  const fuelTypes: EmissionFilterOption[] = [
+    ...new Map(
+      macroFuelTypes.map((m) => [m.name, { value: m.name, label: m.name }])
+    ).values(),
+  ];
+
+  const scopeSet = new Set(macroFuelTypes.map((m) => m.scope));
+  const scopes: EmissionFilterOption[] = [...scopeSet]
+    .sort()
+    .map((s) => ({
+      value: String(s),
+      label: s === 1 ? "Scope 1 (Combustione)" : "Scope 2 (Elettricità)",
+    }));
+
+  return { fuelTypes, scopes };
+}
+
+// ---------------------------------------------------------------------------
 // getFleetDelta
 // ---------------------------------------------------------------------------
 
@@ -357,27 +521,41 @@ export async function getFleetDelta(
     medianDate
   );
 
+  // Bulk-load ALL fuel records for the period (avoid N+1)
+  const vehicleIds = vehicles.map((v) => v.id);
+  const allFuelRecords = await tenantPrisma.fuelRecord.findMany({
+    where: {
+      vehicleId: { in: vehicleIds },
+      date: { gte: startDate, lte: endDate },
+    },
+    orderBy: { odometerKm: "asc" },
+    select: {
+      vehicleId: true,
+      quantityLiters: true,
+      quantityKwh: true,
+      fuelType: true,
+      odometerKm: true,
+      date: true,
+    },
+  });
+
+  // Group by vehicleId
+  const recordsByVehicle = new Map<string, typeof allFuelRecords>();
+  for (const fr of allFuelRecords) {
+    const list = recordsByVehicle.get(fr.vehicleId);
+    if (list) {
+      list.push(fr);
+    } else {
+      recordsByVehicle.set(fr.vehicleId, [fr]);
+    }
+  }
+
   let totalTheoretical = 0;
   let totalReal = 0;
 
   for (const vehicle of vehicles) {
-    // Get fuel records for this vehicle in the period
-    const fuelRecords = await tenantPrisma.fuelRecord.findMany({
-      where: {
-        vehicleId: vehicle.id,
-        date: { gte: startDate, lte: endDate },
-      },
-      orderBy: { odometerKm: "asc" },
-      select: {
-        quantityLiters: true,
-        quantityKwh: true,
-        fuelType: true,
-        odometerKm: true,
-        date: true,
-      },
-    });
-
-    if (fuelRecords.length < 2) continue;
+    const fuelRecords = recordsByVehicle.get(vehicle.id);
+    if (!fuelRecords || fuelRecords.length < 2) continue;
 
     // Calculate km travelled
     const first = fuelRecords[0];

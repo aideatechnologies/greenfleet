@@ -2,17 +2,65 @@
 // Report / Emission Aggregation types (Story 6.4)
 // ---------------------------------------------------------------------------
 
-export type AggregationLevel = "VEHICLE" | "CARLIST" | "FUEL_TYPE" | "PERIOD";
+import type { PerGasResult, EmissionScope } from "@/types/emission";
+
+export type AggregationLevel = "FLEET" | "VEHICLE" | "CARLIST" | "FUEL_TYPE" | "PERIOD";
 export type PeriodGranularity = "MONTHLY" | "QUARTERLY" | "YEARLY";
+
+// ---------------------------------------------------------------------------
+// Vehicle Filters (advanced filtering)
+// ---------------------------------------------------------------------------
+
+export type VehicleFilters = {
+  licensePlates?: string[];
+  marca?: string[];
+  modello?: string;
+  fuelType?: string[];
+  carrozzeria?: string[];
+  isHybrid?: boolean;
+  cilindrataMin?: number;
+  cilindrataMax?: number;
+  potenzaKwMin?: number;
+  potenzaKwMax?: number;
+  potenzaCvMin?: number;
+  potenzaCvMax?: number;
+  co2GKmMin?: number;
+  co2GKmMax?: number;
+  prezzoListinoMin?: number;
+  prezzoListinoMax?: number;
+};
+
+// ---------------------------------------------------------------------------
+// Scope / Performance
+// ---------------------------------------------------------------------------
+
+export type ScopeBreakdown = {
+  scope: EmissionScope;
+  scopeLabel: string;
+  emissions: number;
+  perGas: PerGasResult;
+};
+
+export type PerformanceLevel = "good" | "neutral" | "poor";
+
+// ---------------------------------------------------------------------------
+// Report params
+// ---------------------------------------------------------------------------
 
 export type ReportParams = {
   dateRange: { startDate: Date; endDate: Date };
   aggregationLevel: AggregationLevel;
   periodGranularity?: PeriodGranularity;
   carlistId?: string;
+  vehicleFilters?: VehicleFilters;
 };
 
+// ---------------------------------------------------------------------------
+// Aggregation result
+// ---------------------------------------------------------------------------
+
 export type EmissionAggregation = {
+  // --- Campi esistenti ---
   label: string;
   id: string;
   theoreticalEmissions: number;
@@ -21,7 +69,25 @@ export type EmissionAggregation = {
   deltaPercentage: number;
   totalKm: number;
   totalFuel: number;
+  // --- NUOVI ---
+  scopeBreakdowns: ScopeBreakdown[];
+  perGas: PerGasResult;
+  realCO2ePerKm: number;
+  theoreticalCO2ePerKm: number;
+  co2GKmWltp: number;
+  co2GKmNedc: number;
+  performanceLevel: PerformanceLevel;
+  performanceDeviation: number;
+  isHybrid: boolean;
+  fuelType: string;
+  fuelTypeLabel: string;
+  totalFuelLitres: number;
+  totalFuelKwh: number;
 };
+
+// ---------------------------------------------------------------------------
+// Time series / Breakdown (unchanged)
+// ---------------------------------------------------------------------------
 
 export type EmissionTimeSeries = {
   period: string;
@@ -38,6 +104,10 @@ export type EmissionBreakdown = {
   percentage: number;
 };
 
+// ---------------------------------------------------------------------------
+// Report result
+// ---------------------------------------------------------------------------
+
 export type ReportResult = {
   aggregations: EmissionAggregation[];
   timeSeries: EmissionTimeSeries[];
@@ -52,6 +122,14 @@ export type ReportResult = {
     vehicleCount: number;
     dateRange: { startDate: Date; endDate: Date };
     generatedAt: Date;
+    // --- NUOVI ---
+    avgRealCO2ePerKm: number;
+    avgTheoreticalCO2ePerKm: number;
+    totalScope1: number;
+    totalScope2: number;
+    scope1Percentage: number;
+    scope2Percentage: number;
+    totalPerGas: PerGasResult;
   };
 };
 
@@ -156,4 +234,29 @@ export type CSVOptions = {
   separator: string;
   decimalSeparator: string;
   includeHeaders: boolean;
+};
+
+// ---------------------------------------------------------------------------
+// Filter Preset
+// ---------------------------------------------------------------------------
+
+export type ReportFilterPreset = {
+  id: string;
+  name: string;
+  filters: VehicleFilters & {
+    carlistId?: string;
+    aggregationLevel?: AggregationLevel;
+    periodGranularity?: PeriodGranularity;
+  };
+};
+
+// ---------------------------------------------------------------------------
+// Filter Options (distinct values for selects)
+// ---------------------------------------------------------------------------
+
+export type FilterOptions = {
+  targhe: string[];
+  marche: string[];
+  carrozzerie: string[];
+  carburanti: string[];
 };

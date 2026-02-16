@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useTransition } from "react";
+import React, { useState, useCallback, useEffect, useTransition } from "react";
 import { Building2, List, Car } from "lucide-react";
 import {
   Card,
@@ -257,23 +257,25 @@ export function DrillDownNavigator({
                 const Icon = entry.icon;
 
                 return (
-                  <BreadcrumbItem key={`${entry.level}-${entry.id ?? "root"}`}>
+                  <React.Fragment key={`${entry.level}-${entry.id ?? "root"}`}>
                     {idx > 0 && <BreadcrumbSeparator />}
-                    {isLast ? (
-                      <BreadcrumbPage className="flex items-center gap-1.5">
-                        <Icon className="size-3.5" />
-                        {entry.label}
-                      </BreadcrumbPage>
-                    ) : (
-                      <BreadcrumbLink
-                        className="flex cursor-pointer items-center gap-1.5"
-                        onClick={() => navigateToBreadcrumb(entry)}
-                      >
-                        <Icon className="size-3.5" />
-                        {entry.label}
-                      </BreadcrumbLink>
-                    )}
-                  </BreadcrumbItem>
+                    <BreadcrumbItem>
+                      {isLast ? (
+                        <BreadcrumbPage className="flex items-center gap-1.5">
+                          <Icon className="size-3.5" />
+                          {entry.label}
+                        </BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink
+                          className="flex cursor-pointer items-center gap-1.5"
+                          onClick={() => navigateToBreadcrumb(entry)}
+                        >
+                          <Icon className="size-3.5" />
+                          {entry.label}
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                  </React.Fragment>
                 );
               })}
             </BreadcrumbList>

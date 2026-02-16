@@ -29,7 +29,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { CarlistBreakdownResult } from "@/lib/services/dashboard-service";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { exportToCsv } from "@/lib/utils/csv-export";
+import type {
+  CarlistBreakdownItem,
+  CarlistBreakdownResult,
+} from "@/lib/services/dashboard-service";
 import {
   formatKm,
   formatEmission,
@@ -90,6 +96,27 @@ export function CarlistBreakdownSection({
   }
 
   const emissionsItems = data.items.filter((i) => i.emissionsKgCO2e > 0);
+
+  function todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }
+
+  function handleExportCarlist() {
+    exportToCsv(
+      `flotta-per-parco-auto-${todayStr()}`,
+      [
+        { header: "Parco Auto", accessor: (r: CarlistBreakdownItem) => r.carlistName },
+        { header: "Veicoli", accessor: (r: CarlistBreakdownItem) => r.vehicleCount, format: "integer" },
+        { header: "Km", accessor: (r: CarlistBreakdownItem) => r.totalKm, format: "integer" },
+        { header: "Litri", accessor: (r: CarlistBreakdownItem) => r.totalLitres, format: "decimal2" },
+        { header: "kWh", accessor: (r: CarlistBreakdownItem) => r.totalKwh, format: "decimal2" },
+        { header: "Emissioni kgCO2e", accessor: (r: CarlistBreakdownItem) => r.emissionsKgCO2e, format: "decimal2" },
+        { header: "%", accessor: (r: CarlistBreakdownItem) => r.emissionsPercentage, format: "percentage" },
+      ],
+      data.items
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -160,15 +187,21 @@ export function CarlistBreakdownSection({
 
       {/* Row 2: Summary table */}
       <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">
-            Riepilogo per Parco Auto
-          </CardTitle>
-          <CardDescription>
-            {data.unassignedVehicles > 0
-              ? `${data.unassignedVehicles} veicoli non assegnati a nessun parco auto`
-              : "Tutti i veicoli sono assegnati a un parco auto"}
-          </CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <div>
+            <CardTitle className="text-base">
+              Riepilogo per Parco Auto
+            </CardTitle>
+            <CardDescription>
+              {data.unassignedVehicles > 0
+                ? `${data.unassignedVehicles} veicoli non assegnati a nessun parco auto`
+                : "Tutti i veicoli sono assegnati a un parco auto"}
+            </CardDescription>
+          </div>
+          <Button variant="outline" size="sm" onClick={handleExportCarlist}>
+            <Download className="h-4 w-4 mr-1" />
+            Esporta CSV
+          </Button>
         </CardHeader>
         <CardContent>
           <Table>

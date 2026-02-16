@@ -216,7 +216,7 @@ export default async function ContractDetailPage({
               {contractType === "BREVE_TERMINE" && (
                 <>
                   <dt className="text-muted-foreground">Fornitore</dt>
-                  <dd className="font-medium">{contract.supplier}</dd>
+                  <dd className="font-medium">{contract.supplierRef?.name ?? contract.supplier ?? "-"}</dd>
                   <dt className="text-muted-foreground">Data inizio</dt>
                   <dd className="font-medium">
                     {formatDateLong(contract.startDate)}
@@ -245,7 +245,7 @@ export default async function ContractDetailPage({
               {contractType === "LUNGO_TERMINE" && (
                 <>
                   <dt className="text-muted-foreground">Fornitore</dt>
-                  <dd className="font-medium">{contract.supplier}</dd>
+                  <dd className="font-medium">{contract.supplierRef?.name ?? contract.supplier ?? "-"}</dd>
                   <dt className="text-muted-foreground">Data inizio</dt>
                   <dd className="font-medium">
                     {formatDateLong(contract.startDate)}
@@ -296,7 +296,7 @@ export default async function ContractDetailPage({
                   <dt className="text-muted-foreground">
                     Societa di leasing
                   </dt>
-                  <dd className="font-medium">{contract.leasingCompany}</dd>
+                  <dd className="font-medium">{contract.supplierRef?.name ?? contract.leasingCompany ?? "-"}</dd>
                   <dt className="text-muted-foreground">Data inizio</dt>
                   <dd className="font-medium">
                     {formatDateLong(contract.startDate)}

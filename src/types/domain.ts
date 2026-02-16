@@ -48,8 +48,8 @@ export type ContractStatusRow = {
     type: ContractType;
     startDate: Date | null;
     endDate: Date | null;
-    supplier: string | null;
-    leasingCompany: string | null;
+    supplierName: string | null;
+    supplierId: string | null;
     monthlyRate: number | null;
     dailyRate: number | null;
     purchasePrice: number | null;

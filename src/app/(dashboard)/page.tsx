@@ -12,11 +12,13 @@ import { ProgressTarget } from "@/components/data-display/ProgressTarget";
 import {
   getDashboardKPIs,
   getEmissionsTrend,
+  getEmissionFilterOptions,
   getFleetDelta,
   getTargetProgress,
   getFleetBreakdownByFuelType,
   getFleetBreakdownByCarlist,
 } from "@/lib/services/dashboard-service";
+import { EmissionsTrendCard } from "./components/EmissionsTrendCard";
 import { FuelTypeBreakdownSection } from "./components/FuelTypeBreakdownSection";
 import { CarlistBreakdownSection } from "./components/CarlistBreakdownSection";
 import {
@@ -63,7 +65,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
-      {/* Welcome section */}
+      {/* ── Welcome ──────────────────────────────────────────────── */}
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
@@ -78,22 +80,27 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      {/* KPI Row */}
+      {/* ── KPI Row ──────────────────────────────────────────────── */}
       <Suspense fallback={<KPIRowSkeleton />}>
         <KPIRow tenantId={ctx.organizationId} />
       </Suspense>
 
-      {/* DeltaBar + ProgressTarget */}
-      <Suspense fallback={<BottomSectionSkeleton />}>
-        <BottomSection tenantId={ctx.organizationId} />
+      {/* ── Andamento Emissioni per Veicolo ──────────────────────── */}
+      <Suspense fallback={<TrendSkeleton />}>
+        <TrendRow tenantId={ctx.organizationId} />
       </Suspense>
 
-      {/* Fleet breakdown by fuel type */}
+      {/* ── Delta + Obiettivo (side by side) ─────────────────────── */}
+      <Suspense fallback={<DeltaTargetSkeleton />}>
+        <DeltaTargetRow tenantId={ctx.organizationId} />
+      </Suspense>
+
+      {/* ── Analisi per Tipo Alimentazione ───────────────────────── */}
       <Suspense fallback={<FuelTypeBreakdownSkeleton />}>
         <FuelTypeBreakdownRow tenantId={ctx.organizationId} />
       </Suspense>
 
-      {/* Fleet breakdown by car list (parco auto) */}
+      {/* ── Analisi per Parco Auto ───────────────────────────────── */}
       <Suspense fallback={<CarlistBreakdownSkeleton />}>
         <CarlistBreakdownRow tenantId={ctx.organizationId} />
       </Suspense>
@@ -167,10 +174,22 @@ async function KPIRow({ tenantId }: { tenantId: string }) {
 }
 
 // ---------------------------------------------------------------------------
-// Bottom Section (DeltaBar + ProgressTarget + Notifications)
+// Trend row (area chart with optional filters - full width)
 // ---------------------------------------------------------------------------
 
-async function BottomSection({ tenantId }: { tenantId: string }) {
+async function TrendRow({ tenantId }: { tenantId: string }) {
+  const [trendData, filterOptions] = await Promise.all([
+    getEmissionsTrend(tenantId, 12),
+    getEmissionFilterOptions(),
+  ]);
+  return <EmissionsTrendCard initialData={trendData} filterOptions={filterOptions} />;
+}
+
+// ---------------------------------------------------------------------------
+// Delta + Target row (side by side)
+// ---------------------------------------------------------------------------
+
+async function DeltaTargetRow({ tenantId }: { tenantId: string }) {
   const now = new Date();
   const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const thisMonthEnd = new Date(
@@ -188,13 +207,16 @@ async function BottomSection({ tenantId }: { tenantId: string }) {
   const hasDeltaData = delta.theoretical > 0 || delta.real > 0;
 
   return (
-    <div className="space-y-4">
-      {/* DeltaBar - full width */}
+    <div className="grid gap-4 lg:grid-cols-2">
+      {/* DeltaBar */}
       <Card>
-        <CardHeader>
+        <CardHeader className="pb-2">
           <CardTitle className="text-base">
-            Delta Emissioni Flotta - Teorico vs Reale
+            Delta Emissioni Flotta
           </CardTitle>
+          <p className="text-xs text-muted-foreground">
+            Teorico vs Reale &mdash; mese corrente
+          </p>
         </CardHeader>
         <CardContent>
           {hasDeltaData ? (
@@ -213,10 +235,15 @@ async function BottomSection({ tenantId }: { tenantId: string }) {
 
       {/* Target progress */}
       <Card>
-        <CardHeader>
+        <CardHeader className="pb-2">
           <CardTitle className="text-base">
             Obiettivo Emissioni
           </CardTitle>
+          {targetProgress && (
+            <p className="text-xs text-muted-foreground">
+              {targetProgress.description ?? "Target attivo"}
+            </p>
+          )}
         </CardHeader>
         <CardContent>
           {targetProgress ? (
@@ -299,13 +326,32 @@ function KPIRowSkeleton() {
   );
 }
 
-function BottomSectionSkeleton() {
+function TrendSkeleton() {
   return (
-    <div className="space-y-4">
-      {/* DeltaBar skeleton */}
+    <Card>
+      <CardHeader className="pb-2">
+        <Skeleton className="h-5 w-44" />
+        <Skeleton className="h-4 w-64" />
+      </CardHeader>
+      <CardContent>
+        <Skeleton className="h-[280px] w-full rounded-lg" />
+        <div className="mt-3 flex flex-wrap gap-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-4 w-20" />
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function DeltaTargetSkeleton() {
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
       <Card>
-        <CardHeader>
-          <Skeleton className="h-5 w-64" />
+        <CardHeader className="pb-2">
+          <Skeleton className="h-5 w-48" />
+          <Skeleton className="h-3 w-36" />
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -315,44 +361,25 @@ function BottomSectionSkeleton() {
           </div>
         </CardContent>
       </Card>
-      {/* ProgressTarget + Notifications skeleton */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-5 w-48" />
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <Skeleton className="h-4 w-20" />
-                <Skeleton className="h-4 w-24" />
-              </div>
-              <Skeleton className="h-3 w-full rounded-full" />
-              <div className="flex justify-between">
-                <Skeleton className="h-3 w-16" />
-                <Skeleton className="h-5 w-12 rounded-full" />
-              </div>
+      <Card>
+        <CardHeader className="pb-2">
+          <Skeleton className="h-5 w-44" />
+          <Skeleton className="h-3 w-32" />
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-24" />
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Skeleton className="size-4 rounded" />
-              <Skeleton className="h-5 w-20" />
+            <Skeleton className="h-3 w-full rounded-full" />
+            <div className="flex justify-between">
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-5 w-12 rounded-full" />
             </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <Skeleton className="h-10 flex-1 rounded-lg" />
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -365,18 +392,9 @@ function FuelTypeBreakdownSkeleton() {
         <Skeleton className="h-4 w-72" />
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4">
-              <Skeleton className="size-3 rounded-full" />
-              <Skeleton className="h-5 w-24" />
-              <Skeleton className="h-5 w-12" />
-              <Skeleton className="h-5 w-20" />
-              <Skeleton className="h-5 w-20" />
-              <Skeleton className="h-5 w-24" />
-              <Skeleton className="h-5 w-12" />
-            </div>
-          ))}
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Skeleton className="h-[280px] w-full rounded-lg" />
+          <Skeleton className="h-[280px] w-full rounded-lg" />
         </div>
       </CardContent>
     </Card>

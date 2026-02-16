@@ -69,8 +69,13 @@ function statusBadgeClasses(status: string): string {
 // Key detail line
 // ---------------------------------------------------------------------------
 
+function getSupplierName(contract: ContractWithDetails): string | null {
+  return contract.supplierRef?.name ?? contract.leasingCompany ?? contract.supplier ?? null;
+}
+
 function getKeyDetail(contract: ContractWithDetails): string | null {
   const type = contract.type as ContractTypeT;
+  const supplierName = getSupplierName(contract);
   switch (type) {
     case "PROPRIETARIO":
       return contract.purchasePrice != null
@@ -78,7 +83,7 @@ function getKeyDetail(contract: ContractWithDetails): string | null {
         : null;
     case "BREVE_TERMINE":
       return [
-        contract.supplier ? `Fornitore: ${contract.supplier}` : null,
+        supplierName ? `Fornitore: ${supplierName}` : null,
         contract.dailyRate != null
           ? `${formatCurrency(contract.dailyRate)}/giorno`
           : null,
@@ -87,7 +92,7 @@ function getKeyDetail(contract: ContractWithDetails): string | null {
         .join(" - ") || null;
     case "LUNGO_TERMINE":
       return [
-        contract.supplier ? `Fornitore: ${contract.supplier}` : null,
+        supplierName ? `Fornitore: ${supplierName}` : null,
         contract.monthlyRate != null
           ? `${formatCurrency(contract.monthlyRate)}/mese`
           : null,
@@ -96,7 +101,7 @@ function getKeyDetail(contract: ContractWithDetails): string | null {
         .join(" - ") || null;
     case "LEASING_FINANZIARIO":
       return [
-        contract.leasingCompany ? contract.leasingCompany : null,
+        supplierName ?? null,
         contract.monthlyRate != null
           ? `${formatCurrency(contract.monthlyRate)}/mese`
           : null,

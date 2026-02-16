@@ -1,0 +1,1675 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><p:FatturaElettronica xmlns:p="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" versione="FPR12"><FatturaElettronicaHeader>
+<DatiTrasmissione>
+<IdTrasmittente>
+<IdPaese>IT</IdPaese>
+<IdCodice>05262890014</IdCodice>
+</IdTrasmittente>
+<ProgressivoInvio>U25I17171</ProgressivoInvio>
+<FormatoTrasmissione>FPR12</FormatoTrasmissione>
+<CodiceDestinatario>SUBM70N</CodiceDestinatario>
+<ContattiTrasmittente>
+</ContattiTrasmittente>
+</DatiTrasmissione>
+<CedentePrestatore>
+<DatiAnagrafici>
+<IdFiscaleIVA>
+<IdPaese>IT</IdPaese>
+<IdCodice>01696270212</IdCodice>
+</IdFiscaleIVA>
+<Anagrafica>
+<Denominazione>EDENRED UTA MOBILITY SRL</Denominazione>
+</Anagrafica>
+<RegimeFiscale>RF01</RegimeFiscale>
+</DatiAnagrafici>
+<Sede>
+<Indirizzo>VIA PIRELLI 18</Indirizzo>
+<CAP>20124</CAP>
+<Comune>MILANO</Comune>
+<Provincia>MI</Provincia>
+<Nazione>IT</Nazione>
+</Sede>
+<Contatti>
+</Contatti>
+</CedentePrestatore>
+<CessionarioCommittente>
+<DatiAnagrafici>
+<IdFiscaleIVA><IdPaese>IT</IdPaese><IdCodice>06598481007</IdCodice></IdFiscaleIVA>
+<Anagrafica>
+<Denominazione>FLEET SUPPORT S.R.L.</Denominazione>
+</Anagrafica>
+</DatiAnagrafici>
+<Sede>
+<Indirizzo>VIA VARESE 5</Indirizzo>
+<CAP>00185</CAP>
+<Comune>ROMA</Comune>
+<Nazione>IT</Nazione>
+</Sede>
+</CessionarioCommittente>
+</FatturaElettronicaHeader><FatturaElettronicaBody>
+<DatiGenerali>
+<DatiGeneraliDocumento>
+<TipoDocumento>TD01</TipoDocumento>
+<Divisa>EUR</Divisa>
+<Data>2025-01-08</Data>
+<Numero>I17171</Numero>
+<ImportoTotaleDocumento>5014.99</ImportoTotaleDocumento>
+</DatiGeneraliDocumento>
+<DatiContratto>
+<RiferimentoNumeroLinea>1</RiferimentoNumeroLinea>
+<IdDocumento>767192/06042024</IdDocumento>
+<Data>2024-06-04</Data>
+</DatiContratto>
+</DatiGenerali>
+<DatiBeniServizi>
+<DettaglioLinee>
+<NumeroLinea>1</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>17/12/2024 18:38:00 AGIP Roma (RM) Agip JOLLY 1 Km:22947 SUPER 95 16,41 lt 28,37Eu.</Descrizione>
+<Quantita>16.41</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4171</PrezzoUnitario>
+<PrezzoTotale>23.254</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422187925</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 1</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>2</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>02/12/2024 18:47:00 AGIP Roma (RM) Agip JOLLY 1 Km:22760 SUPER 95 32,3 lt 56,17Eu.</Descrizione>
+<Quantita>32.30</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4254</PrezzoUnitario>
+<PrezzoTotale>46.041</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422187925</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 1</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>3</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>30/12/2024 18:42:00 Q8 EASY Roma (RM) Q8 EASY JOLLY 2 Km:13663 SUPER 95 31,41 lt 54,31Eu.</Descrizione>
+<Quantita>31.41</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4173</PrezzoUnitario>
+<PrezzoTotale>44.516</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422188162</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 2</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>4</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>20/12/2024 01:40:00 IP Pomezia (RM) IP MATIC JOLLY 2 Km:11772 SUPER 95 32,87 lt 56,50Eu.</Descrizione>
+<Quantita>32.87</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4089</PrezzoUnitario>
+<PrezzoTotale>46.312</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422188162</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 2</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>5</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>15/12/2024 11:46:00 Q8 EASY Roma (RM) Q8 EASY JOLLY 2 Km:11164 SUPER 95 33,74 lt 58,00Eu.</Descrizione>
+<Quantita>33.74</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4090</PrezzoUnitario>
+<PrezzoTotale>47.541</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422188162</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 2</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>6</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>05/12/2024 09:25:00 ENI Bassano In Teverina (VT) Eni JOLLY 3 Km:20180 SUPER 95 33,61 lt 68,03Eu.</Descrizione>
+<Quantita>33.61</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.6591</PrezzoUnitario>
+<PrezzoTotale>55.762</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422188170</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 3</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>7</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101249</CodiceValore>
+</CodiceArticolo>
+<Descrizione>24/12/2024 07:39:00 TAMOIL Orte (VT) Tamoil JOLLY 3 Km:21900 SUPER 98 35,25 lt 63,08Eu.</Descrizione>
+<Quantita>35.25</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4668</PrezzoUnitario>
+<PrezzoTotale>51.705</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422188170</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 3</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>8</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>12/12/2024 12:52:00 Q8 Soriano nel Cimino (VT) Q8 JOLLY 3 Km:20820 SUPER 95 33,16 lt 58,00Eu.</Descrizione>
+<Quantita>33.16</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4337</PrezzoUnitario>
+<PrezzoTotale>47.541</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422188170</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 3</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>9</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>17/12/2024 19:07:00 ENI Bassano In Teverina (VT) Eni JOLLY 3 Km:21330 SUPER 95 34,01 lt 60,67Eu.</Descrizione>
+<Quantita>34.01</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4622</PrezzoUnitario>
+<PrezzoTotale>49.730</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422188170</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY 3</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>10</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>11/12/2024 21:58:00 T. PETROL Roma (RM) POMPE BIANCHE FN284PZ Km:96 SUPER 95 4,71 lt 8,14Eu.</Descrizione>
+<Quantita>4.71</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4166</PrezzoUnitario>
+<PrezzoTotale>6.672</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930647</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FN284PZ A.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>11</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>30/11/2024 19:33:00 T. PETROL Roma (RM) POMPE BIANCHE FN284PZ Km:855 DIESEL 9,71 lt 15,72Eu.</Descrizione>
+<Quantita>9.71</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3270</PrezzoUnitario>
+<PrezzoTotale>12.885</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930647</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FN284PZ A.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>12</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>02/12/2024 22:20:00 T. PETROL Roma (RM) POMPE BIANCHE FN284PZ Km:8 SUPER 95 4,43 lt 7,70Eu.</Descrizione>
+<Quantita>4.43</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4247</PrezzoUnitario>
+<PrezzoTotale>6.312</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930647</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FN284PZ A.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>13</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>25/12/2024 00:56:00 T. PETROL Roma (RM) POMPE BIANCHE FN284PZ Km:100 SUPER 95 32,3 lt 57,14Eu.</Descrizione>
+<Quantita>32.30</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4500</PrezzoUnitario>
+<PrezzoTotale>46.836</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930647</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FN284PZ A.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>14</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>30/11/2024 19:46:00 T. PETROL Roma (RM) POMPE BIANCHE FN284PZ Km:0 SUPER 95 24,54 lt 42,68Eu.</Descrizione>
+<Quantita>24.54</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4256</PrezzoUnitario>
+<PrezzoTotale>34.984</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930647</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FN284PZ A.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>15</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>25/12/2024 19:20:00 T. PETROL Roma (RM) POMPE BIANCHE FN284PZ Km:655 DIESEL 21,83 lt 36,22Eu.</Descrizione>
+<Quantita>21.83</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3600</PrezzoUnitario>
+<PrezzoTotale>29.689</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930647</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FN284PZ A.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>16</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>23/12/2024 21:30:00 T. PETROL Roma (RM) POMPE BIANCHE FN284PZ Km:96 SUPER 95 4,69 lt 8,06Eu.</Descrizione>
+<Quantita>4.69</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4087</PrezzoUnitario>
+<PrezzoTotale>6.607</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930647</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FN284PZ A.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>17</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>16/12/2024 11:51:00 SMAF Roma (RM)  GA753NK Km:0 SUPER 95 36,62 lt 75,00Eu.</Descrizione>
+<Quantita>36.62</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.6787</PrezzoUnitario>
+<PrezzoTotale>61.475</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930654</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA753NK A.COSTANTINI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>18</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>06/12/2024 10:23:00 Q8 Marling (BZ) Q8 GM909BK Km:54800 DIESEL 34,9 lt 60,00Eu.</Descrizione>
+<Quantita>34.90</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4092</PrezzoUnitario>
+<PrezzoTotale>49.180</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930662</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM909BK R.APICELLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>19</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>19/12/2024 08:32:00 SOMMESE Magnago (MI) POMPE BIANCHE GM909BK Km:55800 DIESEL 29,54 lt 49,01Eu.</Descrizione>
+<Quantita>29.54</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3599</PrezzoUnitario>
+<PrezzoTotale>40.172</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930662</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM909BK R.APICELLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>20</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>02/12/2024 08:46:00 SOMMESE Magnago (MI) POMPE BIANCHE GM909BK Km:54300 DIESEL 42,21 lt 70,03Eu.</Descrizione>
+<Quantita>42.21</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3599</PrezzoUnitario>
+<PrezzoTotale>57.402</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930662</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM909BK R.APICELLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>21</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>12/12/2024 08:50:00 SOMMESE Castellanza (VA) POMPE BIANCHE GM909BK Km:55200 DIESEL 36,61 lt 60,00Eu.</Descrizione>
+<Quantita>36.61</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3434</PrezzoUnitario>
+<PrezzoTotale>49.180</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930662</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM909BK R.APICELLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>22</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>08/12/2024 19:18:00 SOMMESE Varese (VA) POMPE BIANCHE GD849LF Km:89350 SUPER 95 34,11 lt 60,00Eu.</Descrizione>
+<Quantita>34.11</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4418</PrezzoUnitario>
+<PrezzoTotale>49.180</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930670</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GD849LF A.CANDIANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>23</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>23/12/2024 07:38:00 SOMMESE Varese (VA) POMPE BIANCHE GD849LF Km:0 SUPER 95 5,72 lt 10,00Eu.</Descrizione>
+<Quantita>5.72</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4330</PrezzoUnitario>
+<PrezzoTotale>8.197</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930670</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GD849LF A.CANDIANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>24</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>02/12/2024 17:45:00 SOMMESE Varese (VA) POMPE BIANCHE GD849LF Km:1 SUPER 95 22,74 lt 40,00Eu.</Descrizione>
+<Quantita>22.74</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4418</PrezzoUnitario>
+<PrezzoTotale>32.787</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930670</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GD849LF A.CANDIANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>25</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>13/12/2024 21:39:00 SOMMESE Varese (VA) POMPE BIANCHE GD849LF Km:89750 SUPER 95 40,07 lt 70,00Eu.</Descrizione>
+<Quantita>40.07</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4319</PrezzoUnitario>
+<PrezzoTotale>57.377</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930670</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GD849LF A.CANDIANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>26</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>11/12/2024 16:19:00 ESSO Milano (MI) Esso FN840WG Km:101310 DIESEL 46,07 lt 75,05Eu.</Descrizione>
+<Quantita>46.07</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3353</PrezzoUnitario>
+<PrezzoTotale>61.516</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930688</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FN840WG M.CROSA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>27</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>21/12/2024 11:32:00 AGIP Salaria Est Agip GM536MB Km:0 DIESEL 74,2 lt 142,02Eu.</Descrizione>
+<Quantita>74.20</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.5689</PrezzoUnitario>
+<PrezzoTotale>116.410</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930696</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM536MB A.MASSARA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>28</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>11/12/2024 07:22:00 TAMOIL Roma (RM) Tamoil GM536MB Km:0 DIESEL 29,28 lt 48,00Eu.</Descrizione>
+<Quantita>29.28</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3437</PrezzoUnitario>
+<PrezzoTotale>39.344</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930696</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM536MB A.MASSARA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>29</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>27/12/2024 14:56:00 SMAF Roma (RM)  GM536MB Km:0 SUPER 95 29,96 lt 53,00Eu.</Descrizione>
+<Quantita>29.96</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4500</PrezzoUnitario>
+<PrezzoTotale>43.443</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930696</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM536MB A.MASSARA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>30</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>17/12/2024 16:36:00 Q8 Tiburtina Sud Q8 GM536MB Km:1 DIESEL 12,98 lt 24,00Eu.</Descrizione>
+<Quantita>12.98</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.5156</PrezzoUnitario>
+<PrezzoTotale>19.672</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930696</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM536MB A.MASSARA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>31</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>10/12/2024 09:44:00 STAROIL Roma (RM)  GM536MB Km:1 DIESEL 7,08 lt 11,18Eu.</Descrizione>
+<Quantita>7.08</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.2943</PrezzoUnitario>
+<PrezzoTotale>9.164</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930696</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM536MB A.MASSARA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>32</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>17/12/2024 14:05:00 Q8 Magliana Nord Q8 FP583BL Km:41828 DIESEL 45,11 lt 87,01Eu.</Descrizione>
+<Quantita>45.11</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.5810</PrezzoUnitario>
+<PrezzoTotale>71.320</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930704</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>FP583BL C.CERINI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>33</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>30/11/2024 14:59:00 TIBER Roma (RM) POMPE BIANCHE EZ437LK Km:0 DIESEL 30,51 lt 50,00Eu.</Descrizione>
+<Quantita>30.51</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3433</PrezzoUnitario>
+<PrezzoTotale>40.984</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>34</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>17/12/2024 07:53:00 IP Roma (RM) IP MATIC EZ437LK Km:21365 SUPER 95 51,54 lt 89,11Eu.</Descrizione>
+<Quantita>51.54</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4172</PrezzoUnitario>
+<PrezzoTotale>73.041</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>35</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>02/12/2024 07:33:00 IP Roma (RM) IP MATIC EZ437LK Km:20000 SUPER 95 50,59 lt 87,98Eu.</Descrizione>
+<Quantita>50.59</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4255</PrezzoUnitario>
+<PrezzoTotale>72.115</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>36</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>21/12/2024 18:02:00 TIBER Roma (RM) POMPE BIANCHE EZ437LK Km:0 DIESEL 30,89 lt 50,00Eu.</Descrizione>
+<Quantita>30.89</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3268</PrezzoUnitario>
+<PrezzoTotale>40.984</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>37</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>20/12/2024 07:32:00 IP Roma (RM) IP MATIC EZ437LK Km:21641 SUPER 95 29,95 lt 51,48Eu.</Descrizione>
+<Quantita>29.95</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4089</PrezzoUnitario>
+<PrezzoTotale>42.197</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>38</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>09/12/2024 17:22:00 IP Roma (RM) IP MATIC EZ437LK Km:20955 SUPER 95 37,62 lt 64,67Eu.</Descrizione>
+<Quantita>37.62</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4090</PrezzoUnitario>
+<PrezzoTotale>53.008</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>39</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>29/12/2024 14:35:00 IP Roma (RM) IP MATIC EZ437LK Km:22489 SUPER 95 17,5 lt 30,08Eu.</Descrizione>
+<Quantita>17.50</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4089</PrezzoUnitario>
+<PrezzoTotale>24.656</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>40</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>26/12/2024 11:54:00 IP Roma (RM) IP MATIC EZ437LK Km:21857 SUPER 95 17,46 lt 30,01Eu.</Descrizione>
+<Quantita>17.46</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4088</PrezzoUnitario>
+<PrezzoTotale>24.598</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>41</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>28/12/2024 16:25:00 IP Roma (RM) IP MATIC EZ437LK Km:22294 SUPER 95 55,27 lt 95,01Eu.</Descrizione>
+<Quantita>55.27</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4090</PrezzoUnitario>
+<PrezzoTotale>77.877</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930712</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>EZ437LK R.MAMMONE</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>42</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>20/12/2024 08:15:00 AGIP Colletasso Sud Agip GR124CT Km:10158 SUPER 95 36,89 lt 70,05Eu.</Descrizione>
+<Quantita>36.89</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.5565</PrezzoUnitario>
+<PrezzoTotale>57.418</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930738</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR124CT M.INNOCENZI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>43</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>30/11/2024 11:20:00 ESSO Roma (RM) Esso GR124CT Km:9296 SUPER 95 17,45 lt 34,01Eu.</Descrizione>
+<Quantita>17.45</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.5975</PrezzoUnitario>
+<PrezzoTotale>27.877</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930738</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR124CT M.INNOCENZI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>44</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>15/12/2024 10:25:00 AGIP Colletasso Sud Agip GR124CT Km:9706 SUPER 95 36,88 lt 70,04Eu.</Descrizione>
+<Quantita>36.88</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.5567</PrezzoUnitario>
+<PrezzoTotale>57.410</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930738</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR124CT M.INNOCENZI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>45</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>10/12/2024 07:14:00 IP MATIC-Station Roma (RM) IP MATIC GA474DY Km:819 SUPER 95 41,5 lt 70,09Eu.</Descrizione>
+<Quantita>41.50</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3844</PrezzoUnitario>
+<PrezzoTotale>57.451</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930837</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA474DY V.PEZZETTA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>46</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>21/12/2024 09:40:00 IP MATIC-Station Roma (RM) IP MATIC GA474DY Km:1644 SUPER 95 41,69 lt 70,00Eu.</Descrizione>
+<Quantita>41.69</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3763</PrezzoUnitario>
+<PrezzoTotale>57.377</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930837</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA474DY V.PEZZETTA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>47</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>17/12/2024 07:17:00 IP MATIC-Station Roma (RM) IP MATIC GA474DY Km:1124 SUPER 95 23,59 lt 40,08Eu.</Descrizione>
+<Quantita>23.59</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3926</PrezzoUnitario>
+<PrezzoTotale>32.853</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930837</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA474DY V.PEZZETTA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>48</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>07/12/2024 11:55:00 ESSO Pisana Esterna Esso JOLLY Km:1 DIESEL 24,03 lt 48,04Eu.</Descrizione>
+<Quantita>24.03</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.6387</PrezzoUnitario>
+<PrezzoTotale>39.377</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930845</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY JOLLY FLEET SU</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>49</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>24/12/2024 15:54:00 T. PETROL Roma (RM) POMPE BIANCHE JOLLY Km:1 SUPER 95 34,23 lt 60,55Eu.</Descrizione>
+<Quantita>34.23</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4499</PrezzoUnitario>
+<PrezzoTotale>49.631</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930845</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>JOLLY JOLLY FLEET SU</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>50</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>15/12/2024 18:18:00 ESSO Roma (RM) Esso GM891BK Km:48263 DIESEL 37,52 lt 60,00Eu.</Descrizione>
+<Quantita>37.52</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3108</PrezzoUnitario>
+<PrezzoTotale>49.180</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930852</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM891BK M.SANTANGELO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>51</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>23/12/2024 10:30:00 ESSO Roma (RM) Esso GM891BK Km:45783 DIESEL 37,52 lt 60,00Eu.</Descrizione>
+<Quantita>37.52</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3108</PrezzoUnitario>
+<PrezzoTotale>49.180</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930852</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM891BK M.SANTANGELO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>52</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>29/11/2024 10:30:00 ENI, Frascati (RM) Eni GM891BK Km:44628 DIESEL 24,2 lt 40,15Eu.</Descrizione>
+<Quantita>24.20</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3599</PrezzoUnitario>
+<PrezzoTotale>32.910</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930852</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM891BK M.SANTANGELO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>53</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>28/12/2024 14:37:00 T. PETROL Roma (RM) POMPE BIANCHE GA478GN Km:66974 SUPER 95 25,17 lt 43,52Eu.</Descrizione>
+<Quantita>25.17</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4172</PrezzoUnitario>
+<PrezzoTotale>35.672</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930860</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA478GN P.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>54</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>30/11/2024 19:38:00 AGIP Pescara (PE) Agip GA478GN Km:66572 SUPER 95 14,4 lt 25,91Eu.</Descrizione>
+<Quantita>14.40</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4748</PrezzoUnitario>
+<PrezzoTotale>21.238</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930860</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA478GN P.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>55</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>09/12/2024 19:41:00 T. PETROL Roma (RM) POMPE BIANCHE GA478GN Km:0 SUPER 95 3,58 lt 6,23Eu.</Descrizione>
+<Quantita>3.58</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4264</PrezzoUnitario>
+<PrezzoTotale>5.107</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930860</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA478GN P.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>56</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>16/12/2024 20:10:00 ESSO Roma (RM) Esso GA478GN Km:0 SUPER 95 27,18 lt 47,81Eu.</Descrizione>
+<Quantita>27.18</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4418</PrezzoUnitario>
+<PrezzoTotale>39.189</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930860</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GA478GN P.BONATO</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>57</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>28/11/2024 19:54:00 ESSO Roma (RM) Esso GK644HC Km:62926 DIESEL 66,71 lt 110,00Eu.</Descrizione>
+<Quantita>66.71</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3516</PrezzoUnitario>
+<PrezzoTotale>90.164</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930878</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GK644HC D.CALVANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>58</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>25/12/2024 22:52:00 ESSO Roma (RM) Esso GK644HC Km:64422 DIESEL 64,23 lt 103,99Eu.</Descrizione>
+<Quantita>64.23</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3271</PrezzoUnitario>
+<PrezzoTotale>85.238</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930878</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GK644HC D.CALVANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>59</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>07/12/2024 17:20:00 ESSO Roma (RM) Esso GK644HC Km:0 SUPER 95 26,62 lt 46,03Eu.</Descrizione>
+<Quantita>26.62</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4173</PrezzoUnitario>
+<PrezzoTotale>37.730</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930878</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GK644HC D.CALVANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>60</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>27/12/2024 11:14:00 ESSO Roma (RM) Esso GK644HC Km:0 SUPER 95 27,96 lt 48,06Eu.</Descrizione>
+<Quantita>27.96</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4089</PrezzoUnitario>
+<PrezzoTotale>39.393</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930878</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GK644HC D.CALVANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>61</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>13/12/2024 19:55:00 ESSO Roma (RM) Esso GK644HC Km:63666 DIESEL 67,31 lt 108,97Eu.</Descrizione>
+<Quantita>67.31</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3270</PrezzoUnitario>
+<PrezzoTotale>89.320</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930878</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GK644HC D.CALVANI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>62</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>UTA</CodiceTipo>
+<CodiceValore>01510</CodiceValore>
+</CodiceArticolo>
+<Descrizione>06/12/2024 08:16:00 NEXO Guidonia Montecelio (RM) POMPE BIANCHE GR349CV Km:33000 ADBLUE 10 lt 25,00Eu.</Descrizione>
+<Quantita>10.00</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>2.0492</PrezzoUnitario>
+<PrezzoTotale>20.492</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930886</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR349CV L.PIETRANTONI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>63</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>03/12/2024 18:35:00 Q8 Avezzano (AQ) Q8 GR349CV Km:32100 DIESEL 42,2 lt 70,01Eu.</Descrizione>
+<Quantita>42.20</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3598</PrezzoUnitario>
+<PrezzoTotale>57.385</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930886</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR349CV L.PIETRANTONI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>64</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>14/12/2024 18:12:00 SARNI OIL Montevelino Sud SARNI O GR349CV Km:33050 DIESEL 40,61 lt 79,55Eu.</Descrizione>
+<Quantita>40.61</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.6056</PrezzoUnitario>
+<PrezzoTotale>65.205</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930886</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR349CV L.PIETRANTONI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>65</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>25/12/2024 12:22:00 IP Carsolo (AQ) IP GR349CV Km:34100 DIESEL 39,94 lt 100,75Eu.</Descrizione>
+<Quantita>39.94</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>2.0677</PrezzoUnitario>
+<PrezzoTotale>82.582</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930886</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR349CV L.PIETRANTONI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>66</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>09/12/2024 17:24:00 Q8 Civita Nord Q8 GR349CV Km:32600 DIESEL 39,87 lt 79,70Eu.</Descrizione>
+<Quantita>39.87</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.6385</PrezzoUnitario>
+<PrezzoTotale>65.328</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930886</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR349CV L.PIETRANTONI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>67</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>18/12/2024 16:21:00 NEXO Guidonia Montecelio (RM) POMPE BIANCHE GR349CV Km:33520 DIESEL 45,31 lt 72,00Eu.</Descrizione>
+<Quantita>45.31</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3025</PrezzoUnitario>
+<PrezzoTotale>59.016</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930886</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR349CV L.PIETRANTONI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>68</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>25/12/2024 16:44:00 IP Milano (MI) IP GG289VW Km:0 SUPER 95 13,92 lt 34,25Eu.</Descrizione>
+<Quantita>13.92</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>2.0168</PrezzoUnitario>
+<PrezzoTotale>28.074</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930894</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GG289VW B.BRAMBILLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>69</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>04/12/2024 18:53:00 IP Milano (MI) IP GG289VW Km:1 SUPER 95 28,88 lt 71,10Eu.</Descrizione>
+<Quantita>28.88</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>2.0180</PrezzoUnitario>
+<PrezzoTotale>58.279</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930894</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GG289VW B.BRAMBILLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>70</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>13/12/2024 19:16:00 IP Milano (MI) IP GG289VW Km:0 SUPER 95 28,92 lt 71,14Eu.</Descrizione>
+<Quantita>28.92</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>2.0163</PrezzoUnitario>
+<PrezzoTotale>58.312</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930894</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GG289VW B.BRAMBILLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>71</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>20/12/2024 08:50:00 STAROIL Roma (RM)  GR126CT Km:0 SUPER 95 8,39 lt 14,17Eu.</Descrizione>
+<Quantita>8.39</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3844</PrezzoUnitario>
+<PrezzoTotale>11.615</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930902</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR126CT P.PADULA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>72</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101249</CodiceValore>
+</CodiceArticolo>
+<Descrizione>30/11/2024 14:27:00 TAMOIL Roma (RM) Tamoil GR126CT Km:15100 SUPER 98 17,55 lt 30,01Eu.</Descrizione>
+<Quantita>17.55</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4016</PrezzoUnitario>
+<PrezzoTotale>24.598</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930902</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR126CT P.PADULA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>73</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>08/12/2024 19:36:00 AGIP Latina (LT) Agip GR126CT Km:15604 SUPER 95 36,4 lt 63,30Eu.</Descrizione>
+<Quantita>36.40</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4254</PrezzoUnitario>
+<PrezzoTotale>51.885</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930902</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR126CT P.PADULA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>74</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101249</CodiceValore>
+</CodiceArticolo>
+<Descrizione>29/11/2024 18:23:00 TAMOIL Roma (RM) Tamoil GR126CT Km:5206 SUPER 98 6,16 lt 10,53Eu.</Descrizione>
+<Quantita>6.16</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4012</PrezzoUnitario>
+<PrezzoTotale>8.631</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930902</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR126CT P.PADULA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>75</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>25/12/2024 21:17:00 ESSO Roma (RM) Esso GR126CT Km:16195 SUPER 95 40,27 lt 70,03Eu.</Descrizione>
+<Quantita>40.27</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4254</PrezzoUnitario>
+<PrezzoTotale>57.402</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930902</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR126CT P.PADULA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>76</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101249</CodiceValore>
+</CodiceArticolo>
+<Descrizione>30/11/2024 14:32:00 TAMOIL Roma (RM) Tamoil GR126CT Km:0 SUPER 98 32,18 lt 55,00Eu.</Descrizione>
+<Quantita>32.18</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4009</PrezzoUnitario>
+<PrezzoTotale>45.082</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930902</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR126CT P.PADULA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>77</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>06/12/2024 12:24:00 IP Roma (RM) IP GR972DY Km:9600 DIESEL 41,6 lt 104,30Eu.</Descrizione>
+<Quantita>41.60</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>2.0551</PrezzoUnitario>
+<PrezzoTotale>85.492</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930910</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR972DY D.MARANESI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>78</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>24/12/2024 09:57:00 Q8 Roma (RM) Q8 GM910BK Km:37881 DIESEL 40,04 lt 66,03Eu.</Descrizione>
+<Quantita>40.04</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3517</PrezzoUnitario>
+<PrezzoTotale>54.123</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930928</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM910BK A.FIATTI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>79</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>07/12/2024 16:07:00 Q8 Roma (RM) Q8 GM910BK Km:37029 DIESEL 46,39 lt 76,50Eu.</Descrizione>
+<Quantita>46.39</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3517</PrezzoUnitario>
+<PrezzoTotale>62.705</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930928</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GM910BK A.FIATTI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>80</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>01/12/2024 17:20:00 TIBER-Station Roma (RM) POMPE BIANCHE GR212BF Km:33885 DIESEL 39,34 lt 65,66Eu.</Descrizione>
+<Quantita>39.34</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3681</PrezzoUnitario>
+<PrezzoTotale>53.820</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930944</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR212BF M.NICOLAI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>81</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>02/12/2024 18:05:00 ESSO Avezzano (AQ) Esso GR212BF Km:34055 SUPER 95 37,19 lt 65,05Eu.</Descrizione>
+<Quantita>37.19</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4337</PrezzoUnitario>
+<PrezzoTotale>53.320</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930944</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR212BF M.NICOLAI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>82</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>10/12/2024 18:35:00 Q8 Avezzano (AQ) Q8 GR212BF Km:34993 DIESEL 29,54 lt 49,01Eu.</Descrizione>
+<Quantita>29.54</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3599</PrezzoUnitario>
+<PrezzoTotale>40.172</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930944</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR212BF M.NICOLAI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>83</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>05/12/2024 08:23:00 Q8 Avezzano (AQ) Q8 GR212BF Km:34534 DIESEL 43,4 lt 72,00Eu.</Descrizione>
+<Quantita>43.40</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3598</PrezzoUnitario>
+<PrezzoTotale>59.016</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930944</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR212BF M.NICOLAI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>84</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101943</CodiceValore>
+</CodiceArticolo>
+<Descrizione>22/12/2024 18:04:00 TIBER-Station Roma (RM) POMPE BIANCHE GR212BF Km:36358 DIESEL 42,98 lt 70,01Eu.</Descrizione>
+<Quantita>42.98</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.3352</PrezzoUnitario>
+<PrezzoTotale>57.385</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050422930944</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GR212BF M.NICOLAI</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>85</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>06/12/2024 19:05:00 ESSO Milano (MI) Esso GB826CZ Km:136650 SUPER 95 40,53 lt 72,39Eu.</Descrizione>
+<Quantita>40.53</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4640</PrezzoUnitario>
+<PrezzoTotale>59.336</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050423038192</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GB826CZ B.MONTANARELLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>86</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>21/12/2024 22:25:00 ESSO Milano (MI) Esso GB826CZ Km:136850 SUPER 95 31,67 lt 56,56Eu.</Descrizione>
+<Quantita>31.67</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4639</PrezzoUnitario>
+<PrezzoTotale>46.361</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050423038192</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GB826CZ B.MONTANARELLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>87</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>22/12/2024 10:50:00 Q8 Milano (MI) Q8 GB826CZ Km:137000 SUPER 95 39,36 lt 77,90Eu.</Descrizione>
+<Quantita>39.36</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.6223</PrezzoUnitario>
+<PrezzoTotale>63.853</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050423038192</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GB826CZ B.MONTANARELLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>88</NumeroLinea>
+<CodiceArticolo>
+<CodiceTipo>CARB</CodiceTipo>
+<CodiceValore>27101245</CodiceValore>
+</CodiceArticolo>
+<Descrizione>29/12/2024 17:16:00 ESSO Milano (MI) Esso GB826CZ Km:137736 SUPER 95 24,15 lt 43,13Eu.</Descrizione>
+<Quantita>24.15</Quantita>
+<UnitaMisura>lt</UnitaMisura>
+<PrezzoUnitario>1.4639</PrezzoUnitario>
+<PrezzoTotale>35.353</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+<RiferimentoAmministrazione>63620050423038192</RiferimentoAmministrazione>
+<AltriDatiGestionali>
+<TipoDato>TARGA</TipoDato>
+<RiferimentoTesto>GB826CZ B.MONTANARELLA</RiferimentoTesto>
+</AltriDatiGestionali>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>89</NumeroLinea>
+<TipoCessionePrestazione>AC</TipoCessionePrestazione>
+<Descrizione>Costo Servizio 20,45Eu.</Descrizione>
+<Quantita>1.00</Quantita>
+<UnitaMisura>Pz</UnitaMisura>
+<PrezzoUnitario>20.4500</PrezzoUnitario>
+<PrezzoTotale>20.45</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+
+<DatiRiepilogo>
+<AliquotaIVA>22.00</AliquotaIVA>
+<ImponibileImporto>4110.65</ImponibileImporto>
+<Imposta>904.34</Imposta>
+<EsigibilitaIVA>I</EsigibilitaIVA>
+</DatiRiepilogo>
+</DatiBeniServizi>
+<DatiPagamento>
+<CondizioniPagamento>TP02</CondizioniPagamento>
+<DettaglioPagamento>
+<ModalitaPagamento>MP21</ModalitaPagamento>
+<DataRiferimentoTerminiPagamento>2025-01-08</DataRiferimentoTerminiPagamento>
+<GiorniTerminiPagamento>3</GiorniTerminiPagamento>
+<ImportoPagamento>5014.99</ImportoPagamento>
+</DettaglioPagamento>
+</DatiPagamento>
+</FatturaElettronicaBody></p:FatturaElettronica>

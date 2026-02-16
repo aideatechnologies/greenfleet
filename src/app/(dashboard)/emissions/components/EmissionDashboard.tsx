@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useCallback, useEffect, useTransition, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DeltaBar } from "@/components/data-display/DeltaBar";
 import { ProgressTarget } from "@/components/data-display/ProgressTarget";
-import { formatEmission, formatKm } from "@/lib/utils/number";
-import type { ReportResult } from "@/types/report";
+import { formatEmission, formatKm, formatCO2Intensity, formatPercentage } from "@/lib/utils/number";
+import type { ReportResult, FilterOptions, ReportFilterPreset } from "@/types/report";
 import { EmissionReportFilters } from "./EmissionReportFilters";
 import { EmissionTimeSeriesChart } from "./EmissionTimeSeriesChart";
 import { EmissionBreakdownChart } from "./EmissionBreakdownChart";
 import { EmissionAreaChart } from "./EmissionAreaChart";
 import { EmissionAggregationTable } from "./EmissionAggregationTable";
+import { ScopeComparisonChart } from "./ScopeComparisonChart";
 import { DrillDownNavigator } from "./DrillDownNavigator";
 import { ExportButtons } from "./ExportButtons";
 import {
@@ -32,6 +33,8 @@ interface EmissionDashboardProps {
   carlists: CarlistOption[];
   defaultStartDate: Date;
   defaultEndDate: Date;
+  filterOptions: FilterOptions;
+  initialPresets: ReportFilterPreset[];
 }
 
 // ---------------------------------------------------------------------------
@@ -76,14 +79,26 @@ export function EmissionDashboard({
   carlists,
   defaultStartDate,
   defaultEndDate,
+  filterOptions,
+  initialPresets,
 }: EmissionDashboardProps) {
   const [report, setReport] = useState<ReportResult>(initialReport);
+  const [presets, setPresets] = useState<ReportFilterPreset[]>(initialPresets);
   const [targetProgress, setTargetProgress] =
     useState<TargetProgressResult | null>(null);
   const [targetLoaded, setTargetLoaded] = useState(false);
   const [_isLoadingTarget, startTargetTransition] = useTransition();
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const { metadata } = report;
+
+  const handlePresetSaved = useCallback((preset: ReportFilterPreset) => {
+    setPresets((prev) => [...prev, preset].sort((a, b) => a.name.localeCompare(b.name)));
+  }, []);
+
+  const handlePresetDeleted = useCallback((presetId: string) => {
+    setPresets((prev) => prev.filter((p) => p.id !== presetId));
+  }, []);
 
   // Derive date strings for drill-down and target progress
   const startDateISO = defaultStartDate.toISOString();
@@ -107,23 +122,39 @@ export function EmissionDashboard({
 
   return (
     <div className="space-y-6">
-      {/* Filters + Export */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <EmissionReportFilters
-          carlists={carlists}
-          onReportGenerated={setReport}
-          defaultStartDate={defaultStartDate}
-          defaultEndDate={defaultEndDate}
-        />
-        <ExportButtons
-          dateRange={{ startDate: defaultStartDate, endDate: defaultEndDate }}
-          aggregationLevel="VEHICLE"
-          disabled={report.aggregations.length === 0}
-        />
-      </div>
+      {/* Filters */}
+      <EmissionReportFilters
+        carlists={carlists}
+        onReportGenerated={setReport}
+        defaultStartDate={defaultStartDate}
+        defaultEndDate={defaultEndDate}
+        filterOptions={filterOptions}
+        presets={presets}
+        onPresetSaved={handlePresetSaved}
+        onPresetDeleted={handlePresetDeleted}
+        resultsRef={resultsRef}
+      />
+
+      {/* Results section */}
+      <div ref={resultsRef} className="space-y-6">
+
+      {/* Export bar */}
+      <Card className="bg-muted/30">
+        <CardContent className="flex items-center justify-between py-3">
+          <p className="text-sm font-medium text-muted-foreground">
+            Report generato: {metadata.vehicleCount} veicoli —{" "}
+            {formatEmission(metadata.totalRealEmissions, true)} emissioni reali
+          </p>
+          <ExportButtons
+            dateRange={{ startDate: defaultStartDate, endDate: defaultEndDate }}
+            aggregationLevel="VEHICLE"
+            disabled={report.aggregations.length === 0}
+          />
+        </CardContent>
+      </Card>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <KPICard
           title="Emissioni Teoriche"
           value={formatEmission(metadata.totalTheoreticalEmissions, true)}
@@ -144,6 +175,16 @@ export function EmissionDashboard({
           title="Km Totali"
           value={formatKm(metadata.totalKm)}
           subtitle={`${metadata.vehicleCount} veicoli nel periodo`}
+        />
+        <KPICard
+          title="Media CO2e/km"
+          value={formatCO2Intensity(metadata.avgRealCO2ePerKm)}
+          subtitle={`Teorica: ${formatCO2Intensity(metadata.avgTheoreticalCO2ePerKm)}`}
+        />
+        <KPICard
+          title="Totale Emissioni (S1+S2)"
+          value={formatEmission(metadata.totalScope1 + metadata.totalScope2, true)}
+          subtitle={`S1: ${formatPercentage(metadata.scope1Percentage)} — S2: ${formatPercentage(metadata.scope2Percentage)}`}
         />
       </div>
 
@@ -203,6 +244,15 @@ export function EmissionDashboard({
         <EmissionBreakdownChart data={report.breakdown} />
       </div>
 
+      {/* Scope 1 vs Scope 2 comparison + gas detail */}
+      <ScopeComparisonChart
+        scope1={metadata.totalScope1}
+        scope2={metadata.totalScope2}
+        scope1Percentage={metadata.scope1Percentage}
+        scope2Percentage={metadata.scope2Percentage}
+        aggregations={report.aggregations}
+      />
+
       {/* Cumulative Area Chart — full width */}
       <EmissionAreaChart data={report.timeSeries} />
 
@@ -217,6 +267,8 @@ export function EmissionDashboard({
         startDate={startDateISO}
         endDate={endDateISO}
       />
+
+      </div>{/* end resultsRef */}
     </div>
   );
 }

@@ -113,6 +113,17 @@ export function formatPercentage(value: number): string {
  *   formatFuelConsumption(0, 450.2)      -> "450,2 kWh"
  *   formatFuelConsumption(500, 120)      -> "500,0 L + 120,0 kWh"
  */
+/**
+ * Formats a CO2 intensity value in gCO2e/km with IT locale (1 decimal).
+ *
+ * Examples:
+ *   formatCO2Intensity(142.3) -> "142,3 gCO2e/km"
+ *   formatCO2Intensity(0)     -> "0,0 gCO2e/km"
+ */
+export function formatCO2Intensity(value: number): string {
+  return `${fmtFuel.format(value)} gCO2e/km`;
+}
+
 export function formatFuelConsumption(litres: number, kwh: number): string {
   if (litres > 0 && kwh > 0)
     return `${fmtFuel.format(litres)} L + ${fmtFuel.format(kwh)} kWh`;

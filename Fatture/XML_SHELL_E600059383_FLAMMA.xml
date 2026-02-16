@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><FatturaElettronica xmlns="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" versione="FPR12">
+<FatturaElettronicaHeader xmlns="">
+<DatiTrasmissione>
+<IdTrasmittente>
+<IdPaese>IT</IdPaese>
+<IdCodice>10437330961</IdCodice>
+</IdTrasmittente>
+<ProgressivoInvio>1</ProgressivoInvio>
+<FormatoTrasmissione>FPR12</FormatoTrasmissione>
+<CodiceDestinatario>0000000</CodiceDestinatario>
+<ContattiTrasmittente>
+<Telefono xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">390280012358</Telefono>
+<Email xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">info@foribaglobal.com</Email>
+</ContattiTrasmittente>
+<PECDestinatario>flammaspa@pec.it</PECDestinatario>
+</DatiTrasmissione>
+<CedentePrestatore>
+<DatiAnagrafici xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">
+<IdFiscaleIVA>
+<IdPaese>IT</IdPaese>
+<IdCodice>01940680745</IdCodice>
+</IdFiscaleIVA>
+<Anagrafica>
+<Denominazione>Shell Mobility Italia S.r.l.</Denominazione>
+</Anagrafica>
+<ProvinciaAlbo>MI</ProvinciaAlbo>
+<RegimeFiscale>RF01</RegimeFiscale>
+</DatiAnagrafici>
+<Sede xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">
+<Indirizzo>Via Vittor Pisani</Indirizzo>
+<NumeroCivico>16</NumeroCivico>
+<CAP>20124</CAP>
+<Comune>Milano</Comune>
+<Nazione>IT</Nazione>
+</Sede>
+<IscrizioneREA xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">
+<Ufficio>MI</Ufficio>
+<NumeroREA>1998222</NumeroREA>
+<CapitaleSociale>1000000.00</CapitaleSociale>
+<StatoLiquidazione>LN</StatoLiquidazione>
+</IscrizioneREA>
+</CedentePrestatore>
+<CessionarioCommittente>
+<DatiAnagrafici xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">
+<IdFiscaleIVA>
+<IdPaese>IT</IdPaese>
+<IdCodice>03709030161</IdCodice>
+</IdFiscaleIVA>
+<Anagrafica>
+<Denominazione>Flamma S.p.A. IT00000394</Denominazione>
+</Anagrafica>
+</DatiAnagrafici>
+<Sede xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">
+<Indirizzo>22 Via Bedeschi</Indirizzo>
+<CAP>24040</CAP>
+<Comune>Chignolo d'lsola</Comune>
+<Nazione>IT</Nazione>
+</Sede>
+</CessionarioCommittente>
+<TerzoIntermediarioOSoggettoEmittente>
+<DatiAnagrafici>
+<IdFiscaleIVA>
+<IdPaese>IT</IdPaese>
+<IdCodice>07945211006</IdCodice>
+</IdFiscaleIVA>
+<Anagrafica>
+<Denominazione>InfoCert S.p.A.</Denominazione>
+</Anagrafica>
+</DatiAnagrafici>
+</TerzoIntermediarioOSoggettoEmittente>
+<SoggettoEmittente>TZ</SoggettoEmittente>
+</FatturaElettronicaHeader>
+<FatturaElettronicaBody xmlns="">
+<DatiGenerali xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">
+<DatiGeneraliDocumento>
+<TipoDocumento>TD01</TipoDocumento>
+<Divisa>EUR</Divisa>
+<Data>2024-12-15</Data>
+<Numero>E600059383</Numero>
+<ImportoTotaleDocumento>234.96</ImportoTotaleDocumento>
+<Causale>Questa fattura è utilizzabile per il rimborso IVA regolato dall'Art. 38 ter. del D.P.R 633/72.</Causale>
+<Causale>Imposta di bollo assolta in modo virtuale ai sensi dell'articolo 15 del d.p.r. 642/1972 e del DM 17/06/2014, ove dovuta.</Causale>
+</DatiGeneraliDocumento>
+</DatiGenerali>
+<DatiBeniServizi xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">
+<DettaglioLinee>
+<NumeroLinea>1</NumeroLinea>
+<Descrizione>7002167******890018 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>2</NumeroLinea>
+<Descrizione>7002167******890026 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>3</NumeroLinea>
+<Descrizione>7002167******850018 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>4</NumeroLinea>
+<Descrizione>7002167******850026 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>5</NumeroLinea>
+<Descrizione>7002167******850034 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>6</NumeroLinea>
+<Descrizione>7002167******850042 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>7</NumeroLinea>
+<Descrizione>7002167******850059 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>8</NumeroLinea>
+<Descrizione>7002167******850067 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>9</NumeroLinea>
+<Descrizione>7002167******850083 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>10</NumeroLinea>
+<Descrizione>7002167******850091 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>11</NumeroLinea>
+<Descrizione>7002167******850109 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>12</NumeroLinea>
+<Descrizione>7002167******850117 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>13</NumeroLinea>
+<Descrizione>7002167******850125 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>14</NumeroLinea>
+<Descrizione>7002167******850133 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>15</NumeroLinea>
+<Descrizione>7002167******850141 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>16</NumeroLinea>
+<Descrizione>7002167******850158 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>17</NumeroLinea>
+<Descrizione>7002167******850166 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>18</NumeroLinea>
+<Descrizione>7002167******850174 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>19</NumeroLinea>
+<Descrizione>7002167******850182 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>20</NumeroLinea>
+<Descrizione>7002167******850190 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>21</NumeroLinea>
+<Descrizione>7002167******850208 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>22</NumeroLinea>
+<Descrizione>7002167******850216 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>23</NumeroLinea>
+<Descrizione>7002167******850224 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>24</NumeroLinea>
+<Descrizione>7002167******850232 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>25</NumeroLinea>
+<Descrizione>7002167******850240 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>26</NumeroLinea>
+<Descrizione>7002167******850257 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>27</NumeroLinea>
+<Descrizione>7002167******850265 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>28</NumeroLinea>
+<Descrizione>7002167******850273 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>29</NumeroLinea>
+<Descrizione>7002167******850281 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>30</NumeroLinea>
+<Descrizione>7002167******850307 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>31</NumeroLinea>
+<Descrizione>7002167******850315 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>32</NumeroLinea>
+<Descrizione>7002167******850323 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>33</NumeroLinea>
+<Descrizione>7002167******850331 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>34</NumeroLinea>
+<Descrizione>7002167******850349 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>35</NumeroLinea>
+<Descrizione>7002167******850356 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>36</NumeroLinea>
+<Descrizione>7002167******850364 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>37</NumeroLinea>
+<Descrizione>7002167******850372 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>38</NumeroLinea>
+<Descrizione>7002167******850380 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>39</NumeroLinea>
+<Descrizione>7002167******850398 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>40</NumeroLinea>
+<Descrizione>7002167******850406 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>41</NumeroLinea>
+<Descrizione>7002167******850414 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>42</NumeroLinea>
+<Descrizione>7002167******850422 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>43</NumeroLinea>
+<Descrizione>7002167******850430 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>44</NumeroLinea>
+<Descrizione>7002167******850448 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>45</NumeroLinea>
+<Descrizione>7002167******850455 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>46</NumeroLinea>
+<Descrizione>7002167******850463 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>47</NumeroLinea>
+<Descrizione>7002167******850471 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>48</NumeroLinea>
+<Descrizione>7002167******850489 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>49</NumeroLinea>
+<Descrizione>7002167******850497 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>50</NumeroLinea>
+<Descrizione>7002167******850505 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>51</NumeroLinea>
+<Descrizione>7002167******850513 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>52</NumeroLinea>
+<Descrizione>7002167******850521 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>53</NumeroLinea>
+<Descrizione>7002167******850539 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>54</NumeroLinea>
+<Descrizione>7002167******850547 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>55</NumeroLinea>
+<Descrizione>7002167******850554 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>56</NumeroLinea>
+<Descrizione>7002167******850570 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>57</NumeroLinea>
+<Descrizione>7002167******850588 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>58</NumeroLinea>
+<Descrizione>7002167******850596 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>59</NumeroLinea>
+<Descrizione>7002167******850604 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>60</NumeroLinea>
+<Descrizione>7002167******850612 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>61</NumeroLinea>
+<Descrizione>7002167******990286 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>2.5000</PrezzoUnitario>
+<PrezzoTotale>2.50</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>62</NumeroLinea>
+<Descrizione>7002167******990344 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>2.5000</PrezzoUnitario>
+<PrezzoTotale>2.50</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>63</NumeroLinea>
+<Descrizione>7002167******990369 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>2.5000</PrezzoUnitario>
+<PrezzoTotale>2.50</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>64</NumeroLinea>
+<Descrizione>486 Carica elettrica - Commissione di collegamento Dorno,Area Di Serviz GR588YR classe veicolo</Descrizione>
+<Quantita>44.37</Quantita>
+<UnitaMisura>kWh</UnitaMisura>
+<DataInizioPeriodo>2024-12-01</DataInizioPeriodo>
+<PrezzoUnitario>0.6700</PrezzoUnitario>
+<PrezzoTotale>29.73</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>65</NumeroLinea>
+<Descrizione>486 Carica elettrica - Commissione di collegamento Asti,Corso Alessandr GR588YR classe veicolo</Descrizione>
+<Quantita>13.35</Quantita>
+<UnitaMisura>kWh</UnitaMisura>
+<DataInizioPeriodo>2024-12-01</DataInizioPeriodo>
+<PrezzoUnitario>0.7199</PrezzoUnitario>
+<PrezzoTotale>9.61</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>66</NumeroLinea>
+<Descrizione>7002167******990377 6-Commissione per transazione ricarica elettrica</Descrizione>
+<Quantita>2.00</Quantita>
+<DataInizioPeriodo>2024-12-15</DataInizioPeriodo>
+<PrezzoUnitario>0.2900</PrezzoUnitario>
+<PrezzoTotale>0.58</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>67</NumeroLinea>
+<Descrizione>7002167******990377 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>2.5000</PrezzoUnitario>
+<PrezzoTotale>2.50</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>68</NumeroLinea>
+<Descrizione>18 Carica elettrica Castellanza,Via San GS579EF classe veicolo</Descrizione>
+<Quantita>28.30</Quantita>
+<UnitaMisura>kWh</UnitaMisura>
+<DataInizioPeriodo>2024-12-01</DataInizioPeriodo>
+<PrezzoUnitario>0.5802</PrezzoUnitario>
+<PrezzoTotale>16.42</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>69</NumeroLinea>
+<Descrizione>18 Carica elettrica Castellanza,Via San GS579EF classe veicolo</Descrizione>
+<Quantita>43.03</Quantita>
+<UnitaMisura>kWh</UnitaMisura>
+<DataInizioPeriodo>2024-12-14</DataInizioPeriodo>
+<PrezzoUnitario>0.5801</PrezzoUnitario>
+<PrezzoTotale>24.96</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>70</NumeroLinea>
+<Descrizione>7002167******990385 6-Commissione per transazione ricarica elettrica</Descrizione>
+<Quantita>2.00</Quantita>
+<DataInizioPeriodo>2024-12-15</DataInizioPeriodo>
+<PrezzoUnitario>0.2900</PrezzoUnitario>
+<PrezzoTotale>0.58</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>71</NumeroLinea>
+<Descrizione>7002167******990385 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>2.5000</PrezzoUnitario>
+<PrezzoTotale>2.50</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>72</NumeroLinea>
+<Descrizione>7002167******990393 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>2.5000</PrezzoUnitario>
+<PrezzoTotale>2.50</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>73</NumeroLinea>
+<Descrizione>7002167******990401 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>2.5000</PrezzoUnitario>
+<PrezzoTotale>2.50</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>74</NumeroLinea>
+<Descrizione>486 Carica elettrica - Commissione di collegamento Curno,Via Bergamo 66 GW380EN classe veicolo</Descrizione>
+<Quantita>40.87</Quantita>
+<UnitaMisura>kWh</UnitaMisura>
+<DataInizioPeriodo>2024-12-07</DataInizioPeriodo>
+<PrezzoUnitario>0.7201</PrezzoUnitario>
+<PrezzoTotale>29.43</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>75</NumeroLinea>
+<Descrizione>7002167******990419 6-Commissione per transazione ricarica elettrica</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-12-15</DataInizioPeriodo>
+<PrezzoUnitario>0.2900</PrezzoUnitario>
+<PrezzoTotale>0.29</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>76</NumeroLinea>
+<Descrizione>7002167******990419 Costo di gestione carta</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-11-30</DataInizioPeriodo>
+<PrezzoUnitario>2.5000</PrezzoUnitario>
+<PrezzoTotale>2.50</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DettaglioLinee>
+<NumeroLinea>77</NumeroLinea>
+<Descrizione>7002167******850463 Calcolo costi e commissione</Descrizione>
+<Quantita>1.00</Quantita>
+<DataInizioPeriodo>2024-12-15</DataInizioPeriodo>
+<PrezzoUnitario>1.0000</PrezzoUnitario>
+<PrezzoTotale>1.00</PrezzoTotale>
+<AliquotaIVA>22.00</AliquotaIVA>
+</DettaglioLinee>
+<DatiRiepilogo>
+<AliquotaIVA>22.00</AliquotaIVA>
+<ImponibileImporto>192.60</ImponibileImporto>
+<Imposta>42.36</Imposta>
+<EsigibilitaIVA>I</EsigibilitaIVA>
+</DatiRiepilogo>
+</DatiBeniServizi>
+<DatiPagamento xmlns:n0="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2">
+<CondizioniPagamento>TP02</CondizioniPagamento>
+<DettaglioPagamento>
+<ModalitaPagamento>MP19</ModalitaPagamento>
+<DataRiferimentoTerminiPagamento>2024-12-15</DataRiferimentoTerminiPagamento>
+<DataScadenzaPagamento>2025-01-14</DataScadenzaPagamento>
+<ImportoPagamento>234.96</ImportoPagamento>
+</DettaglioPagamento>
+</DatiPagamento>
+</FatturaElettronicaBody>
+<ds:Signature Id="id-81bcb5236fea28223753c33f8a25498c"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/><ds:Reference Id="r-id-81bcb5236fea28223753c33f8a25498c-1" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2002/06/xmldsig-filter2"><dsig-filter2:XPath xmlns:dsig-filter2="http://www.w3.org/2002/06/xmldsig-filter2" Filter="subtract">/descendant::ds:Signature</dsig-filter2:XPath></ds:Transform><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>OyovJ2f3X2JZV0Gv+Pm4xS+UXKSdZqmmTAhFD/LbLtw=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xades-id-81bcb5236fea28223753c33f8a25498c"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>ioqk36K0SX/FocZoBU+WzHelHAuGslj2C22bvWcKkSs=</ds:DigestValue></ds:Reference><ds:Reference URI="#keyInfo-id-81bcb5236fea28223753c33f8a25498c"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>XW+VTrYN5Q4XmBaIWCVps5bFfaeIjQvMp5Wp/qHcG7Y=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="value-id-81bcb5236fea28223753c33f8a25498c">B5JNIlpBINzQCMiwiTPX4czGeCo6e7dzT3g7+TpnwVOuBZQ1xfhWKKEatFW13O/vQQ07hz+iOymkFxI7DH0vOhTEijqethZ1BBTmS5W6kMFUp3lAYTg1u/mKvu84oUtE5TON7cooJMIQW076JRpZG/Jq0F2OHeJr7Hg8J/BwnNCUXfn+YhnEwiTh1WxZgQxnTod+ep4P4uTn5Rm93MvSOShr4GUL/mRtDXxeQiGYQKgfMM4L6ibVUYPSGPC8mQBku75p1Ic99miQa0Mi/NQ13DmyljXAz/F3EI2Se3uFRHq9824O0dExdKSkuIrlBfJE51iPaIVXmGHwqPYeAM/APA==</ds:SignatureValue><ds:KeyInfo Id="keyInfo-id-81bcb5236fea28223753c33f8a25498c"><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#id-81bcb5236fea28223753c33f8a25498c"><xades:SignedProperties Id="xades-id-81bcb5236fea28223753c33f8a25498c"><xades:SignedSignatureProperties><xades:SigningTime>2024-12-15T18:57:00Z</xades:SigningTime><xades:SigningCertificateV2><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>4spyPoF1TsiVsNZApEhZvclrGbfcHYZC1qACTPVHjL4=</ds:DigestValue></xades:CertDigest><xades:IssuerSerialV2>MIGUMIGLpIGIMIGFMQswCQYDVQQGEwJJVDEVMBMGA1UECgwMSU5GT0NFUlQgU1BBMSIwIAYDVQQLDBlDZXJ0aWZpY2F0b3JlIEFjY3JlZGl0YXRvMRQwEgYDVQQFEwswNzk0NTIxMTAwNjElMCMGA1UEAwwcSW5mb0NlcnQgRmlybWEgUXVhbGlmaWNhdGEgMgIEAW3/7A==</xades:IssuerSerialV2></xades:Cert></xades:SigningCertificateV2></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#r-id-81bcb5236fea28223753c33f8a25498c-1"><xades:MimeType>application/octet-stream</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></FatturaElettronica>

@@ -37,7 +37,12 @@ import {
   VehicleSelector,
   type VehicleOptionItem,
 } from "@/components/forms/VehicleSelector";
+import {
+  SupplierSelector,
+  type SupplierOptionItem,
+} from "@/components/forms/SupplierSelector";
 import { getTenantVehiclesAction } from "../actions/get-tenant-vehicles";
+import { getNltSuppliersAction } from "../actions/get-nlt-suppliers";
 import { createContractAction } from "../actions/create-contract";
 import { updateContractAction } from "../actions/update-contract";
 import { SuccessionConfirmDialog } from "./SuccessionConfirmDialog";
@@ -59,7 +64,7 @@ type BreveTermineValues = {
   type: "BREVE_TERMINE";
   vehicleId: string;
   notes?: string;
-  supplier: string;
+  supplierId: string;
   startDate: Date;
   endDate: Date;
   dailyRate: number;
@@ -70,7 +75,7 @@ type LungoTermineValues = {
   type: "LUNGO_TERMINE";
   vehicleId: string;
   notes?: string;
-  supplier: string;
+  supplierId: string;
   startDate: Date;
   endDate: Date;
   monthlyRate: number;
@@ -83,7 +88,7 @@ type LeasingFinanziarioValues = {
   type: "LEASING_FINANZIARIO";
   vehicleId: string;
   notes?: string;
-  leasingCompany: string;
+  supplierId: string;
   startDate: Date;
   endDate: Date;
   monthlyRate: number;
@@ -134,7 +139,7 @@ function getDefaultValues(
         type: "BREVE_TERMINE",
         vehicleId: "",
         notes: "",
-        supplier: "",
+        supplierId: "",
         startDate: undefined as unknown as Date,
         endDate: undefined as unknown as Date,
         dailyRate: undefined as unknown as number,
@@ -145,7 +150,7 @@ function getDefaultValues(
         type: "LUNGO_TERMINE",
         vehicleId: "",
         notes: "",
-        supplier: "",
+        supplierId: "",
         startDate: undefined as unknown as Date,
         endDate: undefined as unknown as Date,
         monthlyRate: undefined as unknown as number,
@@ -158,7 +163,7 @@ function getDefaultValues(
         type: "LEASING_FINANZIARIO",
         vehicleId: "",
         notes: "",
-        leasingCompany: "",
+        supplierId: "",
         startDate: undefined as unknown as Date,
         endDate: undefined as unknown as Date,
         monthlyRate: undefined as unknown as number,
@@ -182,6 +187,7 @@ export function ContractForm({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [vehicles, setVehicles] = useState<VehicleOptionItem[]>([]);
+  const [nltSuppliers, setNltSuppliers] = useState<SupplierOptionItem[]>([]);
   const [successionDialogOpen, setSuccessionDialogOpen] = useState(false);
   const [successionInfo, setSuccessionInfo] = useState("");
   const [pendingValues, setPendingValues] = useState<FormValues | null>(null);
@@ -195,15 +201,17 @@ export function ContractForm({
     mode: "onBlur",
   });
 
-  // Load vehicles for selector
+  // Load vehicles and suppliers for selectors
   useEffect(() => {
-    async function loadVehicles() {
-      const result = await getTenantVehiclesAction();
-      if (result.success) {
-        setVehicles(result.data);
-      }
+    async function loadOptions() {
+      const [vehiclesResult, suppliersResult] = await Promise.all([
+        getTenantVehiclesAction(),
+        getNltSuppliersAction(),
+      ]);
+      if (vehiclesResult.success) setVehicles(vehiclesResult.data);
+      if (suppliersResult.success) setNltSuppliers(suppliersResult.data);
     }
-    loadVehicles();
+    loadOptions();
   }, []);
 
   function handleSuccessionConfirm() {
@@ -311,13 +319,13 @@ export function ContractForm({
             <ProprietarioFields form={form} />
           )}
           {contractType === "BREVE_TERMINE" && (
-            <BreveTermineFields form={form} />
+            <BreveTermineFields form={form} suppliers={nltSuppliers} />
           )}
           {contractType === "LUNGO_TERMINE" && (
-            <LungoTermineFields form={form} />
+            <LungoTermineFields form={form} suppliers={nltSuppliers} />
           )}
           {contractType === "LEASING_FINANZIARIO" && (
-            <LeasingFinanziarioFields form={form} />
+            <LeasingFinanziarioFields form={form} suppliers={nltSuppliers} />
           )}
 
           {/* Notes (all types) */}
@@ -586,17 +594,22 @@ function ProprietarioFields({ form }: { form: any }) {
 // ---------------------------------------------------------------------------
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function BreveTermineFields({ form }: { form: any }) {
+function BreveTermineFields({ form, suppliers }: { form: any; suppliers: SupplierOptionItem[] }) {
   return (
     <>
       <FormField
         control={form.control}
-        name="supplier"
+        name="supplierId"
         render={({ field }) => (
           <FormItem className="sm:col-span-2">
             <FormLabel>Fornitore *</FormLabel>
             <FormControl>
-              <Input placeholder="Nome fornitore noleggio" {...field} />
+              <SupplierSelector
+                suppliers={suppliers}
+                defaultSupplierId={field.value}
+                onSelect={(id) => field.onChange(id)}
+                placeholder="Seleziona fornitore noleggio"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -635,17 +648,22 @@ function BreveTermineFields({ form }: { form: any }) {
 // ---------------------------------------------------------------------------
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function LungoTermineFields({ form }: { form: any }) {
+function LungoTermineFields({ form, suppliers }: { form: any; suppliers: SupplierOptionItem[] }) {
   return (
     <>
       <FormField
         control={form.control}
-        name="supplier"
+        name="supplierId"
         render={({ field }) => (
           <FormItem className="sm:col-span-2">
             <FormLabel>Fornitore *</FormLabel>
             <FormControl>
-              <Input placeholder="Nome fornitore noleggio" {...field} />
+              <SupplierSelector
+                suppliers={suppliers}
+                defaultSupplierId={field.value}
+                onSelect={(id) => field.onChange(id)}
+                placeholder="Seleziona fornitore noleggio"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -708,17 +726,22 @@ function LungoTermineFields({ form }: { form: any }) {
 // ---------------------------------------------------------------------------
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function LeasingFinanziarioFields({ form }: { form: any }) {
+function LeasingFinanziarioFields({ form, suppliers }: { form: any; suppliers: SupplierOptionItem[] }) {
   return (
     <>
       <FormField
         control={form.control}
-        name="leasingCompany"
+        name="supplierId"
         render={({ field }) => (
           <FormItem className="sm:col-span-2">
             <FormLabel>Societa di leasing *</FormLabel>
             <FormControl>
-              <Input placeholder="Nome societa di leasing" {...field} />
+              <SupplierSelector
+                suppliers={suppliers}
+                defaultSupplierId={field.value}
+                onSelect={(id) => field.onChange(id)}
+                placeholder="Seleziona societa di leasing"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>

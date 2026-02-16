@@ -4,6 +4,8 @@
 // Uses tenant-scoped Prisma for vehicle/fuel/km data.
 // V2: multi-gas, multi-scope emission calculation via emission-resolution-service
 // and emission-calculator (calculateScopedEmissions).
+// V3: extended with scope breakdowns, per-gas, WLTP/NEDC cycles, CO2e/km,
+// performance indicators, and advanced vehicle filters.
 // ---------------------------------------------------------------------------
 
 import type { PrismaClient } from "@/generated/prisma/client";
@@ -18,6 +20,9 @@ import type {
   DrillDownResult,
   DrillDownItem,
   VehicleEmissionDetail,
+  ScopeBreakdown,
+  PerformanceLevel,
+  VehicleFilters,
 } from "@/types/report";
 import {
   calculateTheoreticalEmissions,
@@ -27,7 +32,8 @@ import {
   round2,
 } from "@/lib/services/emission-calculator";
 import { resolveAllEmissionContextsBulk } from "@/lib/services/emission-resolution-service";
-import type { EmissionContext } from "@/types/emission";
+import type { EmissionContext, PerGasResult } from "@/types/emission";
+import { KYOTO_GASES, SCOPE_LABELS, type EmissionScope } from "@/types/emission";
 import { getEffectiveFuelType, getCombinedCo2GKm } from "@/lib/utils/fuel-type";
 import type { TargetProgress, TargetScope, TargetPeriod } from "@/types/emission-target";
 import { getFuelTypeLabels } from "@/lib/utils/fuel-type-label";
@@ -41,6 +47,7 @@ type VehicleDataRow = {
   label: string;
   licensePlate: string;
   fuelType: string;
+  fuelTypeLabel: string;
   co2GKm: number;
   fuelLitres: number;
   fuelKwh: number;
@@ -49,20 +56,17 @@ type VehicleDataRow = {
   emissionContexts: EmissionContext[];
   carlistIds: string[];
   carlistNames: string[];
-  /** Period key for per-period breakdowns (e.g. "2025-01", "2025-Q1") */
   periodKey: string;
   periodLabel: string;
+  isHybrid: boolean;
+  co2GKmWltp: number;
+  co2GKmNedc: number;
 };
 
 // ---------------------------------------------------------------------------
 // V2 emission helper
 // ---------------------------------------------------------------------------
 
-/**
- * Computes total real CO2e from resolved emission contexts.
- * Iterates over all contexts (1 for pure fuels, 2 for hybrids),
- * using litres for scope 1 and kWh for scope 2.
- */
 function computeRealEmissionsFromContexts(
   contexts: EmissionContext[],
   fuelLitres: number,
@@ -82,6 +86,72 @@ function computeRealEmissionsFromContexts(
 }
 
 // ---------------------------------------------------------------------------
+// V3 scope / per-gas helpers
+// ---------------------------------------------------------------------------
+
+function emptyPerGas(): PerGasResult {
+  return { co2: 0, ch4: 0, n2o: 0, hfc: 0, pfc: 0, sf6: 0, nf3: 0 };
+}
+
+function addPerGas(a: PerGasResult, b: PerGasResult): PerGasResult {
+  const result = emptyPerGas();
+  for (const gas of KYOTO_GASES) {
+    result[gas] = round2(a[gas] + b[gas]);
+  }
+  return result;
+}
+
+function computeScopeBreakdowns(
+  contexts: EmissionContext[],
+  fuelLitres: number,
+  fuelKwh: number
+): ScopeBreakdown[] {
+  const breakdowns: ScopeBreakdown[] = [];
+  for (const ctx of contexts) {
+    const quantity = ctx.macroFuelType.scope === 1 ? fuelLitres : fuelKwh;
+    const result = calculateScopedEmissions({
+      quantity,
+      gasFactors: ctx.gasFactors,
+      gwpValues: ctx.gwpValues,
+    });
+    const scope = ctx.macroFuelType.scope as EmissionScope;
+    breakdowns.push({
+      scope,
+      scopeLabel: SCOPE_LABELS[scope],
+      emissions: result.totalCO2e,
+      perGas: result.perGas,
+    });
+  }
+  return breakdowns;
+}
+
+function mergeScopeBreakdowns(
+  existing: ScopeBreakdown[],
+  addition: ScopeBreakdown[]
+): ScopeBreakdown[] {
+  const map = new Map<EmissionScope, ScopeBreakdown>();
+  for (const bd of existing) {
+    map.set(bd.scope, { ...bd, perGas: { ...bd.perGas } });
+  }
+  for (const bd of addition) {
+    const ex = map.get(bd.scope);
+    if (ex) {
+      ex.emissions = round2(ex.emissions + bd.emissions);
+      ex.perGas = addPerGas(ex.perGas, bd.perGas);
+    } else {
+      map.set(bd.scope, { ...bd, perGas: { ...bd.perGas } });
+    }
+  }
+  return [...map.values()].sort((a, b) => a.scope - b.scope);
+}
+
+function getPerformanceLevel(deviation: number): PerformanceLevel {
+  if (deviation <= -10) return "good";
+  if (deviation >= 10) return "poor";
+  return "neutral";
+}
+
+// ---------------------------------------------------------------------------
 // Main entry point
 // ---------------------------------------------------------------------------
 
@@ -93,7 +163,7 @@ export async function getAggregatedEmissions(
   const granularity = periodGranularity ?? "MONTHLY";
   const fuelTypeLabels = await getFuelTypeLabels();
 
-  // 1. Load all tenant vehicles (optionally filtered by carlist)
+  // 1. Load all tenant vehicles (optionally filtered by carlist and vehicle filters)
   const vehicles = await loadVehicles(prisma, params);
 
   if (vehicles.length === 0) {
@@ -119,7 +189,8 @@ export async function getAggregatedEmissions(
     emissionContexts,
     carlistMappings,
     dateRange,
-    granularity
+    granularity,
+    fuelTypeLabels
   );
 
   // 4. Aggregate based on level
@@ -157,10 +228,109 @@ export async function getEmissionBreakdown(
 // Data loading helpers
 // ---------------------------------------------------------------------------
 
+type VehicleWithCatalog = {
+  id: string;
+  licensePlate: string;
+  catalogVehicle: {
+    marca: string;
+    modello: string;
+    isHybrid: boolean;
+    prezzoListino: number | null;
+    engines: Array<{
+      fuelType: string;
+      co2GKm: number | null;
+      co2GKmWltp: number | null;
+      co2GKmNedc: number | null;
+      cilindrata: number | null;
+      potenzaKw: number | null;
+      potenzaCv: number | null;
+    }>;
+  };
+};
+
 async function loadVehicles(
   prisma: PrismaClientWithTenant,
   params: ReportParams
-) {
+): Promise<VehicleWithCatalog[]> {
+  const catalogInclude = {
+    include: {
+      engines: {
+        select: {
+          fuelType: true,
+          co2GKm: true,
+          co2GKmWltp: true,
+          co2GKmNedc: true,
+          cilindrata: true,
+          potenzaKw: true,
+          potenzaCv: true,
+        },
+      },
+    },
+  };
+
+  // Build base where clause
+  const baseWhere: Record<string, unknown> = {};
+  if (!params.carlistId) {
+    baseWhere.status = "ACTIVE";
+  }
+
+  // License plate filter (TenantVehicle level)
+  const vf = params.vehicleFilters;
+  if (vf?.licensePlates?.length) {
+    baseWhere.licensePlate = { in: vf.licensePlates };
+  }
+
+  // Build catalog vehicle filter for advanced filters
+  if (vf) {
+    const catalogWhere: Record<string, unknown> = {};
+    if (vf.marca?.length) catalogWhere.marca = { in: vf.marca };
+    if (vf.modello) catalogWhere.modello = vf.modello;
+    if (vf.carrozzeria?.length) catalogWhere.carrozzeria = { in: vf.carrozzeria };
+    if (vf.isHybrid !== undefined) catalogWhere.isHybrid = vf.isHybrid;
+    if (vf.prezzoListinoMin !== undefined || vf.prezzoListinoMax !== undefined) {
+      const prezzoRange: Record<string, number> = {};
+      if (vf.prezzoListinoMin !== undefined) prezzoRange.gte = vf.prezzoListinoMin;
+      if (vf.prezzoListinoMax !== undefined) prezzoRange.lte = vf.prezzoListinoMax;
+      catalogWhere.prezzoListino = prezzoRange;
+    }
+
+    // Engine-level filters via `some`
+    const engineFilter: Record<string, unknown> = {};
+    if (vf.fuelType?.length) engineFilter.fuelType = { in: vf.fuelType };
+    if (vf.cilindrataMin !== undefined || vf.cilindrataMax !== undefined) {
+      const range: Record<string, number> = {};
+      if (vf.cilindrataMin !== undefined) range.gte = vf.cilindrataMin;
+      if (vf.cilindrataMax !== undefined) range.lte = vf.cilindrataMax;
+      engineFilter.cilindrata = range;
+    }
+    if (vf.potenzaKwMin !== undefined || vf.potenzaKwMax !== undefined) {
+      const range: Record<string, number> = {};
+      if (vf.potenzaKwMin !== undefined) range.gte = vf.potenzaKwMin;
+      if (vf.potenzaKwMax !== undefined) range.lte = vf.potenzaKwMax;
+      engineFilter.potenzaKw = range;
+    }
+    if (vf.potenzaCvMin !== undefined || vf.potenzaCvMax !== undefined) {
+      const range: Record<string, number> = {};
+      if (vf.potenzaCvMin !== undefined) range.gte = vf.potenzaCvMin;
+      if (vf.potenzaCvMax !== undefined) range.lte = vf.potenzaCvMax;
+      engineFilter.potenzaCv = range;
+    }
+    if (vf.co2GKmMin !== undefined || vf.co2GKmMax !== undefined) {
+      const range: Record<string, number> = {};
+      if (vf.co2GKmMin !== undefined) range.gte = vf.co2GKmMin;
+      if (vf.co2GKmMax !== undefined) range.lte = vf.co2GKmMax;
+      engineFilter.co2GKm = range;
+    }
+
+    if (Object.keys(engineFilter).length > 0) {
+      catalogWhere.engines = { some: engineFilter };
+    }
+
+    if (Object.keys(catalogWhere).length > 0) {
+      baseWhere.catalogVehicle = catalogWhere;
+    }
+  }
+
   // If carlistId is specified, only load vehicles in that carlist
   if (params.carlistId) {
     const carlistVehicles = await prisma.carlistVehicle.findMany({
@@ -171,23 +341,18 @@ async function loadVehicles(
     if (catalogVehicleIds.length === 0) return [];
 
     return prisma.tenantVehicle.findMany({
-      where: { catalogVehicleId: { in: catalogVehicleIds } },
-      include: {
-        catalogVehicle: {
-          include: { engines: true },
-        },
+      where: {
+        catalogVehicleId: { in: catalogVehicleIds },
+        ...baseWhere,
       },
-    });
+      include: { catalogVehicle: catalogInclude },
+    }) as unknown as VehicleWithCatalog[];
   }
 
   return prisma.tenantVehicle.findMany({
-    where: { status: "ACTIVE" },
-    include: {
-      catalogVehicle: {
-        include: { engines: true },
-      },
-    },
-  });
+    where: baseWhere,
+    include: { catalogVehicle: catalogInclude },
+  }) as unknown as VehicleWithCatalog[];
 }
 
 async function loadFuelRecords(
@@ -219,11 +384,6 @@ async function loadKmReadings(
   });
 }
 
-/**
- * V2: Loads emission contexts for all fuel types using the bulk resolver.
- * Returns Map<vehicleFuelType, EmissionContext[]>.
- * The referenceDate is the median of the date range.
- */
 async function loadEmissionContexts(
   prisma: PrismaClientWithTenant,
   dateRange: { startDate: Date; endDate: Date }
@@ -241,7 +401,6 @@ async function loadCarlistMappings(
   prisma: PrismaClientWithTenant,
   vehicleIds: string[]
 ) {
-  // Get catalogVehicleId for each TenantVehicle
   const vehicles = await prisma.tenantVehicle.findMany({
     where: { id: { in: vehicleIds } },
     select: { id: true, catalogVehicleId: true },
@@ -258,7 +417,6 @@ async function loadCarlistMappings(
     },
   });
 
-  // Build catalogVehicleId → carlists
   const catalogToCarlist = new Map<
     string,
     Array<{ id: string; name: string }>
@@ -273,7 +431,6 @@ async function loadCarlistMappings(
     catalogToCarlist.set(e.catalogVehicleId, existing);
   }
 
-  // Map back to vehicleId → carlists
   const map = new Map<string, Array<{ id: string; name: string }>>();
   for (const v of vehicles) {
     const carlists = catalogToCarlist.get(v.catalogVehicleId);
@@ -287,20 +444,6 @@ async function loadCarlistMappings(
 // ---------------------------------------------------------------------------
 // Data row construction
 // ---------------------------------------------------------------------------
-
-type VehicleWithCatalog = {
-  id: string;
-  licensePlate: string;
-  catalogVehicle: {
-    marca: string;
-    modello: string;
-    isHybrid: boolean;
-    engines: Array<{
-      fuelType: string;
-      co2GKm: number | null;
-    }>;
-  };
-};
 
 type FuelRecordRow = {
   vehicleId: string;
@@ -324,22 +467,18 @@ function buildDataRows(
   emissionContexts: Map<string, EmissionContext[]>,
   carlistMappings: Map<string, Array<{ id: string; name: string }>>,
   dateRange: { startDate: Date; endDate: Date },
-  granularity: PeriodGranularity
+  granularity: PeriodGranularity,
+  fuelTypeLabels: Map<string, string>
 ): VehicleDataRow[] {
   const rows: VehicleDataRow[] = [];
-
-  // Group fuel records and km readings by vehicle
   const fuelByVehicle = groupBy(fuelRecords, (r) => r.vehicleId);
   const kmByVehicle = groupBy(kmReadings, (r) => r.vehicleId);
-
-  // Generate period boundaries
   const periods = generatePeriods(dateRange, granularity);
 
   for (const vehicle of vehicles) {
     const vehicleFuelRecords = fuelByVehicle.get(vehicle.id) ?? [];
     const vehicleKmReadings = kmByVehicle.get(vehicle.id) ?? [];
 
-    // Determine primary fuel type (hybrid-aware) and co2GKm
     const fuelType = getEffectiveFuelType(vehicle.catalogVehicle, vehicleFuelRecords);
     if (!fuelType) continue;
 
@@ -348,13 +487,22 @@ function buildDataRows(
       vehicle.catalogVehicle.isHybrid
     );
 
+    // WLTP / NEDC values — weighted average across non-electric engines
+    const thermalEngines = vehicle.catalogVehicle.engines.filter(
+      (e) => e.fuelType !== "ELETTRICO"
+    );
+    const co2GKmWltp = thermalEngines.length > 0
+      ? thermalEngines.reduce((sum, e) => sum + (e.co2GKmWltp ?? e.co2GKm ?? 0), 0) / thermalEngines.length
+      : 0;
+    const co2GKmNedc = thermalEngines.length > 0
+      ? thermalEngines.reduce((sum, e) => sum + (e.co2GKmNedc ?? 0), 0) / thermalEngines.length
+      : 0;
+
     const carlists = carlistMappings.get(vehicle.id) ?? [];
     const label = `${vehicle.catalogVehicle.marca} ${vehicle.catalogVehicle.modello} (${vehicle.licensePlate})`;
-
-    // Get the emission contexts for this fuel type
     const contexts = emissionContexts.get(fuelType) ?? [];
+    const fuelLabel = fuelTypeLabels.get(fuelType) ?? fuelType;
 
-    // For each period, compute per-vehicle data
     for (const period of periods) {
       const periodFuel = vehicleFuelRecords.filter(
         (r) => r.date >= period.start && r.date <= period.end
@@ -363,7 +511,6 @@ function buildDataRows(
         (r) => r.date >= period.start && r.date <= period.end
       );
 
-      // Merge odometer readings from fuel records and km readings
       const allOdometer = [
         ...periodFuel.map((r) => ({ km: r.odometerKm, date: r.date })),
         ...periodKm.map((r) => ({ km: r.odometerKm, date: r.date })),
@@ -385,7 +532,6 @@ function buildDataRows(
         0
       );
 
-      // Backward-compat emissionFactor: approximate kgCO2e/L
       const realFromContexts = computeRealEmissionsFromContexts(contexts, fuelLitres, fuelKwh);
       const emissionFactor = fuelLitres > 0
         ? realFromContexts / fuelLitres
@@ -396,6 +542,7 @@ function buildDataRows(
         label,
         licensePlate: vehicle.licensePlate,
         fuelType,
+        fuelTypeLabel: fuelLabel,
         co2GKm,
         fuelLitres,
         fuelKwh,
@@ -406,6 +553,9 @@ function buildDataRows(
         carlistNames: carlists.map((c) => c.name),
         periodKey: period.key,
         periodLabel: period.label,
+        isHybrid: vehicle.catalogVehicle.isHybrid,
+        co2GKmWltp: round2(co2GKmWltp),
+        co2GKmNedc: round2(co2GKmNedc),
       });
     }
   }
@@ -445,7 +595,18 @@ function aggregate(
     let totalTheoretical = 0;
     let totalReal = 0;
     let totalKm = 0;
-    let totalFuel = 0;
+    let totalFuelLitres = 0;
+    let totalFuelKwh = 0;
+    let scopeBreakdowns: ScopeBreakdown[] = [];
+    let perGas = emptyPerGas();
+    let weightedWltp = 0;
+    let weightedNedc = 0;
+    let wltpCount = 0;
+    let nedcCount = 0;
+    let hasHybrid = false;
+    const fuelTypes = new Set<string>();
+    let primaryFuelType = "";
+    let primaryFuelLabel = "";
 
     for (const row of group.rows) {
       totalTheoretical += calculateTheoreticalEmissions(
@@ -458,13 +619,53 @@ function aggregate(
         row.fuelKwh
       );
       totalKm += row.kmTravelled;
-      totalFuel += row.fuelLitres;
+      totalFuelLitres += row.fuelLitres;
+      totalFuelKwh += row.fuelKwh;
+
+      // Scope breakdowns
+      const rowScopes = computeScopeBreakdowns(
+        row.emissionContexts,
+        row.fuelLitres,
+        row.fuelKwh
+      );
+      scopeBreakdowns = mergeScopeBreakdowns(scopeBreakdowns, rowScopes);
+
+      // Per-gas totals
+      for (const s of rowScopes) {
+        perGas = addPerGas(perGas, s.perGas);
+      }
+
+      // WLTP / NEDC weighted average
+      if (row.co2GKmWltp > 0) {
+        weightedWltp += row.co2GKmWltp;
+        wltpCount++;
+      }
+      if (row.co2GKmNedc > 0) {
+        weightedNedc += row.co2GKmNedc;
+        nedcCount++;
+      }
+
+      if (row.isHybrid) hasHybrid = true;
+      fuelTypes.add(row.fuelType);
+      primaryFuelType = row.fuelType;
+      primaryFuelLabel = row.fuelTypeLabel;
     }
 
     totalTheoretical = round2(totalTheoretical);
     totalReal = round2(totalReal);
 
     const delta = calculateDelta(totalTheoretical, totalReal);
+
+    // CO2e per km
+    const realCO2ePerKm = totalKm > 0 ? round2((totalReal / totalKm) * 1000) : 0;
+    const theoreticalCO2ePerKm = totalKm > 0 ? round2((totalTheoretical / totalKm) * 1000) : 0;
+
+    const co2GKmWltp = wltpCount > 0 ? round2(weightedWltp / wltpCount) : 0;
+    const co2GKmNedc = nedcCount > 0 ? round2(weightedNedc / nedcCount) : 0;
+
+    // Fuel type label for multi-vehicle groups
+    const fuelType = fuelTypes.size === 1 ? primaryFuelType : "MISTO";
+    const fuelTypeLabel = fuelTypes.size === 1 ? primaryFuelLabel : "Misto";
 
     result.push({
       label: group.label,
@@ -474,8 +675,37 @@ function aggregate(
       deltaAbsolute: delta.absolute,
       deltaPercentage: delta.percentage,
       totalKm: round2(totalKm),
-      totalFuel: round2(totalFuel),
+      totalFuel: round2(totalFuelLitres + totalFuelKwh),
+      scopeBreakdowns,
+      perGas,
+      realCO2ePerKm,
+      theoreticalCO2ePerKm,
+      co2GKmWltp,
+      co2GKmNedc,
+      performanceLevel: "neutral", // placeholder, assigned below
+      performanceDeviation: 0,     // placeholder, assigned below
+      isHybrid: hasHybrid,
+      fuelType,
+      fuelTypeLabel,
+      totalFuelLitres: round2(totalFuelLitres),
+      totalFuelKwh: round2(totalFuelKwh),
     });
+  }
+
+  // Compute fleet average CO2e/km and assign performance levels
+  const totalKmAll = result.reduce((s, a) => s + a.totalKm, 0);
+  const totalRealAll = result.reduce((s, a) => s + a.realEmissions, 0);
+  const avgFleetCO2ePerKm = totalKmAll > 0 ? (totalRealAll / totalKmAll) * 1000 : 0;
+
+  for (const agg of result) {
+    if (avgFleetCO2ePerKm > 0 && agg.realCO2ePerKm > 0) {
+      agg.performanceDeviation = round2(
+        ((agg.realCO2ePerKm - avgFleetCO2ePerKm) / avgFleetCO2ePerKm) * 100
+      );
+    } else {
+      agg.performanceDeviation = 0;
+    }
+    agg.performanceLevel = getPerformanceLevel(agg.performanceDeviation);
   }
 
   // Sort by label
@@ -490,6 +720,8 @@ function getGroupKeys(
   fuelTypeLabels: Map<string, string>
 ): Array<{ id: string; label: string }> {
   switch (level) {
+    case "FLEET":
+      return [{ id: "__fleet__", label: "Totale Parco" }];
     case "VEHICLE":
       return [{ id: row.vehicleId, label: row.label }];
     case "CARLIST":
@@ -523,7 +755,6 @@ function buildTimeSeries(
   rows: VehicleDataRow[],
   _granularity: PeriodGranularity
 ): EmissionTimeSeries[] {
-  // Group all rows by periodKey
   const groups = new Map<
     string,
     { label: string; rows: VehicleDataRow[] }
@@ -540,7 +771,6 @@ function buildTimeSeries(
 
   const result: EmissionTimeSeries[] = [];
 
-  // Sort by period key
   const sortedKeys = [...groups.keys()].sort();
 
   for (const key of sortedKeys) {
@@ -616,7 +846,6 @@ function buildBreakdown(rows: VehicleDataRow[], fuelTypeLabels: Map<string, stri
     });
   }
 
-  // Sort by value descending
   result.sort((a, b) => b.value - a.value);
 
   return result;
@@ -635,17 +864,37 @@ function computeMetadata(
   let totalReal = 0;
   let totalKm = 0;
   let totalFuel = 0;
+  let totalScope1 = 0;
+  let totalScope2 = 0;
+  const totalPerGas = emptyPerGas();
 
   for (const agg of aggregations) {
     totalTheoretical += agg.theoreticalEmissions;
     totalReal += agg.realEmissions;
     totalKm += agg.totalKm;
     totalFuel += agg.totalFuel;
+
+    // Scope totals
+    for (const sb of agg.scopeBreakdowns) {
+      if (sb.scope === 1) totalScope1 += sb.emissions;
+      if (sb.scope === 2) totalScope2 += sb.emissions;
+    }
+
+    // Per-gas totals
+    for (const gas of KYOTO_GASES) {
+      totalPerGas[gas] = round2(totalPerGas[gas] + agg.perGas[gas]);
+    }
   }
 
   totalTheoretical = round2(totalTheoretical);
   totalReal = round2(totalReal);
+  totalScope1 = round2(totalScope1);
+  totalScope2 = round2(totalScope2);
   const delta = calculateDelta(totalTheoretical, totalReal);
+
+  const totalEmissions = totalScope1 + totalScope2;
+  const avgRealCO2ePerKm = totalKm > 0 ? round2((totalReal / totalKm) * 1000) : 0;
+  const avgTheoreticalCO2ePerKm = totalKm > 0 ? round2((totalTheoretical / totalKm) * 1000) : 0;
 
   return {
     totalTheoreticalEmissions: totalTheoretical,
@@ -657,6 +906,13 @@ function computeMetadata(
     vehicleCount: vehicles.length,
     dateRange,
     generatedAt: new Date(),
+    avgRealCO2ePerKm,
+    avgTheoreticalCO2ePerKm,
+    totalScope1,
+    totalScope2,
+    scope1Percentage: totalEmissions > 0 ? round2((totalScope1 / totalEmissions) * 100) : 0,
+    scope2Percentage: totalEmissions > 0 ? round2((totalScope2 / totalEmissions) * 100) : 0,
+    totalPerGas,
   };
 }
 
@@ -792,6 +1048,7 @@ function groupBy<T>(items: T[], keyFn: (item: T) => string): Map<string, T[]> {
 
 
 function emptyResult(params: ReportParams): ReportResult {
+  const emptyGas = emptyPerGas();
   return {
     aggregations: [],
     timeSeries: [],
@@ -806,6 +1063,13 @@ function emptyResult(params: ReportParams): ReportResult {
       vehicleCount: 0,
       dateRange: params.dateRange,
       generatedAt: new Date(),
+      avgRealCO2ePerKm: 0,
+      avgTheoreticalCO2ePerKm: 0,
+      totalScope1: 0,
+      totalScope2: 0,
+      scope1Percentage: 0,
+      scope2Percentage: 0,
+      totalPerGas: emptyGas,
     },
   };
 }
@@ -814,10 +1078,6 @@ function emptyResult(params: ReportParams): ReportResult {
 // Drill-Down functions (Story 6.5)
 // ---------------------------------------------------------------------------
 
-/**
- * Fleet overview: aggregates emissions by carlist for the entire fleet.
- * Returns DrillDownResult with level FLEET, one item per carlist.
- */
 export async function getFleetOverview(
   prisma: PrismaClientWithTenant,
   dateRange: { startDate: Date; endDate: Date }
@@ -830,10 +1090,8 @@ export async function getFleetOverview(
   const result = await getAggregatedEmissions(prisma, params);
   const totalReal = result.metadata.totalRealEmissions;
 
-  // Count vehicles per carlist
   const carlistAggs = result.aggregations;
 
-  // Load carlist vehicle counts
   const carlists = await prisma.carlist.findMany({
     select: {
       id: true,
@@ -858,7 +1116,6 @@ export async function getFleetOverview(
     childCount: carlistCountMap.get(agg.id) ?? 0,
   }));
 
-  // Sort by realEmissions DESC
   items.sort((a, b) => b.realEmissions - a.realEmissions);
 
   return {
@@ -870,16 +1127,11 @@ export async function getFleetOverview(
   };
 }
 
-/**
- * Carlist detail: aggregates emissions by vehicle within a carlist.
- * Returns DrillDownResult with level CARLIST.
- */
 export async function getCarlistDetail(
   prisma: PrismaClientWithTenant,
   carlistId: string,
   dateRange: { startDate: Date; endDate: Date }
 ): Promise<DrillDownResult> {
-  // Get carlist name
   const carlist = await prisma.carlist.findUnique({
     where: { id: carlistId },
     select: { name: true },
@@ -906,7 +1158,6 @@ export async function getCarlistDetail(
       totalReal === 0 ? 0 : round2((agg.realEmissions / totalReal) * 100),
   }));
 
-  // Sort by realEmissions DESC
   items.sort((a, b) => b.realEmissions - a.realEmissions);
 
   return {
@@ -919,9 +1170,6 @@ export async function getCarlistDetail(
   };
 }
 
-/**
- * Vehicle detail: returns full emission detail for a single vehicle.
- */
 export async function getVehicleDetail(
   prisma: PrismaClientWithTenant,
   vehicleId: string,
@@ -944,14 +1192,11 @@ export async function getVehicleDetail(
     loadEmissionContexts(prisma, dateRange),
   ]);
 
-  // Determine fuel type
   const fuelType = getEffectiveFuelType(vehicle.catalogVehicle, fuelRecords);
   const co2GKm = getCombinedCo2GKm(vehicle.catalogVehicle.engines, vehicle.catalogVehicle.isHybrid);
 
-  // Get the emission contexts for this fuel type
   const contexts = fuelType ? (emissionContexts.get(fuelType) ?? []) : [];
 
-  // Total fuel (litres and kWh) and km
   const totalFuel = round2(
     fuelRecords.reduce((sum, r) => sum + r.quantityLiters, 0)
   );
@@ -960,7 +1205,6 @@ export async function getVehicleDetail(
     0
   );
 
-  // Compute km from odometer readings across fuel + km records
   const allOdometer = [
     ...fuelRecords.map((r) => ({ km: r.odometerKm, date: r.date })),
     ...kmReadings.map((r) => ({ km: r.odometerKm, date: r.date })),
@@ -975,7 +1219,6 @@ export async function getVehicleDetail(
   const realEmissions = computeRealEmissionsFromContexts(contexts, totalFuel, totalKwh);
   const delta = calculateDelta(theoreticalEmissions, realEmissions);
 
-  // Monthly series
   const periods = generatePeriods(dateRange, "MONTHLY");
   const monthlySeries = periods.map((period) => {
     const periodFuel = fuelRecords.filter(
@@ -1014,7 +1257,6 @@ export async function getVehicleDetail(
     };
   });
 
-  // Load full fuel records with amounts for the detail view
   const fullFuelRecords = await prisma.fuelRecord.findMany({
     where: {
       vehicleId,
@@ -1030,7 +1272,6 @@ export async function getVehicleDetail(
     },
   });
 
-  // Full km readings with source
   const fullKmReadings = await prisma.kmReading.findMany({
     where: {
       vehicleId,
@@ -1070,10 +1311,6 @@ export async function getVehicleDetail(
   };
 }
 
-/**
- * Loads target and calculates progress for a given scope.
- * Returns null if no target is configured.
- */
 export async function getTargetProgressForDashboard(
   prisma: PrismaClientWithTenant,
   scope: TargetScope,
@@ -1091,7 +1328,6 @@ export async function getTargetProgressForDashboard(
   };
   progress: TargetProgress;
 } | null> {
-  // Find the most recent target for this scope
   const whereClause: Record<string, unknown> = { scope };
   if (scope === "Carlist" && scopeId) {
     whereClause.carlistId = scopeId;
@@ -1104,7 +1340,6 @@ export async function getTargetProgressForDashboard(
 
   if (!target) return null;
 
-  // Calculate current emissions for the target's period
   const effectiveDateRange = dateRange ?? {
     startDate: target.startDate,
     endDate: target.endDate,

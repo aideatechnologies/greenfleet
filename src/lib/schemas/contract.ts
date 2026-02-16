@@ -33,7 +33,7 @@ const proprietarioSchema = contractBase.extend({
 
 const breveTermineSchema = contractBase.extend({
   type: z.literal("BREVE_TERMINE"),
-  supplier: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   dailyRate: z
@@ -48,7 +48,7 @@ const breveTermineSchema = contractBase.extend({
 
 const lungoTermineSchema = contractBase.extend({
   type: z.literal("LUNGO_TERMINE"),
-  supplier: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   monthlyRate: z
@@ -74,9 +74,7 @@ const lungoTermineSchema = contractBase.extend({
 
 const leasingFinanziarioSchema = contractBase.extend({
   type: z.literal("LEASING_FINANZIARIO"),
-  leasingCompany: z
-    .string()
-    .min(1, { error: "La societa di leasing e obbligatoria" }),
+  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   monthlyRate: z
@@ -148,7 +146,7 @@ const updateProprietarioSchema = updateBase.extend({
 
 const updateBreveTermineSchema = updateBase.extend({
   type: z.literal("BREVE_TERMINE"),
-  supplier: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   dailyRate: z
@@ -163,7 +161,7 @@ const updateBreveTermineSchema = updateBase.extend({
 
 const updateLungoTermineSchema = updateBase.extend({
   type: z.literal("LUNGO_TERMINE"),
-  supplier: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
+  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   monthlyRate: z
@@ -189,9 +187,7 @@ const updateLungoTermineSchema = updateBase.extend({
 
 const updateLeasingFinanziarioSchema = updateBase.extend({
   type: z.literal("LEASING_FINANZIARIO"),
-  leasingCompany: z
-    .string()
-    .min(1, { error: "La societa di leasing e obbligatoria" }),
+  supplierId: z.string().min(1, { error: "Il fornitore e obbligatorio" }),
   startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
   endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
   monthlyRate: z

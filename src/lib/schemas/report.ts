@@ -5,6 +5,7 @@ import { z } from "zod";
 // ---------------------------------------------------------------------------
 
 const aggregationLevelSchema = z.union([
+  z.literal("FLEET"),
   z.literal("VEHICLE"),
   z.literal("CARLIST"),
   z.literal("FUEL_TYPE"),
@@ -16,6 +17,29 @@ const periodGranularitySchema = z.union([
   z.literal("QUARTERLY"),
   z.literal("YEARLY"),
 ]);
+
+// ---------------------------------------------------------------------------
+// Vehicle filters schema
+// ---------------------------------------------------------------------------
+
+export const vehicleFiltersSchema = z.object({
+  licensePlates: z.array(z.string()).optional(),
+  marca: z.array(z.string()).optional(),
+  modello: z.string().optional(),
+  fuelType: z.array(z.string()).optional(),
+  carrozzeria: z.array(z.string()).optional(),
+  isHybrid: z.boolean().optional(),
+  cilindrataMin: z.number().optional(),
+  cilindrataMax: z.number().optional(),
+  potenzaKwMin: z.number().optional(),
+  potenzaKwMax: z.number().optional(),
+  potenzaCvMin: z.number().optional(),
+  potenzaCvMax: z.number().optional(),
+  co2GKmMin: z.number().optional(),
+  co2GKmMax: z.number().optional(),
+  prezzoListinoMin: z.number().optional(),
+  prezzoListinoMax: z.number().optional(),
+});
 
 // ---------------------------------------------------------------------------
 // Report params schema (Zod v4 API — using .refine for cross-field validation)
@@ -32,6 +56,7 @@ export const reportParamsSchema = z
     aggregationLevel: aggregationLevelSchema,
     periodGranularity: periodGranularitySchema.optional(),
     carlistId: z.string().optional(),
+    vehicleFilters: vehicleFiltersSchema.optional(),
   })
   .refine(
     (data) => data.dateRange.startDate < data.dateRange.endDate,
