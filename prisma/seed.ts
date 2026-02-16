@@ -106,16 +106,16 @@ async function main() {
   console.log("Seed: inizio...");
 
   // 0. Upsert sentinel CatalogVehicle for uncataloged vehicles
-  await prisma.catalogVehicle.upsert({
-    where: { id: UNCATALOGED_VEHICLE_ID },
-    update: {},
-    create: {
-      id: UNCATALOGED_VEHICLE_ID,
-      marca: "Non catalogato",
-      modello: "",
-      source: "SYSTEM",
-    },
-  });
+  // IDENTITY_INSERT required to insert explicit id=0 on a BigInt identity column
+  await prisma.$executeRawUnsafe(`
+    IF NOT EXISTS (SELECT 1 FROM catalog_vehicles WHERE id = 0)
+    BEGIN
+      SET IDENTITY_INSERT catalog_vehicles ON;
+      INSERT INTO catalog_vehicles (id, marca, modello, source, created_at, updated_at)
+      VALUES (0, N'Non catalogato', N'', N'SYSTEM', GETDATE(), GETDATE());
+      SET IDENTITY_INSERT catalog_vehicles OFF;
+    END
+  `);
   console.log("  Sentinel CatalogVehicle (Non catalogato) initialized");
 
   // 1. Create or update the demo organization
