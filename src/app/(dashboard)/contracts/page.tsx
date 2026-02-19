@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { FileCheck, Plus } from "lucide-react";
+import { FileCheck, FileUp, Plus } from "lucide-react";
 import { getContracts } from "@/lib/services/contract-service";
 import { contractFilterSchema } from "@/lib/schemas/contract";
 import { getSessionContext, isTenantAdmin } from "@/lib/auth/permissions";
@@ -60,12 +60,20 @@ export default async function ContractsPage({
             </Link>
           </Button>
           {canEdit && (
-            <Button asChild>
-              <Link href="/contracts/new">
-                <Plus className="mr-2 h-4 w-4" />
-                Nuovo contratto
-              </Link>
-            </Button>
+            <>
+              <Button variant="outline" asChild>
+                <Link href="/contracts/import">
+                  <FileUp className="mr-2 h-4 w-4" />
+                  Importa
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href="/contracts/new">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Nuovo contratto
+                </Link>
+              </Button>
+            </>
           )}
         </div>
       </div>

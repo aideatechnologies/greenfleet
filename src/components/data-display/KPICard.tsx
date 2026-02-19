@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Tooltip,
   TooltipTrigger,
@@ -86,10 +85,8 @@ function getTrendColor(
 ): TrendColor {
   if (direction === "neutral") return "muted";
   if (invert) {
-    // For emissions: down = good (green), up = bad (red)
     return direction === "down" ? "success" : "destructive";
   }
-  // Default: up = good (green), down = bad (red)
   return direction === "up" ? "success" : "destructive";
 }
 
@@ -130,7 +127,6 @@ function Sparkline({
 }) {
   const chartData = data.map((v, i) => ({ idx: i, val: v }));
   const colors = SPARKLINE_COLORS[color];
-  // Use a unique gradient ID per color to avoid SVG conflicts
   const gradientId = `kpi-spark-${color}`;
 
   return (
@@ -163,22 +159,22 @@ function Sparkline({
 function KPICardSkeleton({ variant }: { variant: "default" | "compact" | "hero" }) {
   if (variant === "compact") {
     return (
-      <Card className="py-4">
-        <CardContent className="flex items-center gap-3 px-4">
+      <div data-slot="card" className="rounded-xl border p-4 bg-card">
+        <div className="flex items-center gap-3">
           <Skeleton className="size-8 rounded-lg" />
           <div className="flex-1 space-y-1.5">
             <Skeleton className="h-3 w-20" />
             <Skeleton className="h-5 w-16" />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   if (variant === "hero") {
     return (
-      <Card className="py-5">
-        <CardContent className="space-y-3 px-5">
+      <div data-slot="card" className="rounded-xl border p-5 bg-card">
+        <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Skeleton className="h-4 w-28" />
             <Skeleton className="size-10 rounded-lg" />
@@ -186,15 +182,14 @@ function KPICardSkeleton({ variant }: { variant: "default" | "compact" | "hero" 
           <Skeleton className="h-9 w-32" />
           <Skeleton className="h-5 w-24" />
           <Skeleton className="mt-2 h-12 w-full" />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
-  // default
   return (
-    <Card className="py-4">
-      <CardContent className="space-y-2 px-5">
+    <div data-slot="card" className="rounded-xl border p-5 bg-card">
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Skeleton className="h-3.5 w-24" />
           <Skeleton className="size-8 rounded-lg" />
@@ -202,8 +197,8 @@ function KPICardSkeleton({ variant }: { variant: "default" | "compact" | "hero" 
         <Skeleton className="h-7 w-20" />
         <Skeleton className="h-4 w-20" />
         <Skeleton className="mt-1 h-9 w-full" />
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -279,20 +274,6 @@ function buildAriaLabel(
 // Main Component
 // ---------------------------------------------------------------------------
 
-/**
- * KPICard - Displays a key performance indicator with optional sparkline and trend.
- *
- * Variants:
- * - `default`: Standard card with optional sparkline
- * - `compact`: Smaller card, no sparkline
- * - `hero`: Larger card, bigger text and sparkline
- *
- * States:
- * - `loading`: Skeleton placeholders
- * - `populated`: Actual value, trend, and sparkline
- * - `no-data`: "--" with tooltip
- * - `error`: Warning icon
- */
 export function KPICard({
   label: labelProp,
   title: titleProp,
@@ -307,12 +288,10 @@ export function KPICard({
   state = "populated",
   className,
 }: KPICardProps) {
-  // Resolve backward-compatible aliases
   const label = labelProp ?? titleProp ?? "";
   const unit = unitProp ?? suffixProp;
   const Icon = resolveIcon(iconProp);
 
-  // Loading state
   if (state === "loading") {
     return <KPICardSkeleton variant={variant} />;
   }
@@ -323,11 +302,11 @@ export function KPICard({
 
   const ariaLabel = buildAriaLabel(label, value, unit, trend, state);
 
-  // ── Compact variant ──────────────────────────────────────────────────
+  // -- Compact variant --
   if (variant === "compact") {
     return (
-      <Card className={cn("py-4", className)} role="region" aria-label={ariaLabel}>
-        <CardContent className="flex items-center gap-3 px-4">
+      <div data-slot="card" className={cn("rounded-xl border p-4 bg-card transition-all duration-200", className)} role="region" aria-label={ariaLabel}>
+        <div className="flex items-center gap-3">
           {Icon && (
             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
               <Icon className="size-4 text-primary" aria-hidden="true" />
@@ -365,20 +344,20 @@ export function KPICard({
               )}
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
-  // ── Hero variant ─────────────────────────────────────────────────────
+  // -- Hero variant --
   if (variant === "hero") {
     return (
-      <Card className={cn("py-5", className)} role="region" aria-label={ariaLabel}>
-        <CardContent className="space-y-1 px-5">
+      <div data-slot="card" className={cn("rounded-xl border p-5 bg-card transition-all duration-200", className)} role="region" aria-label={ariaLabel}>
+        <div className="space-y-1">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-muted-foreground">{label}</p>
             {Icon && (
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                 <Icon className="size-5 text-primary" aria-hidden="true" />
               </div>
             )}
@@ -422,15 +401,15 @@ export function KPICard({
               <Sparkline data={sparklineData} color={trendColor} height={48} />
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
-  // ── Default variant ──────────────────────────────────────────────────
+  // -- Default variant --
   return (
-    <Card className={cn("py-4", className)} role="region" aria-label={ariaLabel}>
-      <CardContent className="space-y-1 px-5">
+    <div data-slot="card" className={cn("rounded-xl border p-5 bg-card transition-all duration-200", className)} role="region" aria-label={ariaLabel}>
+      <div className="space-y-1">
         <div className="flex items-center justify-between">
           <p className="text-xs font-medium text-muted-foreground">{label}</p>
           {Icon && (
@@ -474,7 +453,7 @@ export function KPICard({
             <Sparkline data={sparklineData} color={trendColor} height={36} />
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

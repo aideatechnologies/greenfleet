@@ -11,6 +11,7 @@ import { requireAuth, isGlobalAdmin } from "@/lib/auth/permissions";
 import { prisma, getPrismaForTenant } from "@/lib/db/client";
 import { auditCreate } from "@/lib/services/audit-service";
 import { logger } from "@/lib/utils/logger";
+import { invalidateFuelTypeLabelCache } from "@/lib/utils/fuel-type-label";
 
 export async function deleteFuelTypeMappingAction(
   id: number
@@ -47,6 +48,7 @@ export async function deleteFuelTypeMappingAction(
       });
     }
 
+    invalidateFuelTypeLabelCache();
     revalidatePath("/settings/fuel-type-mappings");
     return { success: true, data: { id } };
   } catch (error) {

@@ -43,8 +43,8 @@ export async function drillDown(
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
 
-  // 2. RBAC: owner/admin only
-  if (ctx.role !== "owner" && ctx.role !== "admin") {
+  // 2. RBAC: owner/admin/mobility_manager only
+  if (ctx.role !== "owner" && ctx.role !== "admin" && ctx.role !== "mobility_manager") {
     return {
       success: false,
       error: "Non hai i permessi per visualizzare il drill-down emissioni",
@@ -149,8 +149,8 @@ export async function getVehicleDetailAction(
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
 
-  // 2. RBAC: owner/admin only
-  if (ctx.role !== "owner" && ctx.role !== "admin") {
+  // 2. RBAC: owner/admin/mobility_manager only
+  if (ctx.role !== "owner" && ctx.role !== "admin" && ctx.role !== "mobility_manager") {
     return {
       success: false,
       error: "Non hai i permessi per visualizzare il dettaglio veicolo",

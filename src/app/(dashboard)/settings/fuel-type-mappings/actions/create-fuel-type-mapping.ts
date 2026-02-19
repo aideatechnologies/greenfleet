@@ -11,6 +11,7 @@ import { prisma } from "@/lib/db/client";
 import { getPrismaForTenant } from "@/lib/db/client";
 import { auditCreate } from "@/lib/services/audit-service";
 import { logger } from "@/lib/utils/logger";
+import { invalidateFuelTypeLabelCache } from "@/lib/utils/fuel-type-label";
 
 export async function createFuelTypeMappingAction(
   input: unknown
@@ -56,6 +57,7 @@ export async function createFuelTypeMappingAction(
       });
     }
 
+    invalidateFuelTypeLabelCache();
     revalidatePath("/settings/fuel-type-mappings");
     return { success: true, data: mapping };
   } catch (error) {

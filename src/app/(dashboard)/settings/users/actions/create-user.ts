@@ -33,26 +33,28 @@ export async function createUser(
 
   const { tenantId, role } = parsed.data;
 
-  // RBAC: must be admin of the target tenant
-  const canManage = await isTenantAdmin(ctx, tenantId);
-  if (!canManage) {
-    return {
-      success: false,
-      error: "Permessi insufficienti per questo tenant",
-      code: ErrorCode.FORBIDDEN,
-    };
-  }
+  // RBAC: role-based creation hierarchy
+  const callerIsOwner = await isGlobalAdmin(ctx.userId);
+  const callerRole = ctx.role;
 
-  // Only admin or owner can create admin users
-  if (role === "admin") {
-    const callerIsAdmin = await isTenantAdmin(ctx, tenantId);
-    if (!callerIsAdmin) {
+  if (callerIsOwner) {
+    // owner can create any role (admin, mobility_manager, member)
+  } else if (callerRole === "admin") {
+    // admin can create mobility_manager and member, but NOT admin
+    if (role === "admin") {
       return {
         success: false,
-        error: "Permessi insufficienti per creare un Fleet Manager",
+        error: "Un Fleet Manager non puo creare altri Fleet Manager",
         code: ErrorCode.FORBIDDEN,
       };
     }
+  } else {
+    // mobility_manager, member, etc. cannot create users
+    return {
+      success: false,
+      error: "Permessi insufficienti per creare utenti",
+      code: ErrorCode.FORBIDDEN,
+    };
   }
 
   try {

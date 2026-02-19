@@ -279,11 +279,30 @@ async function main() {
   });
   console.log(`Veicoli attivi caricati: ${vehicles.length}\n`);
 
+  // 5b. Load fuel cards for the tenant (map by assigned vehicle)
+  const fuelCards = await prisma.fuelCard.findMany({
+    where: { tenantId: org.id, status: "ACTIVE" },
+    select: { id: true, assignedVehicleId: true },
+  });
+  const fuelCardByVehicle = new Map<number, number>();
+  let defaultFuelCardId: number | null = null;
+  for (const fc of fuelCards) {
+    if (fc.assignedVehicleId) {
+      fuelCardByVehicle.set(Number(fc.assignedVehicleId), Number(fc.id));
+    }
+    if (!defaultFuelCardId) defaultFuelCardId = Number(fc.id);
+  }
+  if (!defaultFuelCardId && fuelCards.length === 0) {
+    throw new Error("Nessuna carta carburante trovata per il tenant. Creane almeno una prima di eseguire il seed.");
+  }
+  console.log(`Carte carburante caricate: ${fuelCards.length} (default ID: ${defaultFuelCardId})\n`);
+
   // 6. Generate fuel records
   type FuelRecordInput = {
     tenantId: string;
     vehicleId: number;
     userId: string;
+    fuelCardId: number;
     date: Date;
     fuelType: string;
     quantityLiters: number;
@@ -368,6 +387,7 @@ async function main() {
           tenantId: org.id,
           vehicleId: Number(vehicle.id),
           userId: adminUser.id,
+          fuelCardId: fuelCardByVehicle.get(Number(vehicle.id)) ?? defaultFuelCardId!,
           date: new Date(year, month, day),
           fuelType,
           quantityLiters: Math.max(0, litres),

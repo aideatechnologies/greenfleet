@@ -8,6 +8,10 @@ import { CONTRACT_TYPE_VALUES, CONTRACT_STATUS_VALUES } from "@/types/contract";
 
 const contractBase = z.object({
   vehicleId: z.coerce.number({ error: "Il veicolo e obbligatorio" }),
+  contractNumber: z
+    .string()
+    .min(1, { error: "Il numero contratto e obbligatorio" })
+    .max(100, { error: "Il numero contratto non puo superare 100 caratteri" }),
   contractKm: z
     .number()
     .int({ error: "I km contratto devono essere un numero intero" })
@@ -131,6 +135,10 @@ export type ContractInput = z.input<typeof contractSchema>;
 // ---------------------------------------------------------------------------
 
 const updateBase = z.object({
+  contractNumber: z
+    .string()
+    .min(1, { error: "Il numero contratto e obbligatorio" })
+    .max(100, { error: "Il numero contratto non puo superare 100 caratteri" }),
   contractKm: z
     .number()
     .int({ error: "I km contratto devono essere un numero intero" })

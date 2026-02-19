@@ -13,6 +13,7 @@ import { requireAuth, isGlobalAdmin } from "@/lib/auth/permissions";
 import { prisma, getPrismaForTenant } from "@/lib/db/client";
 import { auditUpdate, calculateChanges } from "@/lib/services/audit-service";
 import { logger } from "@/lib/utils/logger";
+import { invalidateFuelTypeLabelCache } from "@/lib/utils/fuel-type-label";
 
 const AUDITABLE_FIELDS = ["macroFuelTypeId", "description"];
 
@@ -75,6 +76,7 @@ export async function updateFuelTypeMappingAction(
       });
     }
 
+    invalidateFuelTypeLabelCache();
     revalidatePath("/settings/fuel-type-mappings");
     return { success: true, data: mapping };
   } catch (error) {

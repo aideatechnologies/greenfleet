@@ -32,7 +32,11 @@ export type AuditAction =
   | "fuel_type_mapping.deleted"
   | "gwp_config.created"
   | "gwp_config.updated"
-  | "gwp_config.deleted";
+  | "gwp_config.deleted"
+  | "fuel_card.created"
+  | "fuel_card.updated"
+  | "fuel_card.deleted"
+  | "catalog_vehicle.created";
 
 // ---------------------------------------------------------------------------
 // Change tracking

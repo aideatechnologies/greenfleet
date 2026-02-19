@@ -51,6 +51,7 @@ export const createEmployeeSchema = z.object({
     .nonnegative({ error: "I km medi mensili non possono essere negativi" })
     .nullable()
     .optional(),
+  carlistId: z.coerce.number().nullable().optional(),
 });
 
 export const updateEmployeeSchema = createEmployeeSchema.extend({

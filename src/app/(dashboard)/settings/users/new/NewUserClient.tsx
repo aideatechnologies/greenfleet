@@ -9,11 +9,11 @@ import { createUser } from "../actions/create-user";
 export function NewUserClient({
   defaultTenantId,
   tenants,
-  canAssignAdmin,
+  allowedRoles,
 }: {
   defaultTenantId: string;
   tenants: Array<{ id: string; name: string }>;
-  canAssignAdmin: boolean;
+  allowedRoles: Array<{ value: string; label: string }>;
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +41,7 @@ export function NewUserClient({
       mode="create"
       tenantId={defaultTenantId}
       tenants={tenants}
-      canAssignAdmin={canAssignAdmin}
+      allowedRoles={allowedRoles}
       onSubmit={handleSubmit}
       isLoading={isLoading}
     />

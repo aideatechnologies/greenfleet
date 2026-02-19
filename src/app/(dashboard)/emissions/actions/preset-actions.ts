@@ -44,7 +44,7 @@ export async function savePresetAction(
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
 
-  if (ctx.role !== "owner" && ctx.role !== "admin") {
+  if (ctx.role !== "owner" && ctx.role !== "admin" && ctx.role !== "mobility_manager") {
     return {
       success: false,
       error: "Non hai i permessi per salvare preset",
@@ -97,7 +97,7 @@ export async function deletePresetAction(
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
 
-  if (ctx.role !== "owner" && ctx.role !== "admin") {
+  if (ctx.role !== "owner" && ctx.role !== "admin" && ctx.role !== "mobility_manager") {
     return {
       success: false,
       error: "Non hai i permessi per eliminare preset",

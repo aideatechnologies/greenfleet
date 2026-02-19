@@ -708,7 +708,7 @@ async function phase2(orgId: string): Promise<Map<string, number>> {
               tenantId: orgId,
               supplierTypeId: typeMap.get(sup.type)!,
               name: sup.name,
-              vatNumber: null,
+              vatNumber: "",
               address: sup.address,
               pec: sup.pec,
               contactName: sup.contactName,
@@ -1434,7 +1434,7 @@ async function phase7(
         where: {
           tenantId: orgId,
           vehicleId,
-          contractNumber: cr.numeroContratto,
+          contractNumber: cr.numeroContratto ?? "",
           startDate: startDateForQuery,
         },
       });
@@ -1444,7 +1444,7 @@ async function phase7(
         vehicleId,
         type: contractType,
         status: "ACTIVE" as const,
-        contractNumber: cr.numeroContratto,
+        contractNumber: cr.numeroContratto ?? "",
         supplierId,
         durationMonths: cr.mesi,
         totalKm: cr.km,

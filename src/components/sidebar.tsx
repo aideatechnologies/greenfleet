@@ -26,7 +26,6 @@ import {
   UserCog,
   Users,
 } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -53,7 +52,7 @@ type NavSection = {
 };
 
 // ---------------------------------------------------------------------------
-// Navigation sections (grouped as per design system spec)
+// Navigation sections
 // ---------------------------------------------------------------------------
 
 const navSections: NavSection[] = [
@@ -66,40 +65,40 @@ const navSections: NavSection[] = [
   {
     label: "Operativita",
     items: [
-      { label: "Veicoli", href: "/vehicles", icon: Car, roles: ["owner", "admin"] },
-      { label: "Contratti", href: "/contracts", icon: FileText, roles: ["owner", "admin"] },
-      { label: "Stato Contrattuale", href: "/contracts/status", icon: FileCheck, roles: ["owner", "admin"] },
-      { label: "Dipendenti", href: "/dipendenti", icon: Users, roles: ["owner", "admin"] },
-      { label: "Carte Carburante", href: "/fuel-cards", icon: CreditCard, roles: ["owner", "admin"] },
-      { label: "Carlist", href: "/carlist", icon: List, roles: ["owner", "admin"] },
+      { label: "Veicoli", href: "/vehicles", icon: Car, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Contratti", href: "/contracts", icon: FileText, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Stato Contrattuale", href: "/contracts/status", icon: FileCheck, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Dipendenti", href: "/dipendenti", icon: Users, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Carte Carburante", href: "/fuel-cards", icon: CreditCard, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Carlist", href: "/carlist", icon: List, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Fornitori", href: "/settings/suppliers", icon: Building2, roles: ["owner", "admin", "mobility_manager"] },
     ],
   },
   {
     label: "Dati",
     items: [
-      { label: "Rifornimenti", href: "/fuel-records", icon: Fuel, roles: ["owner", "admin", "member"] },
-      { label: "Rilevazioni Km", href: "/km-readings", icon: Gauge, roles: ["owner", "admin", "member"] },
-      { label: "Import Fatture", href: "/fuel-records/import-xml", icon: FileUp, roles: ["owner", "admin"] },
+      { label: "Rifornimenti", href: "/fuel-records", icon: Fuel, roles: ["owner", "admin", "mobility_manager", "member"] },
+      { label: "Rilevazioni Km", href: "/km-readings", icon: Gauge, roles: ["owner", "admin", "mobility_manager", "member"] },
+      { label: "Import Fatture", href: "/fuel-records/import-xml", icon: FileUp, roles: ["owner", "admin", "mobility_manager"] },
     ],
   },
   {
     label: "Analisi",
     items: [
-      { label: "Stato Flotta", href: "/fleet", icon: ClipboardList, roles: ["owner", "admin"] },
-      { label: "Emissioni", href: "/emissions", icon: BarChart3, roles: ["owner", "admin"] },
-      { label: "Target Emissioni", href: "/emissions/targets", icon: Target, roles: ["owner", "admin"] },
+      { label: "Stato Flotta", href: "/fleet", icon: ClipboardList, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Emissioni", href: "/emissions", icon: BarChart3, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Target Emissioni", href: "/emissions/targets", icon: Target, roles: ["owner", "admin", "mobility_manager"] },
     ],
   },
   {
     label: "Configurazione",
     items: [
       { label: "Utenti", href: "/settings/users", icon: UserCog, roles: ["owner", "admin"] },
-      { label: "Conversione WLTP/NEDC", href: "/settings/emission-standards", icon: Calculator, roles: ["owner", "admin"] },
-      { label: "Macro Tipi", href: "/settings/macro-fuel-types", icon: Fuel, roles: ["owner", "admin"] },
-      { label: "Mappatura Carburanti", href: "/settings/fuel-type-mappings", icon: ArrowRightLeft, roles: ["owner", "admin"] },
-      { label: "GWP", href: "/settings/gwp-config", icon: Atom, roles: ["owner", "admin"] },
-      { label: "Fattori Emissione", href: "/settings/emission-factors", icon: Leaf, roles: ["owner", "admin"] },
-      { label: "Fornitori", href: "/settings/suppliers", icon: Building2, roles: ["owner", "admin"] },
+      { label: "Conversione WLTP/NEDC", href: "/settings/emission-standards", icon: Calculator, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Macro Tipi", href: "/settings/macro-fuel-types", icon: Fuel, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Mappatura Carburanti", href: "/settings/fuel-type-mappings", icon: ArrowRightLeft, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "GWP", href: "/settings/gwp-config", icon: Atom, roles: ["owner", "admin", "mobility_manager"] },
+      { label: "Fattori Emissione", href: "/settings/emission-factors", icon: Leaf, roles: ["owner", "admin", "mobility_manager"] },
       { label: "Tenant", href: "/settings/tenant", icon: Building2, roles: ["owner"] },
       { label: "Catalogo InfoCar", href: "/settings/catalog-import", icon: Database, roles: ["owner"] },
       { label: "Audit Log", href: "/settings/audit-log", icon: ScrollText, roles: ["owner"] },
@@ -125,7 +124,7 @@ function isActive(pathname: string, href: string): boolean {
 }
 
 // ---------------------------------------------------------------------------
-// Desktop Sidebar (always expanded)
+// Desktop Sidebar
 // ---------------------------------------------------------------------------
 
 export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
@@ -139,18 +138,26 @@ export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
     .filter((section) => section.items.length > 0);
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 border-r border-sidebar-border bg-sidebar md:flex md:flex-col">
+    <aside
+      className={cn(
+        "sticky top-0 hidden h-screen w-64 shrink-0 md:flex md:flex-col",
+        // Light mode
+        "bg-white border-r border-gray-200/80",
+        // Dark mode — glass panel
+        "dark:bg-[#0B1120] dark:border-r dark:border-r-[rgba(255,255,255,0.08)]"
+      )}
+    >
       {/* Brand */}
-      <div className="flex h-16 items-center gap-2.5 border-b border-sidebar-border px-5">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-          <Leaf className="size-4.5 text-primary-foreground" />
+      <div className="flex h-16 items-center gap-3 border-b border-gray-200/80 dark:border-b-[rgba(255,255,255,0.08)] px-5">
+        <div className="flex size-10 items-center justify-center rounded-xl bg-[#22C55E] shadow-lg shadow-[#22C55E]/25">
+          <Leaf className="size-5 text-white" />
         </div>
         <div className="flex min-w-0 flex-col">
-          <span className="text-lg font-bold leading-tight tracking-tight text-sidebar-foreground">
+          <span className="text-lg font-bold leading-tight tracking-tight">
             Greenfleet
           </span>
           {currentOrgName && (
-            <span className="truncate text-xs text-sidebar-foreground/50">
+            <span className="truncate text-[11px] text-muted-foreground">
               {currentOrgName}
             </span>
           )}
@@ -160,15 +167,15 @@ export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
       {/* Navigation */}
       <nav
         aria-label="Navigazione principale"
-        className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4"
+        className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-4"
       >
         {visibleSections.map((section, sectionIndex) => (
           <div key={section.label || `section-${sectionIndex}`}>
             {sectionIndex > 0 && section.label && (
               <>
-                <Separator className="my-3 bg-sidebar-border" />
+                <div className="my-3 h-px bg-gray-200/80 dark:bg-[rgba(255,255,255,0.06)]" />
                 <div className="mb-2 px-3">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/40">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground/60">
                     {section.label}
                   </span>
                 </div>
@@ -185,21 +192,21 @@ export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                      "group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 cursor-pointer",
                       active
-                        ? "bg-primary-soft text-primary font-semibold"
-                        : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
+                        ? "bg-primary/10 text-primary font-semibold dark:bg-[rgba(34,197,94,0.12)] dark:text-[#86EFAC]"
+                        : "text-foreground/55 hover:bg-muted hover:text-foreground dark:text-[#94A3B8] dark:hover:bg-[rgba(255,255,255,0.04)] dark:hover:text-white"
                     )}
                   >
                     {active && (
-                      <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
+                      <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-primary dark:bg-[#86EFAC] dark:shadow-[0_0_10px_rgba(134,239,172,0.5)]" />
                     )}
                     <Icon
                       className={cn(
                         "size-[18px] shrink-0 transition-colors duration-200",
                         active
-                          ? "text-primary"
-                          : "text-sidebar-foreground/50 group-hover:text-sidebar-foreground/80"
+                          ? "text-primary dark:text-[#86EFAC]"
+                          : "text-foreground/35 group-hover:text-foreground/65 dark:text-[#94A3B8]/60 dark:group-hover:text-white/80"
                       )}
                     />
                     <span className="truncate">{item.label}</span>
@@ -212,9 +219,9 @@ export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
       </nav>
 
       {/* User info */}
-      <div className="border-t border-sidebar-border p-4">
+      <div className="border-t border-gray-200/80 dark:border-t-[rgba(255,255,255,0.08)] p-4">
         <div className="flex items-center gap-3">
-          <div className="flex size-9 items-center justify-center rounded-full bg-sidebar-accent text-sm font-semibold text-sidebar-primary">
+          <div className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary dark:bg-[rgba(134,239,172,0.1)] dark:text-[#86EFAC]">
             {user.name
               .split(" ")
               .map((n) => n[0])
@@ -223,10 +230,10 @@ export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
               .slice(0, 2)}
           </div>
           <div className="flex min-w-0 flex-col">
-            <span className="truncate text-sm font-medium text-sidebar-foreground">
+            <span className="truncate text-sm font-medium">
               {user.name}
             </span>
-            <span className="truncate text-xs text-sidebar-foreground/50">
+            <span className="truncate text-[11px] text-muted-foreground">
               {user.email}
             </span>
           </div>
@@ -258,9 +265,9 @@ export function SidebarMobileContent({
   return (
     <div className="flex h-full flex-col">
       {/* Brand */}
-      <div className="flex h-16 items-center gap-2.5 px-5">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-          <Leaf className="size-4.5 text-primary-foreground" />
+      <div className="flex h-16 items-center gap-3 px-5">
+        <div className="flex size-10 items-center justify-center rounded-xl bg-[#22C55E] shadow-lg shadow-[#22C55E]/25">
+          <Leaf className="size-5 text-white" />
         </div>
         <span className="text-lg font-bold tracking-tight">Greenfleet</span>
       </div>
@@ -268,15 +275,15 @@ export function SidebarMobileContent({
       {/* Navigation */}
       <nav
         aria-label="Navigazione principale"
-        className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4"
+        className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-4"
       >
         {visibleSections.map((section, sectionIndex) => (
           <div key={section.label || `section-${sectionIndex}`}>
             {sectionIndex > 0 && section.label && (
               <>
-                <Separator className="my-3" />
+                <div className="my-3 h-px bg-border dark:bg-[rgba(255,255,255,0.06)]" />
                 <div className="mb-2 px-3">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-foreground/40">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground/60">
                     {section.label}
                   </span>
                 </div>
@@ -294,21 +301,21 @@ export function SidebarMobileContent({
                     onClick={onNavigate}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                      "group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 cursor-pointer",
                       active
                         ? "bg-primary/10 text-primary font-semibold"
-                        : "text-foreground/70 hover:bg-accent/60 hover:text-foreground"
+                        : "text-foreground/55 hover:bg-accent hover:text-foreground"
                     )}
                   >
                     {active && (
-                      <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
+                      <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-primary" />
                     )}
                     <Icon
                       className={cn(
                         "size-[18px] shrink-0 transition-colors duration-200",
                         active
                           ? "text-primary"
-                          : "text-foreground/50 group-hover:text-foreground/80"
+                          : "text-foreground/35 group-hover:text-foreground/65"
                       )}
                     />
                     <span>{item.label}</span>
@@ -323,7 +330,7 @@ export function SidebarMobileContent({
       {/* User info at bottom */}
       <div className="border-t p-4">
         <div className="flex items-center gap-3">
-          <div className="flex size-9 items-center justify-center rounded-full bg-accent text-sm font-semibold text-primary">
+          <div className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
             {user.name
               .split(" ")
               .map((n) => n[0])
@@ -333,7 +340,7 @@ export function SidebarMobileContent({
           </div>
           <div className="flex min-w-0 flex-col">
             <span className="truncate text-sm font-medium">{user.name}</span>
-            <span className="truncate text-xs text-muted-foreground">
+            <span className="truncate text-[11px] text-muted-foreground">
               {user.email}
             </span>
           </div>

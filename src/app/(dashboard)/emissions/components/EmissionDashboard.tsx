@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useTransition, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DeltaBar } from "@/components/data-display/DeltaBar";
 import { ProgressTarget } from "@/components/data-display/ProgressTarget";
-import { formatEmission, formatKm, formatCO2Intensity, formatPercentage } from "@/lib/utils/number";
+import { formatEmission, formatTheoreticalEmission, formatKm, formatCO2Intensity, formatPercentage } from "@/lib/utils/number";
 import type { ReportResult, FilterOptions, ReportFilterPreset } from "@/types/report";
 import { EmissionReportFilters } from "./EmissionReportFilters";
 import { EmissionTimeSeriesChart } from "./EmissionTimeSeriesChart";
@@ -157,7 +157,7 @@ export function EmissionDashboard({
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <KPICard
           title="Emissioni Teoriche"
-          value={formatEmission(metadata.totalTheoreticalEmissions, true)}
+          value={formatTheoreticalEmission(metadata.totalTheoreticalEmissions, true)}
           subtitle={`${metadata.vehicleCount} veicoli`}
         />
         <KPICard

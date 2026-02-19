@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +12,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Form,
   FormControl,
   FormField,
@@ -21,6 +28,7 @@ import {
 } from "@/components/ui/form";
 import { createEmployeeAction } from "../actions/create-employee";
 import { updateEmployeeAction } from "../actions/update-employee";
+import { getCarlistsAction } from "../actions/get-carlists";
 
 type EmployeeFormProps =
   | {
@@ -32,10 +40,23 @@ type EmployeeFormProps =
       defaultValues: CreateEmployeeInput;
     };
 
+type CarlistOption = { id: string; name: string };
+
 export function EmployeeForm(props: EmployeeFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [carlists, setCarlists] = useState<CarlistOption[]>([]);
   const isEdit = props.mode === "edit";
+
+  useEffect(() => {
+    async function loadCarlists() {
+      const result = await getCarlistsAction();
+      if (result.success) {
+        setCarlists(result.data);
+      }
+    }
+    loadCarlists();
+  }, []);
 
   const form = useForm<CreateEmployeeInput>({
     resolver: zodResolver(createEmployeeSchema) as unknown as Resolver<CreateEmployeeInput>,
@@ -49,6 +70,7 @@ export function EmployeeForm(props: EmployeeFormProps) {
           fiscalCode: "",
           matricola: "",
           avgMonthlyKm: undefined,
+          carlistId: undefined,
         },
     mode: "onBlur",
   });
@@ -226,6 +248,39 @@ export function EmployeeForm(props: EmployeeFormProps) {
               </FormItem>
             )}
           />
+
+          {carlists.length > 0 && (
+            <FormField
+              control={form.control}
+              name="carlistId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Parco Auto (Carlist)</FormLabel>
+                  <Select
+                    onValueChange={(val) =>
+                      field.onChange(val === "__none__" ? undefined : val)
+                    }
+                    value={field.value != null ? String(field.value) : "__none__"}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Nessun parco auto" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="__none__">Nessun parco auto</SelectItem>
+                      {carlists.map((c) => (
+                        <SelectItem key={c.id} value={c.id}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         <div className="flex gap-3">

@@ -25,10 +25,7 @@ export const createFuelRecordSchema = z.object({
     .number({ error: "Il chilometraggio e obbligatorio" })
     .int({ error: "Il chilometraggio deve essere un numero intero" })
     .nonnegative({ error: "Il chilometraggio non puo essere negativo" }),
-  fuelCardId: z
-    .coerce.number()
-    .nullable()
-    .optional(),
+  fuelCardId: z.coerce.number({ error: "La carta carburante e obbligatoria" }),
   notes: z
     .string()
     .max(1000, { error: "Le note non possono superare 1000 caratteri" })
@@ -62,10 +59,7 @@ export const updateFuelRecordSchema = z.object({
     .number({ error: "Il chilometraggio e obbligatorio" })
     .int({ error: "Il chilometraggio deve essere un numero intero" })
     .nonnegative({ error: "Il chilometraggio non puo essere negativo" }),
-  fuelCardId: z
-    .coerce.number()
-    .nullable()
-    .optional(),
+  fuelCardId: z.coerce.number({ error: "La carta carburante e obbligatoria" }),
   notes: z
     .string()
     .max(1000, { error: "Le note non possono superare 1000 caratteri" })

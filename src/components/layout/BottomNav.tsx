@@ -21,7 +21,6 @@ const navItems = [
 // ---------------------------------------------------------------------------
 
 function isActive(pathname: string, href: string): boolean {
-  // Strip query string for matching
   const path = href.split("?")[0];
   if (path === "/driver") return pathname === "/driver";
   return pathname === path || pathname.startsWith(path + "/");
@@ -31,26 +30,13 @@ function isActive(pathname: string, href: string): boolean {
 // Component
 // ---------------------------------------------------------------------------
 
-/**
- * BottomNav - Fixed bottom navigation bar for Driver role on mobile.
- *
- * Visibility:
- * - Only visible on screens < 768px (hidden on md+)
- * - Intended for Driver (member) role only
- *
- * Accessibility:
- * - <nav> with aria-label
- * - aria-current="page" on active item
- * - Minimum touch target 44x44px
- * - Safe area padding for devices with home indicators
- */
 export function BottomNav() {
   const pathname = usePathname();
 
   return (
     <nav
       aria-label="Navigazione principale"
-      className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
+      className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t bg-white/70 backdrop-blur-xl dark:bg-[rgba(15,23,42,0.8)] dark:border-t-[rgba(255,255,255,0.06)] pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       {navItems.map((item) => {
         const active = isActive(pathname, item.href);
@@ -68,7 +54,7 @@ export function BottomNav() {
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <Icon className="h-5 w-5" />
+            <Icon className={cn("h-5 w-5", active && "drop-shadow-[0_0_8px_hsl(162_80%_45%/0.5)]")} />
             <span>{item.label}</span>
           </Link>
         );

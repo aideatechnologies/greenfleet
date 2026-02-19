@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { FileUp, Plus } from "lucide-react";
 import { getKmReadings } from "@/lib/services/km-reading-service";
 import { kmReadingFilterSchema } from "@/lib/schemas/km-reading";
 import { getSessionContext, isTenantAdmin } from "@/lib/auth/permissions";
@@ -51,12 +51,20 @@ export default async function KmReadingsPage({
             Gestisci le rilevazioni chilometriche dei veicoli della tua flotta.
           </p>
         </div>
-        <Button asChild>
-          <Link href="/km-readings/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Nuova rilevazione
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/km-readings/import">
+              <FileUp className="mr-2 h-4 w-4" />
+              Importa
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link href="/km-readings/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Nuova rilevazione
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <KmReadingTable

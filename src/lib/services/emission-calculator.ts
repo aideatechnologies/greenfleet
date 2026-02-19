@@ -11,15 +11,15 @@
 // ---------------------------------------------------------------------------
 
 export type VehicleEmissionInput = {
-  co2GKm: number; // gCO2e/km from InfocarData catalog (Engine.co2GKm)
+  co2GKm: number; // gCO2/km from InfocarData catalog (Engine.co2GKm) — pure CO2, NOT CO2e
   kmTravelled: number; // km driven in the period
   fuelLitres: number; // total litres refuelled in the period
   emissionFactorKgCO2ePerL: number; // emission factor for fuel type (kgCO2e/L)
 };
 
 export type VehicleEmissionResult = {
-  theoretical: number; // kgCO2e
-  real: number; // kgCO2e
+  theoretical: number; // kgCO2 (pure CO2 from WLTP catalog)
+  real: number; // kgCO2e (multi-gas with GWP)
   delta: {
     absolute: number; // kgCO2e (real - theoretical)
     percentage: number; // % ((real - theoretical) / theoretical * 100)
@@ -81,11 +81,11 @@ export function round2(n: number): number {
  * Calculates theoretical CO2 emissions based on catalog data and km driven.
  *
  * Formula: (co2GKm * kmTravelled) / 1000
- * - co2GKm: gCO2e/km WLTP value from InfocarData
+ * - co2GKm: gCO2/km WLTP value from InfocarData (pure CO2, not CO2e)
  * - kmTravelled: km driven in the period
- * - Division by 1000: converts gCO2e to kgCO2e
+ * - Division by 1000: converts gCO2 to kgCO2
  *
- * @returns kgCO2e rounded to 2 decimal places
+ * @returns kgCO2 rounded to 2 decimal places
  */
 export function calculateTheoreticalEmissions(
   co2GKm: number,

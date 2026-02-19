@@ -18,8 +18,8 @@ async function EmissionContent() {
     redirect("/login");
   }
 
-  // RBAC: only owner and admin
-  if (ctx.role !== "owner" && ctx.role !== "admin") {
+  // RBAC: only owner, admin, and mobility_manager
+  if (ctx.role !== "owner" && ctx.role !== "admin" && ctx.role !== "mobility_manager") {
     redirect("/");
   }
 
@@ -82,10 +82,24 @@ async function EmissionContent() {
     carburanti: filterOptionsRaw[2].map((c) => c.fuelType),
   };
 
+  // Convert BigInt fields to Number to avoid RSC serialization issues
+  const carlistsSafe = carlists.map(c => ({ id: Number(c.id), name: c.name }));
+
+  // JSON round-trip to strip Prisma internal metadata and avoid
+  // "Maximum call stack size exceeded" during RSC serialization
+  const safeReport = JSON.parse(JSON.stringify(initialReport, (_key, value) =>
+    typeof value === "bigint" ? Number(value) : value
+  )) as typeof initialReport;
+
+  // Restore Date objects (JSON.stringify converts them to ISO strings)
+  safeReport.metadata.dateRange.startDate = new Date(safeReport.metadata.dateRange.startDate);
+  safeReport.metadata.dateRange.endDate = new Date(safeReport.metadata.dateRange.endDate);
+  safeReport.metadata.generatedAt = new Date(safeReport.metadata.generatedAt);
+
   return (
     <EmissionDashboard
-      initialReport={initialReport}
-      carlists={carlists as unknown as { id: number; name: string }[]}
+      initialReport={safeReport}
+      carlists={carlistsSafe}
       defaultStartDate={defaultStartDate}
       defaultEndDate={defaultEndDate}
       filterOptions={filterOptions}

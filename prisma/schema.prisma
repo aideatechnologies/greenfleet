@@ -259,6 +259,7 @@ model Employee {
   matricola    String?  @db.NVarChar(50)
   workLocation String?  @map("work_location")
   carTierId    BigInt?     @map("car_tier_id")
+  carlistId    BigInt?     @map("carlist_id")
   isPool       Boolean  @default(false) @map("is_pool")
   type         String   @default("employee") @map("type")
   isActive     Boolean  @default(true) @map("is_active")
@@ -267,6 +268,7 @@ model Employee {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   carTier            CarTier?           @relation(fields: [carTierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  carlist            Carlist?           @relation(fields: [carlistId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   tenantVehicles     TenantVehicle[]
   vehicleAssignments VehicleAssignment[]
   fuelCards          FuelCard[]
@@ -342,7 +344,7 @@ model Contract {
   closedAt  DateTime? @map("closed_at")
 
   // Campi generali contratto
-  contractNumber String?  @map("contract_number")
+  contractNumber String   @map("contract_number")
   contractKm     Int?     @map("contract_km")
   supplierId     BigInt?     @map("supplier_id")
   durationMonths Int?     @map("duration_months")
@@ -419,7 +421,7 @@ model Supplier {
   tenantId       String   @map("tenant_id")
   supplierTypeId BigInt      @map("supplier_type_id")
   name           String   @db.NVarChar(200)
-  vatNumber      String?  @map("vat_number") @db.NVarChar(20)
+  vatNumber      String   @map("vat_number") @db.NVarChar(20)
   address        String?  @db.NVarChar(500)
   pec            String?  @db.NVarChar(100)
   contactName    String?  @map("contact_name") @db.NVarChar(100)
@@ -496,7 +498,7 @@ model FuelRecord {
   tenantId       String   @map("tenant_id")
   vehicleId      BigInt      @map("vehicle_id")
   userId         String   @map("user_id")
-  fuelCardId     BigInt?     @map("fuel_card_id")
+  fuelCardId     BigInt      @map("fuel_card_id")
   date           DateTime
   fuelType       String   @map("fuel_type")
   quantityLiters Float    @map("quantity_liters")
@@ -509,7 +511,7 @@ model FuelRecord {
   updatedAt      DateTime @updatedAt @map("updated_at")
 
   vehicle  TenantVehicle @relation(fields: [vehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  fuelCard FuelCard?     @relation(fields: [fuelCardId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  fuelCard FuelCard      @relation(fields: [fuelCardId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([tenantId], map: "idx_fuel_records_tenant_id")
   @@index([vehicleId, date], map: "idx_fuel_records_vehicle_date")
@@ -583,6 +585,7 @@ model Carlist {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   vehicles        CarlistVehicle[]
+  employees       Employee[]
   creator         User              @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
   emissionTargets EmissionTarget[]
 

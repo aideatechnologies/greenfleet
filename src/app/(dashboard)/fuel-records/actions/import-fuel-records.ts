@@ -22,6 +22,7 @@ type ImportRowInput = {
   quantityLiters: number;
   amountEur: number;
   odometerKm: number;
+  fuelCardId?: number;
   notes: string | null;
 };
 
@@ -64,6 +65,27 @@ export async function importFuelRecordsAction(
   try {
     const prisma = getPrismaForTenant(tenantId);
 
+    // Resolve fuel cards: build vehicleId → fuelCardId map
+    const fuelCards = await prisma.fuelCard.findMany({
+      where: { status: "ACTIVE" },
+      select: { id: true, assignedVehicleId: true },
+    });
+    const fuelCardByVehicle = new Map<number, number>();
+    let defaultFuelCardId: number | null = null;
+    for (const fc of fuelCards) {
+      if (fc.assignedVehicleId) {
+        fuelCardByVehicle.set(Number(fc.assignedVehicleId), Number(fc.id));
+      }
+      if (!defaultFuelCardId) defaultFuelCardId = Number(fc.id);
+    }
+    if (!defaultFuelCardId) {
+      return {
+        success: false,
+        error: "Nessuna carta carburante attiva nel tenant. Creane almeno una prima di importare.",
+        code: ErrorCode.VALIDATION,
+      };
+    }
+
     let importedCount = 0;
     let skippedCount = 0;
 
@@ -77,6 +99,7 @@ export async function importFuelRecordsAction(
             tenantId: "", // Overwritten by tenant extension
             vehicleId: row.vehicleId,
             userId: ctx.userId,
+            fuelCardId: row.fuelCardId ?? fuelCardByVehicle.get(row.vehicleId) ?? defaultFuelCardId!,
             date: new Date(row.date),
             fuelType: row.fuelType,
             quantityLiters: row.quantityLiters,
@@ -102,6 +125,7 @@ export async function importFuelRecordsAction(
                 tenantId: "", // Overwritten by tenant extension
                 vehicleId: row.vehicleId,
                 userId: ctx.userId,
+                fuelCardId: row.fuelCardId ?? fuelCardByVehicle.get(row.vehicleId) ?? defaultFuelCardId!,
                 date: new Date(row.date),
                 fuelType: row.fuelType,
                 quantityLiters: row.quantityLiters,

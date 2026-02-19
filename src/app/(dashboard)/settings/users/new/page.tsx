@@ -19,6 +19,21 @@ export default async function NewUserPage() {
 
   const isOwner = await isGlobalAdmin(ctx.userId);
 
+  // Build allowed roles based on caller's role
+  const allowedRoles: Array<{ value: string; label: string }> = [];
+  if (isOwner) {
+    allowedRoles.push(
+      { value: "admin", label: "Fleet Manager" },
+      { value: "mobility_manager", label: "Mobility Manager" },
+      { value: "member", label: "Autista" },
+    );
+  } else if (ctx.role === "admin") {
+    allowedRoles.push(
+      { value: "mobility_manager", label: "Mobility Manager" },
+      { value: "member", label: "Autista" },
+    );
+  }
+
   // Load available tenants: all for owner, only current for admin
   let tenants: Array<{ id: string; name: string }>;
   if (isOwner) {
@@ -46,7 +61,7 @@ export default async function NewUserPage() {
       <NewUserClient
         defaultTenantId={tenantId}
         tenants={tenants}
-        canAssignAdmin={true}
+        allowedRoles={allowedRoles}
       />
     </div>
   );

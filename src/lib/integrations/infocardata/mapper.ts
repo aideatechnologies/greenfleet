@@ -274,7 +274,7 @@ export function mapEngine(
     potenzaCv: raw.potenzaCv ?? null,
     co2GKm: raw.co2GKm ?? null,
     co2Standard,
-    consumptionL100Km: raw.consumo ?? null,
+    consumptionL100Km: raw.consumo != null ? raw.consumo / 10 : null,
     consumptionUnit,
   };
 }

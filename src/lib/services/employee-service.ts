@@ -88,6 +88,7 @@ export async function createEmployee(
       fiscalCode: data.fiscalCode || null,
       matricola: (data as Record<string, unknown>).matricola as string | undefined ?? null,
       avgMonthlyKm: (data as Record<string, unknown>).avgMonthlyKm as number | undefined ?? null,
+      carlistId: (data as Record<string, unknown>).carlistId as number | undefined ?? null,
     },
   });
 }
@@ -117,6 +118,7 @@ export async function updateEmployee(
       fiscalCode: data.fiscalCode || null,
       matricola: (data as Record<string, unknown>).matricola as string | undefined ?? null,
       avgMonthlyKm: (data as Record<string, unknown>).avgMonthlyKm as number | undefined ?? null,
+      carlistId: (data as Record<string, unknown>).carlistId as number | undefined ?? null,
     },
   });
 }

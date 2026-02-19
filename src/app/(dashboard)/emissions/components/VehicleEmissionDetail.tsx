@@ -14,6 +14,7 @@ import { DeltaBar } from "@/components/data-display/DeltaBar";
 import { EmissionTimeSeriesChart } from "./EmissionTimeSeriesChart";
 import {
   formatEmission,
+  formatTheoreticalEmission,
   formatKm,
   formatFuel,
   formatDeltaPercentage,
@@ -103,7 +104,7 @@ export function VehicleEmissionDetailView({
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold tabular-nums">
-              {formatEmission(detail.theoreticalEmissions, true)}
+              {formatTheoreticalEmission(detail.theoreticalEmissions, true)}
             </div>
           </CardContent>
         </Card>

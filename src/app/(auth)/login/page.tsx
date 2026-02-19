@@ -91,23 +91,28 @@ function LoginForm() {
   return (
     <div className="space-y-8">
       {/* Logo */}
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex size-12 items-center justify-center rounded-xl bg-primary">
-          <Leaf className="size-6 text-primary-foreground" />
+      <div className="flex flex-col items-center gap-3">
+        <div className="flex size-16 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/30">
+          <Leaf className="size-8 text-primary-foreground" />
         </div>
-        <span className="text-xl font-bold tracking-tight">Greenfleet</span>
+        <div className="text-center">
+          <span className="text-2xl font-bold tracking-tight">Greenfleet</span>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            Monitoraggio emissioni flotta
+          </p>
+        </div>
       </div>
 
       {/* Error banner */}
       {errorParam && errorMessages[errorParam] && (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {errorMessages[errorParam]}
         </div>
       )}
 
-      <Card className="border-0 shadow-lg sm:border sm:shadow-md">
+      <Card className="border-border/50 shadow-xl dark:backdrop-blur-2xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">Accedi</CardTitle>
+          <CardTitle className="text-xl font-bold">Accedi</CardTitle>
           <CardDescription>
             Inserisci le tue credenziali per accedere
           </CardDescription>
@@ -168,7 +173,7 @@ function LoginForm() {
               />
               <Button
                 type="submit"
-                className="h-10 w-full"
+                className="h-10 w-full font-semibold shadow-md shadow-primary/20"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -191,15 +196,20 @@ function LoginForm() {
 function LoginFormSkeleton() {
   return (
     <div className="space-y-8">
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex size-12 items-center justify-center rounded-xl bg-primary">
-          <Leaf className="size-6 text-primary-foreground" />
+      <div className="flex flex-col items-center gap-3">
+        <div className="flex size-16 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/30">
+          <Leaf className="size-8 text-primary-foreground" />
         </div>
-        <span className="text-xl font-bold tracking-tight">Greenfleet</span>
+        <div className="text-center">
+          <span className="text-2xl font-bold tracking-tight">Greenfleet</span>
+          <p className="mt-0.5 text-sm text-muted-foreground">
+            Monitoraggio emissioni flotta
+          </p>
+        </div>
       </div>
-      <Card className="border-0 shadow-lg sm:border sm:shadow-md">
+      <Card className="border-border/50 shadow-xl dark:backdrop-blur-2xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">Accedi</CardTitle>
+          <CardTitle className="text-xl font-bold">Accedi</CardTitle>
           <CardDescription>
             Inserisci le tue credenziali per accedere
           </CardDescription>

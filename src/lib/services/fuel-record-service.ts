@@ -128,7 +128,7 @@ export async function createFuelRecord(
       tenantId: "", // Overwritten by tenant extension
       vehicleId: input.vehicleId,
       userId,
-      fuelCardId: (input as Record<string, unknown>).fuelCardId as number | undefined ?? null,
+      fuelCardId: (input as Record<string, unknown>).fuelCardId as number,
       date: input.date,
       fuelType: input.fuelType,
       quantityLiters: input.quantityLiters,
@@ -211,7 +211,7 @@ export async function updateFuelRecord(
       amountEur: input.amountEur,
       odometerKm: input.odometerKm,
       notes: input.notes ?? null,
-      fuelCardId: (input as Record<string, unknown>).fuelCardId as number | undefined ?? null,
+      fuelCardId: (input as Record<string, unknown>).fuelCardId as number,
     },
     include: INCLUDE_DETAILS,
   });

@@ -17,17 +17,11 @@ interface EmptyStateAction {
 }
 
 interface EmptyStateProps {
-  /** Title text */
   title: string;
-  /** Optional description */
   description?: string;
-  /** Icon to display — defaults to PackageOpen for action/info, Lock for permission */
   icon?: LucideIcon;
-  /** Empty state variant */
   variant: "action" | "info" | "permission";
-  /** Action buttons (only used with "action" variant) */
   actions?: EmptyStateAction[];
-  /** Additional CSS classes */
   className?: string;
 }
 
@@ -35,14 +29,6 @@ interface EmptyStateProps {
 // Component
 // ---------------------------------------------------------------------------
 
-/**
- * EmptyState - Displayed when a section has no content.
- *
- * Variants:
- * - action: 1-2 CTA buttons to guide the user
- * - info: Informational text only (e.g. "no results for filters")
- * - permission: Access denied message with Lock icon
- */
 export function EmptyState({
   title,
   description,
@@ -51,7 +37,6 @@ export function EmptyState({
   actions,
   className,
 }: EmptyStateProps) {
-  // Resolve icon based on variant
   const Icon =
     icon ?? (variant === "permission" ? Lock : PackageOpen);
 
@@ -62,14 +47,14 @@ export function EmptyState({
         className
       )}
     >
-      <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-muted">
-        <Icon className="size-6 text-muted-foreground" aria-hidden="true" />
+      <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-muted/80 dark:bg-muted/50">
+        <Icon className="size-7 text-muted-foreground" aria-hidden="true" />
       </div>
 
       <h3 className="text-h3 text-foreground">{title}</h3>
 
       {description && (
-        <p className="mt-1 max-w-sm text-body text-muted-foreground">
+        <p className="mt-1.5 max-w-sm text-body text-muted-foreground">
           {description}
         </p>
       )}

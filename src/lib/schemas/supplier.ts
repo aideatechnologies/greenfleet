@@ -53,9 +53,7 @@ export const createSupplierSchema = z.object({
     .max(200, { error: "Il nome non puo superare 200 caratteri" }),
   vatNumber: z
     .string()
-    .max(20, { error: "La partita IVA non puo superare 20 caratteri" })
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
+    .regex(/^\d{11}$/, { error: "Partita IVA: 11 cifre numeriche" }),
   address: z
     .string()
     .max(500, { error: "L'indirizzo non puo superare 500 caratteri" })

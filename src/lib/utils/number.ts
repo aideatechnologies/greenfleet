@@ -36,6 +36,25 @@ export function formatEmission(value: number, asTonnes?: boolean): string {
 }
 
 // ---------------------------------------------------------------------------
+// formatTheoreticalEmission (CO2 puro, non CO2e)
+// ---------------------------------------------------------------------------
+
+/**
+ * Formats a theoretical emission value in kgCO2 (pure CO2 from WLTP catalog).
+ * Theoretical emissions use CO2, NOT CO2e, because WLTP test only measures CO2.
+ *
+ * Examples:
+ *   formatTheoreticalEmission(1320)    -> "1.320,00 kgCO2"
+ *   formatTheoreticalEmission(1500, true) -> "1,50 tCO2"
+ */
+export function formatTheoreticalEmission(value: number, asTonnes?: boolean): string {
+  if (asTonnes && Math.abs(value) >= 1000) {
+    return `${fmt2.format(value / 1000)} tCO2`;
+  }
+  return `${fmt2.format(value)} kgCO2`;
+}
+
+// ---------------------------------------------------------------------------
 // formatDeltaPercentage
 // ---------------------------------------------------------------------------
 

@@ -8,7 +8,7 @@ import { ErrorCode } from "@/types/action-result";
 // admin  = Fleet Manager (single-tenant admin)
 // member = Driver (read-only + own fuel/km)
 
-export type GreenfleetRole = "owner" | "admin" | "member";
+export type GreenfleetRole = "owner" | "admin" | "mobility_manager" | "member";
 
 export type SessionContext = {
   userId: string;
@@ -106,10 +106,15 @@ export async function isTenantAdmin(
   // Platform admin can admin any tenant
   if (await isGlobalAdmin(ctx.userId)) return true;
 
-  // Fleet Manager (admin role) on their own tenant
-  if (ctx.organizationId === tenantId && ctx.role === "admin") return true;
+  // Fleet Manager (admin role) or Mobility Manager on their own tenant
+  if (ctx.organizationId === tenantId && (ctx.role === "admin" || ctx.role === "mobility_manager")) return true;
 
   return false;
+}
+
+/** Check if user is a Mobility Manager */
+export function isMobilityManager(ctx: SessionContext): boolean {
+  return ctx.role === "mobility_manager";
 }
 
 /** Check if user is a Driver */

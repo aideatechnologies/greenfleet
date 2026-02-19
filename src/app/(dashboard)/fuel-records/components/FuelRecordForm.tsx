@@ -410,19 +410,17 @@ export function FuelRecordForm({
             )}
           />
 
-          {/* Fuel card selector */}
-          {fuelCards.length > 0 && (
-            <FormField
-              control={form.control}
-              name="fuelCardId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Carta carburante</FormLabel>
+          {/* Fuel card selector (obbligatorio) */}
+          <FormField
+            control={form.control}
+            name="fuelCardId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Carta carburante *</FormLabel>
+                {fuelCards.length > 0 ? (
                   <Select
-                    onValueChange={(val) =>
-                      field.onChange(val === "__none__" ? undefined : val)
-                    }
-                    value={field.value ?? "__none__"}
+                    onValueChange={field.onChange}
+                    value={field.value ?? ""}
                   >
                     <FormControl>
                       <SelectTrigger
@@ -430,11 +428,10 @@ export function FuelRecordForm({
                           !field.value && "text-muted-foreground"
                         )}
                       >
-                        <SelectValue placeholder="Nessuna carta" />
+                        <SelectValue placeholder="Seleziona carta" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="__none__">Nessuna carta</SelectItem>
                       {fuelCards.map((fc) => (
                         <SelectItem key={fc.id} value={fc.id}>
                           {fc.cardNumber} ({fc.issuer})
@@ -442,11 +439,15 @@ export function FuelRecordForm({
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+                ) : (
+                  <p className="text-sm text-destructive">
+                    Nessuna carta carburante configurata. Creane una prima di registrare un rifornimento.
+                  </p>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {/* Notes */}
           <FormField

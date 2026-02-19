@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/tooltip";
 import {
   formatEmission,
+  formatTheoreticalEmission,
   formatKm,
   formatFuel,
   formatDeltaPercentage,
@@ -82,7 +83,7 @@ const PERFORMANCE_CONFIG: Record<
 const CSV_COLUMNS: CsvColumn<EmissionAggregation>[] = [
   { header: "Gruppo", accessor: (r) => r.label },
   { header: "Alimentazione", accessor: (r) => r.fuelTypeLabel },
-  { header: "Emissioni Teoriche (kgCO2e)", accessor: (r) => r.theoreticalEmissions, format: "decimal2" },
+  { header: "Emissioni Teoriche (kgCO2)", accessor: (r) => r.theoreticalEmissions, format: "decimal2" },
   { header: "Emissioni Reali (kgCO2e)", accessor: (r) => r.realEmissions, format: "decimal2" },
   { header: "Delta (kgCO2e)", accessor: (r) => r.deltaAbsolute, format: "decimal2" },
   { header: "Delta %", accessor: (r) => r.deltaPercentage, format: "decimal2" },
@@ -318,7 +319,7 @@ function AggregationRow({ row }: { row: EmissionAggregation }) {
       <TableCell className="text-xs">{row.fuelTypeLabel}</TableCell>
       {/* Emissioni */}
       <TableCell className="text-right tabular-nums">
-        {formatEmission(row.theoreticalEmissions)}
+        {formatTheoreticalEmission(row.theoreticalEmissions)}
       </TableCell>
       <TableCell className="text-right tabular-nums">
         {formatEmission(row.realEmissions)}

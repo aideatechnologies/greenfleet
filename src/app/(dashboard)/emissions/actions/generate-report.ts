@@ -33,8 +33,8 @@ export async function generateReportAction(
   if (!authResult.success) return authResult;
   const { ctx } = authResult;
 
-  // 2. RBAC: only owner or admin
-  if (ctx.role !== "owner" && ctx.role !== "admin") {
+  // 2. RBAC: only owner, admin, or mobility_manager
+  if (ctx.role !== "owner" && ctx.role !== "admin" && ctx.role !== "mobility_manager") {
     return {
       success: false,
       error: "Non hai i permessi per generare report emissioni",
@@ -75,7 +75,16 @@ export async function generateReportAction(
   try {
     const prisma = getPrismaForTenant(tenantId);
     const result = await getAggregatedEmissions(prisma, parsed.data);
-    return { success: true, data: result };
+    // JSON round-trip to strip Prisma internal metadata and avoid
+    // "Maximum call stack size exceeded" during serialization
+    const safeResult = JSON.parse(JSON.stringify(result, (_key, value) =>
+      typeof value === "bigint" ? Number(value) : value
+    )) as ReportResult;
+    // Restore Date objects
+    safeResult.metadata.dateRange.startDate = new Date(safeResult.metadata.dateRange.startDate);
+    safeResult.metadata.dateRange.endDate = new Date(safeResult.metadata.dateRange.endDate);
+    safeResult.metadata.generatedAt = new Date(safeResult.metadata.generatedAt);
+    return { success: true, data: safeResult };
   } catch (error) {
     logger.error(
       { error, userId: ctx.userId, tenantId },

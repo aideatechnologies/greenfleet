@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { FileUp, Plus } from "lucide-react";
 import { getTenantVehicles } from "@/lib/services/tenant-vehicle-service";
 import { tenantVehicleFilterSchema } from "@/lib/schemas/tenant-vehicle";
 import { getSessionContext, isTenantAdmin } from "@/lib/auth/permissions";
@@ -52,12 +52,20 @@ export default async function VehiclesPage({
           </p>
         </div>
         {canEdit && (
-          <Button asChild>
-            <Link href="/vehicles/new">
-              <Plus className="mr-2 h-4 w-4" />
-              Aggiungi veicolo
-            </Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/vehicles/import">
+                <FileUp className="mr-2 h-4 w-4" />
+                Importa
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href="/vehicles/new">
+                <Plus className="mr-2 h-4 w-4" />
+                Aggiungi veicolo
+              </Link>
+            </Button>
+          </div>
         )}
       </div>
       <TenantVehicleTable

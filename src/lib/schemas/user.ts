@@ -11,7 +11,7 @@ export const createUserSchema = z.object({
     .email("Email non valida")
     .max(254, "Email troppo lunga"),
   password: passwordSchema,
-  role: z.enum(["admin", "member"], {
+  role: z.enum(["admin", "mobility_manager", "member"], {
     message: "Ruolo obbligatorio",
   }),
   tenantId: z.string().min(1, "Tenant obbligatorio"),
@@ -28,7 +28,7 @@ export const updateUserSchema = z.object({
     .email("Email non valida")
     .max(254, "Email troppo lunga")
     .optional(),
-  role: z.enum(["admin", "member"]).optional(),
+  role: z.enum(["admin", "mobility_manager", "member"]).optional(),
 });
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;

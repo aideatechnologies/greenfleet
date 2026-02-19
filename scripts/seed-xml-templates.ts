@@ -503,6 +503,38 @@ async function main() {
             },
           ]
         : []),
+      // Globale: data italiana (dd/MM/yyyy, dd.MM.yyyy, dd-MM-yyyy)
+      {
+        supplierId: null,
+        fieldName: "date",
+        name: "Data italiana (dd/MM/yyyy)",
+        patterns: [{ label: "dd/MM/yyyy", regex: "(\\d{1,2}[/\\-.](\\d{1,2})[/\\-.](\\d{2,4}))", regexGroup: 1 }],
+        priority: 0,
+      },
+      // Globale: data ISO (yyyy-MM-dd)
+      {
+        supplierId: null,
+        fieldName: "date",
+        name: "Data ISO (yyyy-MM-dd)",
+        patterns: [{ label: "yyyy-MM-dd", regex: "(\\d{4}-\\d{2}-\\d{2})", regexGroup: 1 }],
+        priority: 0,
+      },
+      // Globale: importo numerico con separatori
+      {
+        supplierId: null,
+        fieldName: "amount",
+        name: "Importo numerico",
+        patterns: [{ label: "Importo", regex: "([\\d.,]+)", regexGroup: 1 }],
+        priority: 0,
+      },
+      // Globale: telaio VIN (17 caratteri alfanumerici)
+      {
+        supplierId: null,
+        fieldName: "vin",
+        name: "Telaio VIN 17 caratteri",
+        patterns: [{ label: "VIN", regex: "([A-HJ-NPR-Z0-9]{17})", regexGroup: 1 }],
+        priority: 0,
+      },
     ];
 
     for (const def of presetDefs) {

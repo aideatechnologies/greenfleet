@@ -28,7 +28,24 @@ export default async function EditUserPage({
     notFound();
   }
 
-  const canAssignAdmin = await isGlobalAdmin(ctx.userId);
+  const isOwner = await isGlobalAdmin(ctx.userId);
+
+  // Build allowed roles based on caller's role
+  const allowedRoles: Array<{ value: string; label: string }> = [];
+  if (isOwner) {
+    allowedRoles.push(
+      { value: "admin", label: "Fleet Manager" },
+      { value: "mobility_manager", label: "Mobility Manager" },
+      { value: "member", label: "Autista" },
+    );
+  } else if (ctx.role === "admin") {
+    allowedRoles.push(
+      { value: "mobility_manager", label: "Mobility Manager" },
+      { value: "member", label: "Autista" },
+    );
+  }
+
+  const userRole = (user.role === "admin" || user.role === "mobility_manager" || user.role === "member") ? user.role : "member";
 
   return (
     <div className="space-y-4">
@@ -40,11 +57,11 @@ export default async function EditUserPage({
       </div>
       <EditUserClient
         userId={userId}
-        canAssignAdmin={canAssignAdmin}
+        allowedRoles={allowedRoles}
         defaultValues={{
           name: user.name,
           email: user.email,
-          role: (user.role === "admin" || user.role === "member") ? user.role : "member",
+          role: userRole,
         }}
       />
     </div>

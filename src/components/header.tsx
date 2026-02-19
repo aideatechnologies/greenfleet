@@ -105,7 +105,15 @@ export function Header({
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b bg-background/95 px-4 backdrop-blur-sm sm:px-6">
+      <header
+        className={cn(
+          "sticky top-0 z-30 flex h-14 shrink-0 items-center gap-4 px-4 sm:px-6",
+          // Light mode
+          "bg-white/80 backdrop-blur-xl border-b border-gray-200/80",
+          // Dark mode — glass header
+          "dark:bg-[rgba(15,23,42,0.6)] dark:backdrop-blur-2xl dark:border-b dark:border-b-[rgba(255,255,255,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
+        )}
+      >
         {/* Mobile menu button */}
         <Button
           variant="ghost"
@@ -126,25 +134,25 @@ export function Header({
         <div className="flex-1 md:hidden" />
 
         {/* Right side controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {/* Org switcher (admin only) */}
           {showOrgSwitcher && (
             <Popover open={orgSwitcherOpen} onOpenChange={setOrgSwitcherOpen}>
               <PopoverTrigger asChild>
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
                   className={cn(
-                    "justify-between gap-2 max-w-[220px]",
+                    "justify-between gap-2 max-w-[220px] rounded-lg text-muted-foreground hover:text-foreground cursor-pointer",
                     isSwitching && "opacity-70"
                   )}
                   disabled={isSwitching}
                 >
-                  <Building2 className="size-4 shrink-0 text-muted-foreground" />
+                  <Building2 className="size-4 shrink-0" />
                   <span className="truncate text-sm">
                     {currentOrg?.name ?? "Seleziona..."}
                   </span>
-                  <ChevronsUpDown className="size-3.5 shrink-0 text-muted-foreground" />
+                  <ChevronsUpDown className="size-3.5 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-[240px] p-0" align="end">
@@ -185,16 +193,16 @@ export function Header({
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 hover:bg-accent"
+                className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 hover:bg-accent cursor-pointer"
               >
-                <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                <div className="flex size-8 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary ring-1 ring-primary/20 dark:bg-[rgba(134,239,172,0.1)] dark:text-[#86EFAC] dark:ring-[rgba(134,239,172,0.2)]">
                   {initials}
                 </div>
                 <div className="hidden flex-col items-start sm:flex">
                   <span className="text-sm font-medium leading-tight">
                     {user.name}
                   </span>
-                  <span className="text-xs leading-tight text-muted-foreground">
+                  <span className="text-[11px] leading-tight text-muted-foreground">
                     {roleLabel}
                   </span>
                 </div>
@@ -204,21 +212,21 @@ export function Header({
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col gap-1.5">
                   <div className="flex items-center gap-2">
-                    <div className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                    <div className="flex size-10 items-center justify-center rounded-full bg-primary/15 text-sm font-bold text-primary ring-1 ring-primary/20 dark:bg-[rgba(134,239,172,0.1)] dark:text-[#86EFAC] dark:ring-[rgba(134,239,172,0.2)]">
                       {initials}
                     </div>
                     <div className="flex min-w-0 flex-col">
                       <span className="truncate text-sm font-medium">
                         {user.name}
                       </span>
-                      <span className="truncate text-xs text-muted-foreground">
+                      <span className="truncate text-[11px] text-muted-foreground">
                         {user.email}
                       </span>
                     </div>
                   </div>
                   <Badge
                     variant="secondary"
-                    className="w-fit text-xs"
+                    className="w-fit text-[11px]"
                   >
                     {roleLabel}
                     {isAdmin && role !== "owner" && " (Admin)"}

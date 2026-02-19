@@ -69,7 +69,7 @@ export default async function DashboardLayout({
   const showBottomNav = isDriver(ctx);
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#0F172A]">
       <Sidebar
         user={userInfo}
         role={ctx.role}
@@ -87,9 +87,9 @@ export default async function DashboardLayout({
         <main
           id="main-content"
           role="main"
-          className="flex-1 overflow-auto p-4 sm:p-6"
+          className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8"
         >
-          <div className="mx-auto max-w-[1280px]">
+          <div className="mx-auto max-w-[1400px]">
             {children}
           </div>
         </main>

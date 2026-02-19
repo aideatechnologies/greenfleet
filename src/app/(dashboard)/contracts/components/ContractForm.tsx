@@ -54,6 +54,7 @@ import { SuccessionConfirmDialog } from "./SuccessionConfirmDialog";
 type ProprietarioValues = {
   type: "PROPRIETARIO";
   vehicleId: string;
+  contractNumber: string;
   contractKm?: number | null;
   notes?: string;
   purchaseDate: Date;
@@ -64,6 +65,7 @@ type ProprietarioValues = {
 type BreveTermineValues = {
   type: "BREVE_TERMINE";
   vehicleId: string;
+  contractNumber: string;
   contractKm?: number | null;
   notes?: string;
   supplierId: string;
@@ -76,6 +78,7 @@ type BreveTermineValues = {
 type LungoTermineValues = {
   type: "LUNGO_TERMINE";
   vehicleId: string;
+  contractNumber: string;
   contractKm?: number | null;
   notes?: string;
   supplierId: string;
@@ -90,6 +93,7 @@ type LungoTermineValues = {
 type LeasingFinanziarioValues = {
   type: "LEASING_FINANZIARIO";
   vehicleId: string;
+  contractNumber: string;
   contractKm?: number | null;
   notes?: string;
   supplierId: string;
@@ -133,6 +137,7 @@ function getDefaultValues(
       return {
         type: "PROPRIETARIO",
         vehicleId: "",
+        contractNumber: "",
         contractKm: undefined,
         notes: "",
         purchaseDate: undefined as unknown as Date,
@@ -143,6 +148,7 @@ function getDefaultValues(
       return {
         type: "BREVE_TERMINE",
         vehicleId: "",
+        contractNumber: "",
         contractKm: undefined,
         notes: "",
         supplierId: "",
@@ -155,6 +161,7 @@ function getDefaultValues(
       return {
         type: "LUNGO_TERMINE",
         vehicleId: "",
+        contractNumber: "",
         contractKm: undefined,
         notes: "",
         supplierId: "",
@@ -169,6 +176,7 @@ function getDefaultValues(
       return {
         type: "LEASING_FINANZIARIO",
         vehicleId: "",
+        contractNumber: "",
         contractKm: undefined,
         notes: "",
         supplierId: "",
@@ -321,6 +329,21 @@ export function ContractForm({
               )}
             />
           )}
+
+          {/* Numero contratto (obbligatorio) */}
+          <FormField
+            control={form.control}
+            name="contractNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Numero Contratto *</FormLabel>
+                <FormControl>
+                  <Input placeholder="N. contratto" {...field} value={field.value ?? ""} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {/* Km contratto (shared across all types) */}
           <NumberField

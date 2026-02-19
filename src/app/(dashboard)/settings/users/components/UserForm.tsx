@@ -30,19 +30,21 @@ import {
 
 type TenantOption = { id: string; name: string };
 
+type AllowedRole = { value: string; label: string };
+
 type UserFormProps =
   | {
       mode: "create";
       tenantId: string;
       tenants: TenantOption[];
-      canAssignAdmin: boolean;
+      allowedRoles: AllowedRole[];
       onSubmit: (data: FormData) => Promise<void>;
       isLoading: boolean;
     }
   | {
       mode: "edit";
-      canAssignAdmin: boolean;
-      defaultValues: { name: string; email: string; role: "admin" | "member" };
+      allowedRoles: AllowedRole[];
+      defaultValues: { name: string; email: string; role: "admin" | "mobility_manager" | "member" };
       onSubmit: (data: FormData) => Promise<void>;
       isLoading: boolean;
     };
@@ -158,10 +160,11 @@ export function UserForm(props: UserFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="member">Autista</SelectItem>
-                  {props.canAssignAdmin && (
-                    <SelectItem value="admin">Fleet Manager</SelectItem>
-                  )}
+                  {props.allowedRoles.map((r) => (
+                    <SelectItem key={r.value} value={r.value}>
+                      {r.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />

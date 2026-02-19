@@ -8,12 +8,12 @@ import { updateUser } from "../../actions/update-user";
 
 export function EditUserClient({
   userId,
-  canAssignAdmin,
+  allowedRoles,
   defaultValues,
 }: {
   userId: string;
-  canAssignAdmin: boolean;
-  defaultValues: { name: string; email: string; role: "admin" | "member" };
+  allowedRoles: Array<{ value: string; label: string }>;
+  defaultValues: { name: string; email: string; role: "admin" | "mobility_manager" | "member" };
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +39,7 @@ export function EditUserClient({
   return (
     <UserForm
       mode="edit"
-      canAssignAdmin={canAssignAdmin}
+      allowedRoles={allowedRoles}
       defaultValues={defaultValues}
       onSubmit={handleSubmit}
       isLoading={isLoading}

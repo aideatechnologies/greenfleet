@@ -38,7 +38,7 @@ import { getSupplierTypesAction } from "../actions/supplier-type-actions";
 type SupplierFormValues = {
   supplierTypeId: string;
   name: string;
-  vatNumber?: string;
+  vatNumber: string;
   address?: string;
   pec?: string;
   contactName?: string;
@@ -163,7 +163,7 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="vatNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Partita IVA</FormLabel>
+                <FormLabel>Partita IVA *</FormLabel>
                 <FormControl>
                   <Input placeholder="IT01234567890" {...field} value={field.value ?? ""} />
                 </FormControl>

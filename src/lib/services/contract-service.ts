@@ -57,6 +57,7 @@ export async function createContract(
     vehicleId: data.vehicleId,
     type: data.type,
     status: "ACTIVE",
+    contractNumber: (data as Record<string, unknown>).contractNumber ?? "",
     notes: data.notes ?? null,
     contractKm: (data as Record<string, unknown>).contractKm ?? null,
   };
@@ -192,6 +193,7 @@ export async function updateContract(
   data: UpdateContractInput
 ): Promise<ContractWithDetails> {
   const updateData: Record<string, unknown> = {
+    contractNumber: (data as Record<string, unknown>).contractNumber ?? "",
     notes: data.notes ?? null,
     contractKm: (data as Record<string, unknown>).contractKm ?? null,
   };

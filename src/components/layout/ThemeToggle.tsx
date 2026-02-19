@@ -5,15 +5,10 @@ import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
-/**
- * ThemeToggle — Sun/Moon icon toggle for dark mode.
- * Uses next-themes for persistence and system preference detection.
- */
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch: only render after mount
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -23,16 +18,15 @@ export function ThemeToggle() {
   }
 
   if (!mounted) {
-    // Render a placeholder button with same dimensions to avoid layout shift
     return (
       <Button
         variant="ghost"
         size="icon"
-        className="text-muted-foreground"
+        className="size-8 rounded-lg text-muted-foreground"
         aria-label="Cambia tema"
         disabled
       >
-        <Sun className="size-[18px]" />
+        <Sun className="size-4" />
       </Button>
     );
   }
@@ -41,7 +35,7 @@ export function ThemeToggle() {
     <Button
       variant="ghost"
       size="icon"
-      className="text-muted-foreground hover:text-foreground"
+      className="size-8 rounded-lg text-muted-foreground hover:text-foreground"
       onClick={toggleTheme}
       aria-label={
         resolvedTheme === "dark"
@@ -50,9 +44,9 @@ export function ThemeToggle() {
       }
     >
       {resolvedTheme === "dark" ? (
-        <Sun className="size-[18px]" />
+        <Sun className="size-4" />
       ) : (
-        <Moon className="size-[18px]" />
+        <Moon className="size-4" />
       )}
     </Button>
   );

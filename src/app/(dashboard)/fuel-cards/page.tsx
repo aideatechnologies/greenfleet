@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { FileUp, Plus } from "lucide-react";
 import { getSessionContext, isTenantAdmin } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
 import { getFuelCards } from "@/lib/services/fuel-card-service";
@@ -47,12 +47,20 @@ export default async function FuelCardsPage({
             Gestisci le carte carburante assegnate a veicoli, dipendenti o JOLLY.
           </p>
         </div>
-        <Button asChild>
-          <Link href="/fuel-cards/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Nuova Carta
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild>
+            <Link href="/fuel-cards/import">
+              <FileUp className="mr-2 h-4 w-4" />
+              Importa
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link href="/fuel-cards/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Nuova Carta
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <FuelCardTable
