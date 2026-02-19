@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { Route, Leaf, Fuel } from "lucide-react";
 import { Car } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 
 import { getSessionContext, isDriver } from "@/lib/auth/permissions";
 import { prisma, getPrismaForTenant } from "@/lib/db/client";
@@ -80,6 +81,8 @@ export default async function DriverDashboardPage() {
     redirect("/login?error=no_organization");
   }
 
+  const t = await getTranslations("driver");
+
   const tenantPrisma = getPrismaForTenant(ctx.organizationId);
   const data = await getDriverDashboardData(prisma, tenantPrisma, ctx.userId);
 
@@ -87,12 +90,12 @@ export default async function DriverDashboardPage() {
   if (!data) {
     return (
       <div className="pb-16 md:pb-0">
-        <h1 className="mb-6 text-2xl font-bold">La mia Dashboard</h1>
+        <h1 className="mb-6 text-2xl font-bold">{t("myDashboard")}</h1>
         <EmptyState
           variant="info"
           icon={Car}
-          title="Nessun veicolo assegnato"
-          description="Al momento non hai nessun veicolo assegnato. Contatta il Fleet Manager per maggiori informazioni."
+          title={t("noVehicleAssigned")}
+          description={t("noVehicleMessage")}
         />
       </div>
     );
@@ -103,7 +106,7 @@ export default async function DriverDashboardPage() {
 
   return (
     <div className="space-y-6 pb-16 md:pb-0">
-      <h1 className="text-2xl font-bold">La mia Dashboard</h1>
+      <h1 className="text-2xl font-bold">{t("myDashboard")}</h1>
 
       {/* Vehicle Header — read-only, no actions */}
       <Suspense fallback={null}>
@@ -132,7 +135,7 @@ export default async function DriverDashboardPage() {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <Route className="h-4 w-4" />
-              Km percorsi (mese)
+              {t("monthlyKm")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -143,7 +146,7 @@ export default async function DriverDashboardPage() {
             </p>
             {kpis.kmThisMonth == null && (
               <p className="text-xs text-muted-foreground">
-                Dati insufficienti per il calcolo
+                {t("insufficientData")}
               </p>
             )}
           </CardContent>
@@ -154,7 +157,7 @@ export default async function DriverDashboardPage() {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <Leaf className="h-4 w-4" />
-              Emissioni personali (mese)
+              {t("personalEmissions")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -165,7 +168,7 @@ export default async function DriverDashboardPage() {
             </p>
             {kpis.emissionsThisMonthKg == null && (
               <p className="text-xs text-muted-foreground">
-                Nessun rifornimento registrato questo mese
+                {t("noFuelRecordsThisMonth")}
               </p>
             )}
           </CardContent>
@@ -176,7 +179,7 @@ export default async function DriverDashboardPage() {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
               <Fuel className="h-4 w-4" />
-              Ultimo rifornimento
+              {t("lastFuelRecord")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -195,7 +198,7 @@ export default async function DriverDashboardPage() {
               <>
                 <p className="text-2xl font-bold">-</p>
                 <p className="text-xs text-muted-foreground">
-                  Nessun rifornimento registrato
+                  {t("noFuelRecords")}
                 </p>
               </>
             )}

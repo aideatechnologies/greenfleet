@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import {
   PieChart,
   Pie,
@@ -147,6 +148,8 @@ interface FuelTypeBreakdownSectionProps {
 export function FuelTypeBreakdownSection({
   data,
 }: FuelTypeBreakdownSectionProps) {
+  const t = useTranslations("dashboard");
+  const tCommon = useTranslations("common");
   const [selectedItem, setSelectedItem] =
     useState<FuelTypeBreakdownItem | null>(null);
   const [showAllVehicles, setShowAllVehicles] = useState(false);
@@ -184,12 +187,12 @@ export function FuelTypeBreakdownSection({
       <Card>
         <CardHeader>
           <CardTitle className="text-base">
-            Flotta per Tipo Alimentazione
+            {t("fuelTypeFleet")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className="py-4 text-center text-sm italic text-muted-foreground">
-            Nessun dato disponibile per il mese corrente.
+            {t("noDataCurrentMonth")}
           </p>
         </CardContent>
       </Card>
@@ -263,9 +266,9 @@ export function FuelTypeBreakdownSection({
           {/* Donut chart: vehicles per fuel type */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-base">Veicoli per Alimentazione</CardTitle>
+              <CardTitle className="text-base">{t("vehiclesByFuelType")}</CardTitle>
               <CardDescription>
-                Distribuzione della flotta ({data.totals.vehicles} veicoli)
+                {t("fleetDistribution", { count: data.totals.vehicles })}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -276,7 +279,7 @@ export function FuelTypeBreakdownSection({
                       <ChartTooltipContent
                         formatter={(value, _name, props) => {
                           const item = props.payload as FuelTypeBreakdownItem;
-                          return `${value} veicoli (${fmtIt1.format(
+                          return `${value} ${t("vehiclesCount")} (${fmtIt1.format(
                             (item.vehicleCount / data.totals.vehicles) * 100
                           )}%)`;
                         }}
@@ -332,9 +335,9 @@ export function FuelTypeBreakdownSection({
           {/* Bar chart: emissions per fuel type */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-base">Emissioni per Alimentazione</CardTitle>
+              <CardTitle className="text-base">{t("emissionsByFuelType")}</CardTitle>
               <CardDescription>
-                Totale: {formatEmission(data.totals.emissions, true)}
+                {tCommon("total")}: {formatEmission(data.totals.emissions, true)}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -398,9 +401,9 @@ export function FuelTypeBreakdownSection({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <div>
-              <CardTitle className="text-base">Riepilogo per Alimentazione</CardTitle>
+              <CardTitle className="text-base">{t("summaryByFuelType")}</CardTitle>
               <CardDescription>
-                Clicca su una riga per il dettaglio veicoli
+                {t("clickRowForDetail")}
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
@@ -411,12 +414,12 @@ export function FuelTypeBreakdownSection({
                   onClick={() => setShowAllVehicles(true)}
                 >
                   <ListFilter className="h-4 w-4 mr-1" />
-                  Tutti i Veicoli
+                  {t("allVehicles")}
                 </Button>
               )}
               <Button variant="outline" size="sm" onClick={handleExportFuelType}>
                 <Download className="h-4 w-4 mr-1" />
-                Esporta CSV
+                {tCommon("exportCsv")}
               </Button>
             </div>
           </CardHeader>
@@ -424,12 +427,12 @@ export function FuelTypeBreakdownSection({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Alimentazione</TableHead>
-                  <TableHead className="text-right">Veicoli</TableHead>
-                  <TableHead className="text-right">Km</TableHead>
-                  <TableHead className="text-right">Consumo</TableHead>
-                  <TableHead className="text-right">Emissioni CO2e</TableHead>
-                  <TableHead className="text-right">%</TableHead>
+                  <TableHead>{t("fuelType")}</TableHead>
+                  <TableHead className="text-right">{t("vehiclesCol")}</TableHead>
+                  <TableHead className="text-right">{t("kmCol")}</TableHead>
+                  <TableHead className="text-right">{t("consumptionCol")}</TableHead>
+                  <TableHead className="text-right">{t("emissionsCO2eCol")}</TableHead>
+                  <TableHead className="text-right">{t("percentCol")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -471,7 +474,7 @@ export function FuelTypeBreakdownSection({
                 ))}
                 {/* Totals */}
                 <TableRow className="border-t-2 font-semibold">
-                  <TableCell>Totale</TableCell>
+                  <TableCell>{tCommon("total")}</TableCell>
                   <TableCell className="text-right tabular-nums">
                     {data.totals.vehicles}
                   </TableCell>
@@ -503,9 +506,9 @@ export function FuelTypeBreakdownSection({
           <SheetHeader>
             <div className="flex items-center justify-between">
               <div>
-                <SheetTitle>Veicoli {selectedItem?.fuelTypeLabel}</SheetTitle>
+                <SheetTitle>{t("vehiclesFuelTypeLabel", { fuelTypeLabel: selectedItem?.fuelTypeLabel ?? "" })}</SheetTitle>
                 <SheetDescription>
-                  {selectedItem?.vehicles.length} veicoli &middot;{" "}
+                  {selectedItem?.vehicles.length} {t("vehiclesCount")} &middot;{" "}
                   {selectedItem
                     ? formatEmission(selectedItem.emissionsKgCO2e, true)
                     : ""}
@@ -543,12 +546,12 @@ export function FuelTypeBreakdownSection({
           <SheetHeader>
             <div className="flex items-center justify-between">
               <div>
-                <SheetTitle>Dettaglio Emissioni per Veicolo</SheetTitle>
+                <SheetTitle>{t("vehicleEmissionDetail")}</SheetTitle>
                 <SheetDescription>
                   {filteredVehicles.length === allVehicleRows.length
-                    ? `${allVehicleRows.length} veicoli`
-                    : `${filteredVehicles.length} di ${allVehicleRows.length} veicoli`}
-                  {" "}&middot; Totale: {formatEmission(data.totals.emissions, true)}
+                    ? `${allVehicleRows.length} ${t("vehiclesCount")}`
+                    : `${filteredVehicles.length} ${t("ofTotalVehicles", { total: allVehicleRows.length })}`}
+                  {" "}&middot; {tCommon("total")}: {formatEmission(data.totals.emissions, true)}
                 </SheetDescription>
               </div>
               <Button
@@ -566,7 +569,7 @@ export function FuelTypeBreakdownSection({
           <div className="relative mt-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
-              placeholder="Cerca per targa, veicolo, alimentazione..."
+              placeholder={t("searchVehiclePlaceholder")}
               value={vehicleSearch}
               onChange={(e) => setVehicleSearch(e.target.value)}
               className="pl-9"
@@ -580,17 +583,17 @@ export function FuelTypeBreakdownSection({
                 <TableRow>
                   <TableHead>
                     <SortableHead
-                      label="Targa"
+                      label={t("licensePlate")}
                       field="licensePlate"
                       sortKey={sortKey}
                       sortDir={sortDir}
                       onSort={handleVehicleSort}
                     />
                   </TableHead>
-                  <TableHead>Veicolo</TableHead>
+                  <TableHead>{t("vehicleCol")}</TableHead>
                   <TableHead>
                     <SortableHead
-                      label="Alim."
+                      label={t("fuelTypeAbbr")}
                       field="fuelType"
                       sortKey={sortKey}
                       sortDir={sortDir}
@@ -599,7 +602,7 @@ export function FuelTypeBreakdownSection({
                   </TableHead>
                   <TableHead className="text-right">
                     <SortableHead
-                      label="Km"
+                      label={t("kmCol")}
                       field="km"
                       sortKey={sortKey}
                       sortDir={sortDir}
@@ -607,10 +610,10 @@ export function FuelTypeBreakdownSection({
                       align="right"
                     />
                   </TableHead>
-                  <TableHead className="text-right">Consumi</TableHead>
+                  <TableHead className="text-right">{t("consumptionAbbr")}</TableHead>
                   <TableHead className="text-right">
                     <SortableHead
-                      label="CO2e"
+                      label={t("co2eAbbr")}
                       field="emissionsKgCO2e"
                       sortKey={sortKey}
                       sortDir={sortDir}
@@ -618,14 +621,14 @@ export function FuelTypeBreakdownSection({
                       align="right"
                     />
                   </TableHead>
-                  <TableHead className="text-right">%</TableHead>
+                  <TableHead className="text-right">{t("percentCol")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredVehicles.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="py-8 text-center text-sm italic text-muted-foreground">
-                      Nessun veicolo trovato
+                      {t("noVehicleFound")}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -681,16 +684,17 @@ function VehicleDetailTable({
 }: {
   vehicles: FuelTypeVehicleDetail[];
 }) {
+  const t = useTranslations("dashboard");
   return (
     <div className="mt-4">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Targa</TableHead>
-            <TableHead>Veicolo</TableHead>
-            <TableHead className="text-right">Km</TableHead>
-            <TableHead className="text-right">Consumo</TableHead>
-            <TableHead className="text-right">CO2e</TableHead>
+            <TableHead>{t("licensePlate")}</TableHead>
+            <TableHead>{t("vehicleCol")}</TableHead>
+            <TableHead className="text-right">{t("kmCol")}</TableHead>
+            <TableHead className="text-right">{t("consumptionCol")}</TableHead>
+            <TableHead className="text-right">{t("co2eAbbr")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

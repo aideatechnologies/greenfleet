@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Plus, Upload } from "lucide-react";
 import { getFuelRecords } from "@/lib/services/fuel-record-service";
@@ -53,13 +54,16 @@ export default async function FuelRecordsPage({
   ]);
   const co2Factors = Object.fromEntries(co2FactorsMap);
 
+  const t = await getTranslations("fuelRecords");
+  const tCommon = await getTranslations("common");
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Rifornimenti</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
           <p className="text-muted-foreground">
-            Gestisci i rifornimenti dei veicoli della tua flotta.
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
@@ -67,14 +71,14 @@ export default async function FuelRecordsPage({
             <Button variant="outline" asChild>
               <Link href="/fuel-records/import">
                 <Upload className="mr-2 h-4 w-4" />
-                Importa CSV
+                {tCommon("importCsv")}
               </Link>
             </Button>
           )}
           <Button asChild>
             <Link href="/fuel-records/new">
               <Plus className="mr-2 h-4 w-4" />
-              Nuovo rifornimento
+              {t("newFuelRecord")}
             </Link>
           </Button>
         </div>
@@ -106,8 +110,7 @@ export default async function FuelRecordsPage({
           {result.pagination.totalCount > 0 && (
             <div className="flex items-center justify-between border-t pt-4 text-sm text-muted-foreground">
               <span>
-                {result.pagination.totalCount} riforniment
-                {result.pagination.totalCount === 1 ? "o" : "i"} totali
+                {t("totalCount", { count: result.pagination.totalCount })}
               </span>
               {result.pagination.totalPages > 1 && (
                 <div className="flex gap-2">
@@ -119,12 +122,12 @@ export default async function FuelRecordsPage({
                           page: String(filters.page - 1),
                         }).toString()}`}
                       >
-                        Precedente
+                        {tCommon("previous")}
                       </Link>
                     </Button>
                   )}
                   <span className="flex items-center px-2">
-                    Pagina {filters.page} di {result.pagination.totalPages}
+                    {tCommon("page", { page: filters.page, totalPages: result.pagination.totalPages })}
                   </span>
                   {filters.page < result.pagination.totalPages && (
                     <Button variant="outline" size="sm" asChild>
@@ -134,7 +137,7 @@ export default async function FuelRecordsPage({
                           page: String(filters.page + 1),
                         }).toString()}`}
                       >
-                        Successiva
+                        {tCommon("next")}
                       </Link>
                     </Button>
                   )}

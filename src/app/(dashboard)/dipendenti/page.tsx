@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Plus, Upload } from "lucide-react";
 import { getEmployees } from "@/lib/services/employee-service";
@@ -40,13 +41,16 @@ export default async function EmployeeListPage({
   const prisma = getPrismaForTenant(tenantId);
   const result = await getEmployees(prisma, filters);
 
+  const t = await getTranslations("employees");
+  const tCommon = await getTranslations("common");
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Dipendenti</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
           <p className="text-muted-foreground">
-            Gestisci i dipendenti della tua organizzazione.
+            {t("description")}
           </p>
         </div>
         {canEdit && (
@@ -54,13 +58,13 @@ export default async function EmployeeListPage({
             <Button variant="secondary" asChild>
               <Link href="/dipendenti/import">
                 <Upload className="mr-2 h-4 w-4" />
-                Importa da file
+                {tCommon("importFromFile")}
               </Link>
             </Button>
             <Button asChild>
               <Link href="/dipendenti/new">
                 <Plus className="mr-2 h-4 w-4" />
-                Nuovo dipendente
+                {t("newEmployee")}
               </Link>
             </Button>
           </div>

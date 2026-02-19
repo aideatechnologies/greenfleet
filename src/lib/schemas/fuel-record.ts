@@ -2,71 +2,97 @@ import { z } from "zod";
 import { DEFAULT_PAGE_SIZE } from "@/lib/utils/constants";
 
 // ---------------------------------------------------------------------------
-// Create fuel record schema
+// Factory function for i18n
 // ---------------------------------------------------------------------------
 
-export const createFuelRecordSchema = z.object({
-  vehicleId: z.coerce.number({ error: "Il veicolo e obbligatorio" }),
-  date: z.coerce.date({ error: "La data e obbligatoria" }),
-  fuelType: z.string().min(1, { error: "Il tipo carburante e obbligatorio" }),
-  quantityLiters: z
-    .number({ error: "La quantita e obbligatoria" })
-    .positive({ error: "La quantita deve essere positiva" }),
-  quantityKwh: z
-    .number()
-    .positive({ error: "La quantita kWh deve essere positiva" })
-    .nullable()
-    .optional()
-    .transform((val) => (val === 0 ? undefined : val)),
-  amountEur: z
-    .number({ error: "L'importo e obbligatorio" })
-    .positive({ error: "L'importo deve essere positivo" }),
-  odometerKm: z
-    .number({ error: "Il chilometraggio e obbligatorio" })
-    .int({ error: "Il chilometraggio deve essere un numero intero" })
-    .nonnegative({ error: "Il chilometraggio non puo essere negativo" }),
-  fuelCardId: z.coerce.number({ error: "La carta carburante e obbligatoria" }),
-  notes: z
-    .string()
-    .max(1000, { error: "Le note non possono superare 1000 caratteri" })
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-});
+type T = (key: string) => string;
+
+const IT: Record<string, string> = {
+  vehicleRequired: "Il veicolo e obbligatorio",
+  dateRequired: "La data e obbligatoria",
+  fuelTypeRequired: "Il tipo carburante e obbligatorio",
+  quantityRequired: "La quantita e obbligatoria",
+  quantityPositive: "La quantita deve essere positiva",
+  quantityKwhPositive: "La quantita kWh deve essere positiva",
+  amountRequired: "L'importo e obbligatorio",
+  amountPositive: "L'importo deve essere positivo",
+  odometerRequired: "Il chilometraggio e obbligatorio",
+  odometerInt: "Il chilometraggio deve essere un numero intero",
+  odometerNonnegative: "Il chilometraggio non puo essere negativo",
+  fuelCardRequired: "La carta carburante e obbligatoria",
+  notesMax: "Le note non possono superare 1000 caratteri",
+};
+
+const itFallback: T = (k) => IT[k] ?? k;
+
+export function buildCreateFuelRecordSchema(t: T = itFallback) {
+  return z.object({
+    vehicleId: z.coerce.number({ error: t("vehicleRequired") }),
+    date: z.coerce.date({ error: t("dateRequired") }),
+    fuelType: z.string().min(1, { error: t("fuelTypeRequired") }),
+    quantityLiters: z
+      .number({ error: t("quantityRequired") })
+      .positive({ error: t("quantityPositive") }),
+    quantityKwh: z
+      .number()
+      .positive({ error: t("quantityKwhPositive") })
+      .nullable()
+      .optional()
+      .transform((val) => (val === 0 ? undefined : val)),
+    amountEur: z
+      .number({ error: t("amountRequired") })
+      .positive({ error: t("amountPositive") }),
+    odometerKm: z
+      .number({ error: t("odometerRequired") })
+      .int({ error: t("odometerInt") })
+      .nonnegative({ error: t("odometerNonnegative") }),
+    fuelCardId: z.coerce.number({ error: t("fuelCardRequired") }),
+    notes: z
+      .string()
+      .max(1000, { error: t("notesMax") })
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+  });
+}
+
+export function buildUpdateFuelRecordSchema(t: T = itFallback) {
+  return z.object({
+    date: z.coerce.date({ error: t("dateRequired") }),
+    fuelType: z.string().min(1, { error: t("fuelTypeRequired") }),
+    quantityLiters: z
+      .number({ error: t("quantityRequired") })
+      .positive({ error: t("quantityPositive") }),
+    quantityKwh: z
+      .number()
+      .positive({ error: t("quantityKwhPositive") })
+      .nullable()
+      .optional()
+      .transform((val) => (val === 0 ? undefined : val)),
+    amountEur: z
+      .number({ error: t("amountRequired") })
+      .positive({ error: t("amountPositive") }),
+    odometerKm: z
+      .number({ error: t("odometerRequired") })
+      .int({ error: t("odometerInt") })
+      .nonnegative({ error: t("odometerNonnegative") }),
+    fuelCardId: z.coerce.number({ error: t("fuelCardRequired") }),
+    notes: z
+      .string()
+      .max(1000, { error: t("notesMax") })
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Default instances (Italian) — backward compatible
+// ---------------------------------------------------------------------------
+
+export const createFuelRecordSchema = buildCreateFuelRecordSchema();
+export const updateFuelRecordSchema = buildUpdateFuelRecordSchema();
 
 export type CreateFuelRecordInput = z.input<typeof createFuelRecordSchema>;
 export type CreateFuelRecordData = z.output<typeof createFuelRecordSchema>;
-
-// ---------------------------------------------------------------------------
-// Update fuel record schema
-// ---------------------------------------------------------------------------
-
-export const updateFuelRecordSchema = z.object({
-  date: z.coerce.date({ error: "La data e obbligatoria" }),
-  fuelType: z.string().min(1, { error: "Il tipo carburante e obbligatorio" }),
-  quantityLiters: z
-    .number({ error: "La quantita e obbligatoria" })
-    .positive({ error: "La quantita deve essere positiva" }),
-  quantityKwh: z
-    .number()
-    .positive({ error: "La quantita kWh deve essere positiva" })
-    .nullable()
-    .optional()
-    .transform((val) => (val === 0 ? undefined : val)),
-  amountEur: z
-    .number({ error: "L'importo e obbligatorio" })
-    .positive({ error: "L'importo deve essere positivo" }),
-  odometerKm: z
-    .number({ error: "Il chilometraggio e obbligatorio" })
-    .int({ error: "Il chilometraggio deve essere un numero intero" })
-    .nonnegative({ error: "Il chilometraggio non puo essere negativo" }),
-  fuelCardId: z.coerce.number({ error: "La carta carburante e obbligatoria" }),
-  notes: z
-    .string()
-    .max(1000, { error: "Le note non possono superare 1000 caratteri" })
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-});
-
 export type UpdateFuelRecordInput = z.input<typeof updateFuelRecordSchema>;
 export type UpdateFuelRecordData = z.output<typeof updateFuelRecordSchema>;
 

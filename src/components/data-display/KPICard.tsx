@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -207,13 +208,14 @@ function KPICardSkeleton({ variant }: { variant: "default" | "compact" | "hero" 
 // ---------------------------------------------------------------------------
 
 function NoDataValue() {
+  const t = useTranslations("common");
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <span className="text-muted-foreground tabular-nums cursor-default">--</span>
         </TooltipTrigger>
-        <TooltipContent>Dati non ancora disponibili</TooltipContent>
+        <TooltipContent>{t("noDataAvailable")}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
@@ -224,10 +226,11 @@ function NoDataValue() {
 // ---------------------------------------------------------------------------
 
 function ErrorValue() {
+  const t = useTranslations("common");
   return (
     <div className="flex items-center gap-1.5 text-destructive">
       <AlertTriangle className="size-4" aria-hidden="true" />
-      <span className="text-sm font-medium">Errore</span>
+      <span className="text-sm font-medium">{t("error")}</span>
     </div>
   );
 }
@@ -253,13 +256,14 @@ function formatTrendValue(value: number): string {
 function buildAriaLabel(
   label: string,
   value: string | number,
+  tCommon: (key: string) => string,
   unit?: string,
   trend?: KPICardProps["trend"],
   state?: KPICardProps["state"]
 ): string {
-  if (state === "loading") return `${label}: caricamento in corso`;
-  if (state === "error") return `${label}: errore nel caricamento`;
-  if (state === "no-data") return `${label}: dati non disponibili`;
+  if (state === "loading") return `${label}: ${tCommon("loadingInProgress")}`;
+  if (state === "error") return `${label}: ${tCommon("errorLoading")}`;
+  if (state === "no-data") return `${label}: ${tCommon("dataNotAvailable")}`;
 
   let text = `${label}: ${value}`;
   if (unit) text += ` ${unit}`;
@@ -288,6 +292,7 @@ export function KPICard({
   state = "populated",
   className,
 }: KPICardProps) {
+  const tCommon = useTranslations("common");
   const label = labelProp ?? titleProp ?? "";
   const unit = unitProp ?? suffixProp;
   const Icon = resolveIcon(iconProp);
@@ -300,7 +305,7 @@ export function KPICard({
     ? getTrendColor(trend.direction, invertTrendColor)
     : "muted";
 
-  const ariaLabel = buildAriaLabel(label, value, unit, trend, state);
+  const ariaLabel = buildAriaLabel(label, value, (k: string) => tCommon(k as "error"), unit, trend, state);
 
   // -- Compact variant --
   if (variant === "compact") {

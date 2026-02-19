@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { ChevronRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,8 @@ export default function NewContractPage() {
   const searchParams = useSearchParams();
   const defaultVehicleId = searchParams.get("vehicleId") ?? undefined;
   const [selectedType, setSelectedType] = useState<ContractType | null>(null);
+  const t = useTranslations("contracts");
+  const tCommon = useTranslations("common");
 
   return (
     <div className="space-y-6">
@@ -23,10 +26,10 @@ export default function NewContractPage() {
           href="/contracts"
           className="hover:text-foreground transition-colors"
         >
-          Contratti
+          {t("title")}
         </Link>
         <ChevronRight className="h-4 w-4" />
-        <span className="text-foreground">Nuovo</span>
+        <span className="text-foreground">{t("breadcrumbNew")}</span>
       </nav>
 
       {!selectedType ? (
@@ -34,10 +37,10 @@ export default function NewContractPage() {
         <div className="space-y-6">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">
-              Nuovo contratto
+              {t("newContract")}
             </h2>
             <p className="text-muted-foreground">
-              Seleziona il tipo di contratto che vuoi creare.
+              {t("selectContractType")}
             </p>
           </div>
           <ContractTypeSelector onSelect={setSelectedType} />
@@ -52,7 +55,7 @@ export default function NewContractPage() {
               onClick={() => setSelectedType(null)}
             >
               <ArrowLeft className="mr-1 h-4 w-4" />
-              Indietro
+              {tCommon("back")}
             </Button>
             <div>
               <h2 className="text-2xl font-bold tracking-tight">

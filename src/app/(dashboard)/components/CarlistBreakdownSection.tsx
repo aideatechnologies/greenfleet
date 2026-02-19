@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   BarChart,
   Bar,
@@ -91,6 +92,9 @@ interface CarlistBreakdownSectionProps {
 export function CarlistBreakdownSection({
   data,
 }: CarlistBreakdownSectionProps) {
+  const t = useTranslations("dashboard");
+  const tCommon = useTranslations("common");
+
   if (data.items.length === 0) {
     return null;
   }
@@ -125,11 +129,11 @@ export function CarlistBreakdownSection({
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base">
-              Emissioni per Parco Auto
+              {t("emissionsByCarlist")}
             </CardTitle>
             <CardDescription>
-              Totale: {formatEmission(data.totals.emissions, true)} (
-              {data.totals.vehicles} veicoli)
+              {tCommon("total")}: {formatEmission(data.totals.emissions, true)} (
+              {data.totals.vehicles} {t("vehiclesCount")})
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -190,29 +194,29 @@ export function CarlistBreakdownSection({
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <div>
             <CardTitle className="text-base">
-              Riepilogo per Parco Auto
+              {t("summaryByCarlist")}
             </CardTitle>
             <CardDescription>
               {data.unassignedVehicles > 0
-                ? `${data.unassignedVehicles} veicoli non assegnati a nessun parco auto`
-                : "Tutti i veicoli sono assegnati a un parco auto"}
+                ? t("unassignedVehicles", { count: data.unassignedVehicles })
+                : t("allAssigned")}
             </CardDescription>
           </div>
           <Button variant="outline" size="sm" onClick={handleExportCarlist}>
             <Download className="h-4 w-4 mr-1" />
-            Esporta CSV
+            {tCommon("exportCsv")}
           </Button>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Parco Auto</TableHead>
-                <TableHead className="text-right">Veicoli</TableHead>
-                <TableHead className="text-right">Km</TableHead>
-                <TableHead className="text-right">Consumi</TableHead>
-                <TableHead className="text-right">Emissioni CO2e</TableHead>
-                <TableHead className="text-right">%</TableHead>
+                <TableHead>{t("carlistCol")}</TableHead>
+                <TableHead className="text-right">{t("vehiclesCol")}</TableHead>
+                <TableHead className="text-right">{t("kmCol")}</TableHead>
+                <TableHead className="text-right">{t("consumptionAbbr")}</TableHead>
+                <TableHead className="text-right">{t("emissionsCO2eCol")}</TableHead>
+                <TableHead className="text-right">{t("percentCol")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -250,7 +254,7 @@ export function CarlistBreakdownSection({
               ))}
               {/* Totals */}
               <TableRow className="border-t-2 font-semibold">
-                <TableCell>Totale</TableCell>
+                <TableCell>{tCommon("total")}</TableCell>
                 <TableCell className="text-right tabular-nums">
                   {data.totals.vehicles}
                 </TableCell>

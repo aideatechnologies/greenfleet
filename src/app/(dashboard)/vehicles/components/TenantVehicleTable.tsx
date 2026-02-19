@@ -9,6 +9,7 @@ import {
   useTransition,
 } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useReactTable,
   getCoreRowModel,
@@ -94,6 +95,8 @@ export function TenantVehicleTable({
   canEdit: _canEdit,
   fuelTypeLabels = {},
 }: TenantVehicleTableProps) {
+  const t = useTranslations("vehicles");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -173,7 +176,7 @@ export function TenantVehicleTable({
       },
       {
         id: "licensePlate",
-        header: "Targa",
+        header: t("licensePlate"),
         cell: ({ row }) => (
           <span className="font-mono font-medium uppercase tracking-wider">
             {row.original.licensePlate}
@@ -182,14 +185,14 @@ export function TenantVehicleTable({
       },
       {
         id: "vehicle",
-        header: "Veicolo",
+        header: t("vehicle"),
         cell: ({ row }) => {
           const isUncataloged =
             Number(row.original.catalogVehicleId) === UNCATALOGED_VEHICLE_ID;
           if (isUncataloged) {
             return (
               <span className="text-sm italic text-muted-foreground">
-                Non catalogato
+                {t("notCatalogued")}
               </span>
             );
           }
@@ -210,7 +213,7 @@ export function TenantVehicleTable({
       },
       {
         id: "fuelType",
-        header: "Alimentazione",
+        header: t("fuelType"),
         cell: ({ row }) => {
           const engines = row.original.catalogVehicle?.engines ?? [];
           if (engines.length === 0) return <span className="text-muted-foreground">-</span>;
@@ -230,7 +233,7 @@ export function TenantVehicleTable({
       },
       {
         id: "status",
-        header: "Stato",
+        header: tCommon("status"),
         cell: ({ row }) => {
           const status = row.original.status as VehicleStatus;
           return (
@@ -245,7 +248,7 @@ export function TenantVehicleTable({
       },
       {
         id: "employee",
-        header: "Assegnatario",
+        header: t("assignee"),
         cell: ({ row }) => {
           const emp = row.original.assignedEmployee;
           if (!emp) {
@@ -258,7 +261,7 @@ export function TenantVehicleTable({
                 className="bg-indigo-600 hover:bg-indigo-600/90"
               >
                 <Users className="mr-1 h-3 w-3" />
-                Pool
+                {tCommon("pool")}
               </Badge>
             );
           }
@@ -271,7 +274,7 @@ export function TenantVehicleTable({
       },
       {
         id: "registrationDate",
-        header: "Immatricolazione",
+        header: t("registration"),
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground">
             {new Date(row.original.registrationDate).toLocaleDateString(
@@ -286,7 +289,7 @@ export function TenantVehicleTable({
         ),
       },
     ],
-    []
+    [t, tCommon, fuelTypeLabels]
   );
 
   const table = useReactTable({
@@ -306,7 +309,7 @@ export function TenantVehicleTable({
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Cerca per targa, marca, modello..."
+            placeholder={t("searchPlaceholder")}
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-9"
@@ -317,13 +320,13 @@ export function TenantVehicleTable({
           onValueChange={handleStatusFilter}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Stato" />
+            <SelectValue placeholder={tCommon("status")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutti</SelectItem>
-            <SelectItem value={VehicleStatus.ACTIVE}>Attivi</SelectItem>
-            <SelectItem value={VehicleStatus.INACTIVE}>Inattivi</SelectItem>
-            <SelectItem value={VehicleStatus.DISPOSED}>Dismessi</SelectItem>
+            <SelectItem value="all">{tCommon("all")}</SelectItem>
+            <SelectItem value={VehicleStatus.ACTIVE}>{tCommon("active")}</SelectItem>
+            <SelectItem value={VehicleStatus.INACTIVE}>{tCommon("inactive")}</SelectItem>
+            <SelectItem value={VehicleStatus.DISPOSED}>{tCommon("disposed")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -358,13 +361,13 @@ export function TenantVehicleTable({
                     <Car className="h-8 w-8" />
                     <p>
                       {isPending
-                        ? "Caricamento..."
-                        : "Nessun veicolo trovato"}
+                        ? tCommon("loading")
+                        : t("noVehiclesFound")}
                     </p>
                     <p className="text-xs">
                       {isPending
                         ? ""
-                        : "Aggiungi un veicolo per iniziare."}
+                        : t("addToStart")}
                     </p>
                   </div>
                 </TableCell>
@@ -397,8 +400,7 @@ export function TenantVehicleTable({
       {pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {pagination.totalCount} veicoli totali - Pagina{" "}
-            {pagination.page} di {pagination.totalPages}
+            {pagination.totalCount} {t("vehiclesTotal")} - {tCommon("page", { page: pagination.page, totalPages: pagination.totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -408,7 +410,7 @@ export function TenantVehicleTable({
               disabled={pagination.page <= 1 || isPending}
             >
               <ChevronLeft className="h-4 w-4" />
-              Precedente
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -418,7 +420,7 @@ export function TenantVehicleTable({
                 pagination.page >= pagination.totalPages || isPending
               }
             >
-              Successiva
+              {tCommon("next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

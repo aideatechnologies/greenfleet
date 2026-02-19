@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
 import { getSessionContext, isDriver } from "@/lib/auth/permissions";
+import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -26,17 +27,6 @@ import {
 } from "@/lib/utils/number";
 
 // ---------------------------------------------------------------------------
-// Role label
-// ---------------------------------------------------------------------------
-
-const roleLabels: Record<string, string> = {
-  owner: "Platform Admin",
-  admin: "Fleet Manager",
-  mobility_manager: "Mobility Manager",
-  member: "Autista",
-};
-
-// ---------------------------------------------------------------------------
 // Main page (Server Component)
 // ---------------------------------------------------------------------------
 
@@ -58,8 +48,11 @@ export default async function DashboardPage() {
   // At this point, user is owner, admin, or mobility_manager
   if (!ctx.organizationId) redirect("/login");
 
+  const t = await getTranslations("dashboard");
+  const tHeader = await getTranslations("header");
+
   const role = ctx.role ?? "admin";
-  const roleLabel = roleLabels[role] ?? role;
+  const roleLabel = tHeader(`role.${role}` as "role.owner");
   const firstName = session.user.name.split(" ")[0];
 
   return (
@@ -68,14 +61,14 @@ export default async function DashboardPage() {
       <div className="space-y-1">
         <div className="flex items-center gap-3">
           <h1 className="text-h1 tracking-tight">
-            Bentornato, {firstName}
+            {t("welcome", { firstName })}
           </h1>
           <Badge variant="secondary" className="text-[11px]">
             {roleLabel}
           </Badge>
         </div>
         <p className="text-sm text-muted-foreground">
-          Ecco il riepilogo della tua flotta.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -112,6 +105,7 @@ export default async function DashboardPage() {
 // ---------------------------------------------------------------------------
 
 async function KPIRow({ tenantId }: { tenantId: string }) {
+  const t = await getTranslations("dashboard");
   const [kpis, trendData] = await Promise.all([
     getDashboardKPIs(tenantId),
     getEmissionsTrend(tenantId, 12),
@@ -124,7 +118,7 @@ async function KPIRow({ tenantId }: { tenantId: string }) {
     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {/* Hero: Emissioni CO2 */}
       <KPICard
-        label="Emissioni CO2"
+        label={t("emissionsCO2")}
         value={formatEmission(kpis.emissionsThisMonth, true)}
         icon="Leaf"
         variant="hero"
@@ -134,7 +128,7 @@ async function KPIRow({ tenantId }: { tenantId: string }) {
             ? {
                 value: kpis.trendPercentage,
                 direction: kpis.trendDirection,
-                label: "vs mese precedente",
+                label: t("vsPreviousMonth"),
               }
             : undefined
         }
@@ -144,7 +138,7 @@ async function KPIRow({ tenantId }: { tenantId: string }) {
 
       {/* Veicoli Attivi */}
       <KPICard
-        label="Veicoli Attivi"
+        label={t("activeVehicles")}
         value={kpis.activeVehicles}
         icon="Car"
         variant="default"
@@ -153,7 +147,7 @@ async function KPIRow({ tenantId }: { tenantId: string }) {
 
       {/* Km Totali */}
       <KPICard
-        label="Km Totali"
+        label={t("totalKm")}
         value={formatKm(kpis.totalKmThisMonth)}
         icon="Route"
         variant="default"
@@ -162,7 +156,7 @@ async function KPIRow({ tenantId }: { tenantId: string }) {
 
       {/* Consumi Totali */}
       <KPICard
-        label="Consumi Totali"
+        label={t("totalConsumption")}
         value={formatFuelConsumption(kpis.totalFuelThisMonth, kpis.totalKwhThisMonth)}
         icon="Fuel"
         variant="default"
@@ -189,6 +183,7 @@ async function TrendRow({ tenantId }: { tenantId: string }) {
 // ---------------------------------------------------------------------------
 
 async function TargetRow({ tenantId }: { tenantId: string }) {
+  const t = await getTranslations("dashboard");
   const now = new Date();
   const targetProgress = await getTargetProgress(tenantId, now);
 
@@ -196,11 +191,11 @@ async function TargetRow({ tenantId }: { tenantId: string }) {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-base">
-          Obiettivo Emissioni
+          {t("emissionTarget")}
         </CardTitle>
         {targetProgress && (
           <p className="text-xs text-muted-foreground">
-            {targetProgress.description ?? "Target attivo"}
+            {targetProgress.description ?? t("activeTarget")}
           </p>
         )}
       </CardHeader>
@@ -221,7 +216,7 @@ async function TargetRow({ tenantId }: { tenantId: string }) {
           />
         ) : (
           <p className="py-4 text-center text-sm italic text-muted-foreground">
-            Nessun obiettivo emissioni configurato
+            {t("noEmissionTarget")}
           </p>
         )}
       </CardContent>

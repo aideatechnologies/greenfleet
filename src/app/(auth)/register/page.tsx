@@ -27,11 +27,14 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useState } from "react";
 import { Eye, EyeOff, Leaf, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -53,15 +56,15 @@ export default function RegisterPage() {
       });
 
       if (result.error) {
-        toast.error(result.error.message ?? "Errore durante la registrazione");
+        toast.error(result.error.message ?? t("registerError"));
         return;
       }
 
-      toast.success("Account creato con successo");
+      toast.success(t("registerSuccess"));
       router.push("/");
       router.refresh();
     } catch {
-      toast.error("Errore durante la registrazione");
+      toast.error(t("registerError"));
     } finally {
       setIsLoading(false);
     }
@@ -77,15 +80,15 @@ export default function RegisterPage() {
         <div className="text-center">
           <span className="text-2xl font-bold tracking-tight">Greenfleet</span>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Monitoraggio emissioni flotta
+            {tCommon("monitoringSubtitle")}
           </p>
         </div>
       </div>
 
       <Card className="border-border/50 shadow-xl dark:backdrop-blur-2xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-xl font-bold">Registrati</CardTitle>
-          <CardDescription>Crea il tuo account Greenfleet</CardDescription>
+          <CardTitle className="text-xl font-bold">{t("register")}</CardTitle>
+          <CardDescription>{t("registerDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -95,10 +98,10 @@ export default function RegisterPage() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome</FormLabel>
+                    <FormLabel>{t("name")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Mario Rossi"
+                        placeholder={t("namePlaceholder")}
                         autoComplete="name"
                         className="h-10"
                         {...field}
@@ -113,11 +116,11 @@ export default function RegisterPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t("email")}</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="nome@azienda.it"
+                        placeholder={t("emailPlaceholder")}
                         autoComplete="email"
                         className="h-10"
                         {...field}
@@ -132,7 +135,7 @@ export default function RegisterPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>{t("password")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -164,7 +167,7 @@ export default function RegisterPage() {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Conferma Password</FormLabel>
+                    <FormLabel>{t("confirmPassword")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -199,10 +202,10 @@ export default function RegisterPage() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 size-4 animate-spin" />
-                    Registrazione in corso...
+                    {t("registerLoading")}
                   </>
                 ) : (
-                  "Registrati"
+                  t("register")
                 )}
               </Button>
             </form>
@@ -210,12 +213,12 @@ export default function RegisterPage() {
         </CardContent>
         <CardFooter className="justify-center">
           <p className="text-sm text-muted-foreground">
-            Hai gia un account?{" "}
+            {t("hasAccount")}{" "}
             <Link
               href="/login"
               className="font-medium text-primary underline underline-offset-4 transition-colors hover:text-primary/80"
             >
-              Accedi
+              {t("login")}
             </Link>
           </p>
         </CardFooter>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { FileUp, Plus } from "lucide-react";
 import { getKmReadings } from "@/lib/services/km-reading-service";
@@ -40,28 +41,31 @@ export default async function KmReadingsPage({
   const prisma = getPrismaForTenant(tenantId);
   const result = await getKmReadings(prisma, filters);
 
+  const t = await getTranslations("kmReadings");
+  const tCommon = await getTranslations("common");
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
-            Rilevazioni Km
+            {t("title")}
           </h2>
           <p className="text-muted-foreground">
-            Gestisci le rilevazioni chilometriche dei veicoli della tua flotta.
+            {t("description")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/km-readings/import">
               <FileUp className="mr-2 h-4 w-4" />
-              Importa
+              {tCommon("import")}
             </Link>
           </Button>
           <Button asChild>
             <Link href="/km-readings/new">
               <Plus className="mr-2 h-4 w-4" />
-              Nuova rilevazione
+              {t("newReading")}
             </Link>
           </Button>
         </div>

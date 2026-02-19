@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useTransition, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DeltaBar } from "@/components/data-display/DeltaBar";
 import { ProgressTarget } from "@/components/data-display/ProgressTarget";
@@ -82,6 +83,7 @@ export function EmissionDashboard({
   filterOptions,
   initialPresets,
 }: EmissionDashboardProps) {
+  const t = useTranslations("emissions");
   const [report, setReport] = useState<ReportResult>(initialReport);
   const [presets, setPresets] = useState<ReportFilterPreset[]>(initialPresets);
   const [targetProgress, setTargetProgress] =
@@ -142,8 +144,8 @@ export function EmissionDashboard({
       <Card className="bg-muted/30">
         <CardContent className="flex items-center justify-between py-3">
           <p className="text-sm font-medium text-muted-foreground">
-            Report generato: {metadata.vehicleCount} veicoli —{" "}
-            {formatEmission(metadata.totalRealEmissions, true)} emissioni reali
+            {t("reportGenerated")} {metadata.vehicleCount} {t("vehiclesCount")} —{" "}
+            {formatEmission(metadata.totalRealEmissions, true)} {t("realEmissionsSuffix")}
           </p>
           <ExportButtons
             dateRange={{ startDate: defaultStartDate, endDate: defaultEndDate }}
@@ -156,15 +158,15 @@ export function EmissionDashboard({
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <KPICard
-          title="Emissioni Teoriche"
+          title={t("theoreticalEmissions")}
           value={formatTheoreticalEmission(metadata.totalTheoreticalEmissions, true)}
-          subtitle={`${metadata.vehicleCount} veicoli`}
+          subtitle={`${metadata.vehicleCount} ${t("vehiclesCount")}`}
         />
         <KPICard
-          title="Emissioni Reali"
+          title={t("realEmissions")}
           value={formatEmission(metadata.totalRealEmissions, true)}
         />
-        <KPICard title="Delta Emissioni" value="">
+        <KPICard title={t("deltaEmissions")} value="">
           <DeltaBar
             theoretical={metadata.totalTheoreticalEmissions}
             real={metadata.totalRealEmissions}
@@ -172,19 +174,19 @@ export function EmissionDashboard({
           />
         </KPICard>
         <KPICard
-          title="Km Totali"
+          title={t("totalKm")}
           value={formatKm(metadata.totalKm)}
-          subtitle={`${metadata.vehicleCount} veicoli nel periodo`}
+          subtitle={t("vehiclesInPeriod", { count: metadata.vehicleCount })}
         />
         <KPICard
-          title="Media CO2e/km"
+          title={t("avgCO2eKm")}
           value={formatCO2Intensity(metadata.avgRealCO2ePerKm)}
-          subtitle={`Teorica: ${formatCO2Intensity(metadata.avgTheoreticalCO2ePerKm)}`}
+          subtitle={`${t("theoretical")} ${formatCO2Intensity(metadata.avgTheoreticalCO2ePerKm)}`}
         />
         <KPICard
-          title="Totale Emissioni (S1+S2)"
+          title={t("totalEmissionsS1S2")}
           value={formatEmission(metadata.totalScope1 + metadata.totalScope2, true)}
-          subtitle={`S1: ${formatPercentage(metadata.scope1Percentage)} — S2: ${formatPercentage(metadata.scope2Percentage)}`}
+          subtitle={`${t("s1")} ${formatPercentage(metadata.scope1Percentage)} — ${t("s2")} ${formatPercentage(metadata.scope2Percentage)}`}
         />
       </div>
 
@@ -192,7 +194,7 @@ export function EmissionDashboard({
       {targetLoaded && targetProgress && (
         <Card>
           <CardHeader>
-            <CardTitle>Progresso Target Emissioni</CardTitle>
+            <CardTitle>{t("targetProgress")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ProgressTarget
@@ -228,11 +230,11 @@ export function EmissionDashboard({
       {targetLoaded && !targetProgress && (
         <Card>
           <CardHeader>
-            <CardTitle>Target Emissioni</CardTitle>
+            <CardTitle>{t("emissionTarget")}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              Nessun target emissioni configurato.
+              {t("noTargetConfigured")}
             </p>
           </CardContent>
         </Card>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { FileUp, Plus } from "lucide-react";
 import { getTenantVehicles } from "@/lib/services/tenant-vehicle-service";
@@ -42,13 +43,16 @@ export default async function VehiclesPage({
   const prisma = getPrismaForTenant(tenantId);
   const result = await getTenantVehicles(prisma, filters);
 
+  const t = await getTranslations("vehicles");
+  const tCommon = await getTranslations("common");
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Veicoli</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
           <p className="text-muted-foreground">
-            Gestisci la flotta veicoli della tua organizzazione.
+            {t("description")}
           </p>
         </div>
         {canEdit && (
@@ -56,13 +60,13 @@ export default async function VehiclesPage({
             <Button variant="outline" asChild>
               <Link href="/vehicles/import">
                 <FileUp className="mr-2 h-4 w-4" />
-                Importa
+                {tCommon("import")}
               </Link>
             </Button>
             <Button asChild>
               <Link href="/vehicles/new">
                 <Plus className="mr-2 h-4 w-4" />
-                Aggiungi veicolo
+                {t("addVehicle")}
               </Link>
             </Button>
           </div>

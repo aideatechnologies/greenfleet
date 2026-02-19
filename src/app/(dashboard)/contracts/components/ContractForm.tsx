@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { contractSchema, updateContractSchema } from "@/lib/schemas/contract";
 import type { ContractInput, UpdateContractInput } from "@/lib/schemas/contract";
@@ -201,6 +202,8 @@ export function ContractForm({
   defaultVehicleId,
 }: ContractFormProps) {
   const router = useRouter();
+  const t = useTranslations("contracts");
+  const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
   const [vehicles, setVehicles] = useState<VehicleOptionItem[]>([]);
   const [nltSuppliers, setNltSuppliers] = useState<SupplierOptionItem[]>([]);
@@ -239,7 +242,7 @@ export function ContractForm({
           true
         );
         if (result.success) {
-          toast.success("Contratto creato con successo. Il contratto precedente e stato chiuso.");
+          toast.success(t("contractCreatedWithSuccession"));
           setSuccessionDialogOpen(false);
           setPendingValues(null);
           router.push("/contracts");
@@ -248,7 +251,7 @@ export function ContractForm({
           toast.error(result.error);
         }
       } catch {
-        toast.error("Errore nel salvataggio del contratto");
+        toast.error(t("contractSaveError"));
       }
     });
   }
@@ -262,7 +265,7 @@ export function ContractForm({
             values as UpdateContractInput
           );
           if (result.success) {
-            toast.success("Contratto aggiornato con successo");
+            toast.success(t("contractUpdated"));
             router.push(`/contracts/${contractId}`);
             router.refresh();
           } else {
@@ -271,7 +274,7 @@ export function ContractForm({
         } else {
           const result = await createContractAction(values as ContractInput);
           if (result.success) {
-            toast.success("Contratto creato con successo");
+            toast.success(t("contractCreated"));
             router.push("/contracts");
             router.refresh();
           } else if (
@@ -287,7 +290,7 @@ export function ContractForm({
           }
         }
       } catch {
-        toast.error("Errore nel salvataggio del contratto");
+        toast.error(t("contractSaveError"));
       }
     });
   }
@@ -301,7 +304,7 @@ export function ContractForm({
         {/* Contract type badge (read-only) */}
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground">
-            Tipo contratto:
+            {t("contractType")}
           </span>
           <Badge variant="secondary">
             {CONTRACT_TYPE_LABELS[contractType]}
@@ -316,7 +319,7 @@ export function ContractForm({
               name="vehicleId"
               render={({ field }) => (
                 <FormItem className="sm:col-span-2">
-                  <FormLabel>Veicolo *</FormLabel>
+                  <FormLabel>{t("selectVehicle")}</FormLabel>
                   <FormControl>
                     <VehicleSelector
                       vehicles={vehicles}
@@ -336,9 +339,9 @@ export function ContractForm({
             name="contractNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Numero Contratto *</FormLabel>
+                <FormLabel>{t("contractNumber")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="N. contratto" {...field} value={field.value ?? ""} />
+                  <Input placeholder={t("contractNumberPlaceholder")} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -349,7 +352,7 @@ export function ContractForm({
           <NumberField
             form={form}
             name="contractKm"
-            label="Km contratto"
+            label={t("contractKm")}
             unit="km"
           />
 
@@ -373,10 +376,10 @@ export function ContractForm({
             name="notes"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Note</FormLabel>
+                <FormLabel>{tCommon("notes")}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Note aggiuntive sul contratto..."
+                    placeholder={t("additionalNotes")}
                     rows={3}
                     {...field}
                     value={field.value ?? ""}
@@ -391,10 +394,10 @@ export function ContractForm({
         <div className="flex gap-3">
           <Button type="submit" disabled={isPending}>
             {isPending
-              ? "Salvataggio..."
+              ? tCommon("saving")
               : isEdit
-                ? "Aggiorna contratto"
-                : "Salva contratto"}
+                ? t("updateContract")
+                : t("saveContract")}
           </Button>
           <Button
             type="button"
@@ -402,7 +405,7 @@ export function ContractForm({
             onClick={() => router.back()}
             disabled={isPending}
           >
-            Annulla
+            {tCommon("cancel")}
           </Button>
         </div>
       </form>
@@ -427,12 +430,14 @@ function DatePickerField({
   name,
   label,
   required = false,
+  selectDateLabel,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
   name: string;
   label: string;
   required?: boolean;
+  selectDateLabel: string;
 }) {
   return (
     <FormField
@@ -459,7 +464,7 @@ function DatePickerField({
                     ? format(new Date(field.value), "dd MMMM yyyy", {
                         locale: it,
                       })
-                    : "Seleziona data"}
+                    : selectDateLabel}
                 </Button>
               </FormControl>
             </PopoverTrigger>
@@ -604,25 +609,28 @@ function NumberField({
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ProprietarioFields({ form }: { form: any }) {
+  const t = useTranslations("contracts");
+  const tCommon = useTranslations("common");
   return (
     <>
       <DatePickerField
         form={form}
         name="purchaseDate"
-        label="Data acquisto"
+        label={t("purchaseDate")}
         required
+        selectDateLabel={tCommon("selectDate")}
       />
       <CurrencyField
         form={form}
         name="purchasePrice"
-        label="Prezzo di acquisto"
+        label={t("purchasePrice")}
         required
       />
       <CurrencyField
         form={form}
         name="residualValue"
-        label="Valore residuo"
-        description="Valore stimato alla fine del ciclo di vita"
+        label={t("residualValue")}
+        description={t("residualValueDescription")}
       />
     </>
   );
@@ -634,6 +642,8 @@ function ProprietarioFields({ form }: { form: any }) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function BreveTermineFields({ form, suppliers }: { form: any; suppliers: SupplierOptionItem[] }) {
+  const t = useTranslations("contracts");
+  const tCommon = useTranslations("common");
   return (
     <>
       <FormField
@@ -641,13 +651,13 @@ function BreveTermineFields({ form, suppliers }: { form: any; suppliers: Supplie
         name="supplierId"
         render={({ field }) => (
           <FormItem className="sm:col-span-2">
-            <FormLabel>Fornitore *</FormLabel>
+            <FormLabel>{t("supplier")}</FormLabel>
             <FormControl>
               <SupplierSelector
                 suppliers={suppliers}
                 defaultSupplierId={field.value}
                 onSelect={(id) => field.onChange(id)}
-                placeholder="Seleziona fornitore noleggio"
+                placeholder={t("selectRentalSupplier")}
               />
             </FormControl>
             <FormMessage />
@@ -657,25 +667,27 @@ function BreveTermineFields({ form, suppliers }: { form: any; suppliers: Supplie
       <DatePickerField
         form={form}
         name="startDate"
-        label="Data inizio"
+        label={t("startDate")}
         required
+        selectDateLabel={tCommon("selectDate")}
       />
       <DatePickerField
         form={form}
         name="endDate"
-        label="Data fine"
+        label={t("endDate")}
         required
+        selectDateLabel={tCommon("selectDate")}
       />
       <CurrencyField
         form={form}
         name="dailyRate"
-        label="Canone giornaliero"
+        label={t("dailyRate")}
         required
       />
       <NumberField
         form={form}
         name="includedKm"
-        label="Km inclusi"
+        label={t("includedKm")}
         unit="km"
       />
     </>
@@ -688,6 +700,8 @@ function BreveTermineFields({ form, suppliers }: { form: any; suppliers: Supplie
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function LungoTermineFields({ form, suppliers }: { form: any; suppliers: SupplierOptionItem[] }) {
+  const t = useTranslations("contracts");
+  const tCommon = useTranslations("common");
   return (
     <>
       <FormField
@@ -695,13 +709,13 @@ function LungoTermineFields({ form, suppliers }: { form: any; suppliers: Supplie
         name="supplierId"
         render={({ field }) => (
           <FormItem className="sm:col-span-2">
-            <FormLabel>Fornitore *</FormLabel>
+            <FormLabel>{t("supplier")}</FormLabel>
             <FormControl>
               <SupplierSelector
                 suppliers={suppliers}
                 defaultSupplierId={field.value}
                 onSelect={(id) => field.onChange(id)}
-                placeholder="Seleziona fornitore noleggio"
+                placeholder={t("selectRentalSupplier")}
               />
             </FormControl>
             <FormMessage />
@@ -711,42 +725,44 @@ function LungoTermineFields({ form, suppliers }: { form: any; suppliers: Supplie
       <DatePickerField
         form={form}
         name="startDate"
-        label="Data inizio"
+        label={t("startDate")}
         required
+        selectDateLabel={tCommon("selectDate")}
       />
       <DatePickerField
         form={form}
         name="endDate"
-        label="Data fine"
+        label={t("endDate")}
         required
+        selectDateLabel={tCommon("selectDate")}
       />
       <CurrencyField
         form={form}
         name="monthlyRate"
-        label="Canone mensile"
+        label={t("monthlyRate")}
         required
       />
       <NumberField
         form={form}
         name="franchiseKm"
-        label="Km in franchigia"
+        label={t("franchiseKm")}
         unit="km"
       />
       <CurrencyField
         form={form}
         name="extraKmPenalty"
-        label="Penale extra km"
-        description="Costo per km oltre la franchigia"
+        label={t("extraKmPenalty")}
+        description={t("extraKmDescription")}
       />
       <FormField
         control={form.control}
         name="includedServices"
         render={({ field }) => (
           <FormItem className="sm:col-span-2">
-            <FormLabel>Servizi inclusi</FormLabel>
+            <FormLabel>{t("includedServices")}</FormLabel>
             <FormControl>
               <Textarea
-                placeholder="Manutenzione, assicurazione, soccorso stradale..."
+                placeholder={t("includedServicesPlaceholder")}
                 rows={2}
                 {...field}
                 value={field.value ?? ""}
@@ -766,6 +782,8 @@ function LungoTermineFields({ form, suppliers }: { form: any; suppliers: Supplie
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function LeasingFinanziarioFields({ form, suppliers }: { form: any; suppliers: SupplierOptionItem[] }) {
+  const t = useTranslations("contracts");
+  const tCommon = useTranslations("common");
   return (
     <>
       <FormField
@@ -773,13 +791,13 @@ function LeasingFinanziarioFields({ form, suppliers }: { form: any; suppliers: S
         name="supplierId"
         render={({ field }) => (
           <FormItem className="sm:col-span-2">
-            <FormLabel>Societa di leasing *</FormLabel>
+            <FormLabel>{t("leasingCompany")}</FormLabel>
             <FormControl>
               <SupplierSelector
                 suppliers={suppliers}
                 defaultSupplierId={field.value}
                 onSelect={(id) => field.onChange(id)}
-                placeholder="Seleziona societa di leasing"
+                placeholder={t("selectLeasingCompany")}
               />
             </FormControl>
             <FormMessage />
@@ -789,31 +807,33 @@ function LeasingFinanziarioFields({ form, suppliers }: { form: any; suppliers: S
       <DatePickerField
         form={form}
         name="startDate"
-        label="Data inizio"
+        label={t("startDate")}
         required
+        selectDateLabel={tCommon("selectDate")}
       />
       <DatePickerField
         form={form}
         name="endDate"
-        label="Data fine"
+        label={t("endDate")}
         required
+        selectDateLabel={tCommon("selectDate")}
       />
       <CurrencyField
         form={form}
         name="monthlyRate"
-        label="Canone mensile"
+        label={t("monthlyRate")}
         required
       />
       <CurrencyField
         form={form}
         name="buybackValue"
-        label="Valore di riscatto"
-        description="Importo per il riscatto a fine contratto"
+        label={t("buybackValue")}
+        description={t("buybackDescription")}
       />
       <CurrencyField
         form={form}
         name="maxDiscount"
-        label="Sconto massimo"
+        label={t("maxDiscount")}
       />
     </>
   );

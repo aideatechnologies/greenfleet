@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   createFuelRecordSchema,
@@ -96,6 +97,8 @@ export function FuelRecordForm({
   fuelTypeOptions = [],
 }: FuelRecordFormProps) {
   const router = useRouter();
+  const t = useTranslations("fuelRecords");
+  const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
   const [vehicles, setVehicles] = useState<VehicleOptionItem[]>([]);
   const [fuelCards, setFuelCards] = useState<FuelCardOptionItem[]>([]);
@@ -151,7 +154,7 @@ export function FuelRecordForm({
             values as UpdateFuelRecordInput
           );
           if (result.success) {
-            toast.success("Rifornimento aggiornato con successo");
+            toast.success(t("fuelRecordUpdated"));
             router.push("/fuel-records");
             router.refresh();
           } else {
@@ -162,7 +165,7 @@ export function FuelRecordForm({
             values as CreateFuelRecordInput
           );
           if (result.success) {
-            toast.success("Rifornimento registrato con successo");
+            toast.success(t("fuelRecordCreated"));
             router.push("/fuel-records");
             router.refresh();
           } else {
@@ -170,7 +173,7 @@ export function FuelRecordForm({
           }
         }
       } catch {
-        toast.error("Errore nel salvataggio del rifornimento");
+        toast.error(t("fuelRecordSaveError"));
       }
     });
   }
@@ -188,7 +191,7 @@ export function FuelRecordForm({
             name="vehicleId"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Veicolo *</FormLabel>
+                <FormLabel>{t("vehicle")}</FormLabel>
                 <FormControl>
                   <VehicleSelector
                     vehicles={vehicles}
@@ -208,7 +211,7 @@ export function FuelRecordForm({
             name="date"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Data rifornimento *</FormLabel>
+                <FormLabel>{t("fuelDate")}</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -224,7 +227,7 @@ export function FuelRecordForm({
                           ? format(new Date(field.value), "dd MMMM yyyy", {
                               locale: it,
                             })
-                          : "Seleziona data"}
+                          : tCommon("selectDate")}
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -251,7 +254,7 @@ export function FuelRecordForm({
             name="fuelType"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tipo carburante *</FormLabel>
+                <FormLabel>{t("fuelType")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value}
@@ -260,7 +263,7 @@ export function FuelRecordForm({
                     <SelectTrigger
                       className={cn(!field.value && "text-muted-foreground")}
                     >
-                      <SelectValue placeholder="Seleziona tipo" />
+                      <SelectValue placeholder={t("selectFuelType")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -283,7 +286,7 @@ export function FuelRecordForm({
               name="quantityLiters"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Quantita Litri *</FormLabel>
+                  <FormLabel>{t("quantityLiters")}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
@@ -318,7 +321,7 @@ export function FuelRecordForm({
               name="quantityKwh"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Quantita kWh {watchedFuelType === "ELETTRICO" ? "*" : ""}</FormLabel>
+                  <FormLabel>{watchedFuelType === "ELETTRICO" ? t("quantityKwhRequired") : t("quantityKwh")}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
@@ -350,7 +353,7 @@ export function FuelRecordForm({
             name="amountEur"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Importo *</FormLabel>
+                <FormLabel>{t("amount")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
@@ -383,7 +386,7 @@ export function FuelRecordForm({
             name="odometerKm"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Chilometraggio *</FormLabel>
+                <FormLabel>{t("odometer")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
@@ -416,7 +419,7 @@ export function FuelRecordForm({
             name="fuelCardId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Carta carburante *</FormLabel>
+                <FormLabel>{t("fuelCard")}</FormLabel>
                 {fuelCards.length > 0 ? (
                   <Select
                     onValueChange={field.onChange}
@@ -428,7 +431,7 @@ export function FuelRecordForm({
                           !field.value && "text-muted-foreground"
                         )}
                       >
-                        <SelectValue placeholder="Seleziona carta" />
+                        <SelectValue placeholder={t("selectFuelCard")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -441,7 +444,7 @@ export function FuelRecordForm({
                   </Select>
                 ) : (
                   <p className="text-sm text-destructive">
-                    Nessuna carta carburante configurata. Creane una prima di registrare un rifornimento.
+                    {t("noFuelCardConfigured")}
                   </p>
                 )}
                 <FormMessage />
@@ -455,10 +458,10 @@ export function FuelRecordForm({
             name="notes"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Note</FormLabel>
+                <FormLabel>{tCommon("notes")}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Note aggiuntive sul rifornimento..."
+                    placeholder={t("additionalNotes")}
                     rows={3}
                     {...field}
                     value={field.value ?? ""}
@@ -473,10 +476,10 @@ export function FuelRecordForm({
         <div className="flex gap-3">
           <Button type="submit" disabled={isPending}>
             {isPending
-              ? "Salvataggio..."
+              ? tCommon("saving")
               : isEdit
-                ? "Aggiorna rifornimento"
-                : "Registra rifornimento"}
+                ? t("updateFuelRecord")
+                : t("createFuelRecord")}
           </Button>
           <Button
             type="button"
@@ -484,7 +487,7 @@ export function FuelRecordForm({
             onClick={() => router.back()}
             disabled={isPending}
           >
-            Annulla
+            {tCommon("cancel")}
           </Button>
         </div>
       </form>

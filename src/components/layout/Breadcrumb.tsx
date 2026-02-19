@@ -2,37 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ChevronRight, Home } from "lucide-react";
 import { Fragment } from "react";
-
-// ---------------------------------------------------------------------------
-// Route label mappings
-// ---------------------------------------------------------------------------
-
-const ROUTE_LABELS: Record<string, string> = {
-  vehicles: "Veicoli",
-  contracts: "Contratti",
-  status: "Stato Contrattuale",
-  dipendenti: "Dipendenti",
-  employees: "Dipendenti",
-  carlist: "Carlist",
-  "fuel-records": "Rifornimenti",
-  "km-readings": "Rilevazioni Km",
-  fleet: "Stato Flotta",
-  emissions: "Emissioni",
-  report: "Report",
-  settings: "Impostazioni",
-  users: "Utenti",
-  "emission-factors": "Standard Emissioni",
-  tenant: "Tenant",
-  profile: "Profilo",
-  new: "Nuovo",
-  edit: "Modifica",
-};
-
-function getSegmentLabel(segment: string): string {
-  return ROUTE_LABELS[segment] ?? decodeURIComponent(segment);
-}
 
 // ---------------------------------------------------------------------------
 // Component
@@ -45,6 +17,7 @@ function getSegmentLabel(segment: string): string {
  */
 export function Breadcrumb() {
   const pathname = usePathname();
+  const t = useTranslations("breadcrumb");
 
   // Split pathname and filter empty segments
   const segments = pathname.split("/").filter(Boolean);
@@ -52,6 +25,13 @@ export function Breadcrumb() {
   // Don't show breadcrumb on root/dashboard
   if (segments.length === 0) {
     return null;
+  }
+
+  function getSegmentLabel(segment: string): string {
+    if (t.has(segment as "vehicles")) {
+      return t(segment as "vehicles");
+    }
+    return decodeURIComponent(segment);
   }
 
   // Build breadcrumb items
@@ -66,7 +46,7 @@ export function Breadcrumb() {
 
     return {
       href,
-      label: isId ? "Dettaglio" : label,
+      label: isId ? t("detail") : label,
       isLast,
     };
   });

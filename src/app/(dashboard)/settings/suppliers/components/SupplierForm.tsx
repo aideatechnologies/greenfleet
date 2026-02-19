@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import type { SupplierType } from "@/generated/prisma/client";
 import {
   createSupplierSchema,
@@ -55,6 +56,8 @@ type SupplierFormProps = {
 
 export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormProps) {
   const router = useRouter();
+  const t = useTranslations("settings.suppliers");
+  const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
   const [supplierTypes, setSupplierTypes] = useState<SupplierType[]>([]);
 
@@ -93,7 +96,7 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
         if (isEdit && supplierId) {
           const result = await updateSupplierAction(Number(supplierId), values);
           if (result.success) {
-            toast.success("Fornitore aggiornato con successo");
+            toast.success(t("supplierUpdated"));
             router.push("/settings/suppliers");
             router.refresh();
           } else {
@@ -102,7 +105,7 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
         } else {
           const result = await createSupplierAction(values);
           if (result.success) {
-            toast.success("Fornitore creato con successo");
+            toast.success(t("supplierCreated"));
             router.push("/settings/suppliers");
             router.refresh();
           } else {
@@ -110,7 +113,7 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
           }
         }
       } catch {
-        toast.error("Errore nel salvataggio del fornitore");
+        toast.error(t("supplierSaveError"));
       }
     });
   }
@@ -124,11 +127,11 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="supplierTypeId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tipo Fornitore *</FormLabel>
+                <FormLabel>{t("supplierType")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Seleziona tipo" />
+                      <SelectValue placeholder={t("selectType")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -149,9 +152,9 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome *</FormLabel>
+                <FormLabel>{t("name")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ragione sociale" {...field} />
+                  <Input placeholder={t("namePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -163,9 +166,9 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="vatNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Partita IVA *</FormLabel>
+                <FormLabel>{t("vatNumber")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="IT01234567890" {...field} value={field.value ?? ""} />
+                  <Input placeholder={t("vatNumberPlaceholder")} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -177,9 +180,9 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="pec"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>PEC</FormLabel>
+                <FormLabel>{t("pec")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="pec@fornitore.it" {...field} value={field.value ?? ""} />
+                  <Input placeholder={t("pecPlaceholder")} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -191,9 +194,9 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="address"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Indirizzo</FormLabel>
+                <FormLabel>{t("address")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Via, CAP, Citta" {...field} value={field.value ?? ""} />
+                  <Input placeholder={t("addressPlaceholder")} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -205,9 +208,9 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="contactName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Referente</FormLabel>
+                <FormLabel>{t("contactName")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nome e cognome" {...field} value={field.value ?? ""} />
+                  <Input placeholder={t("contactNamePlaceholder")} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -219,9 +222,9 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="contactPhone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Telefono</FormLabel>
+                <FormLabel>{t("phone")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="+39 ..." {...field} value={field.value ?? ""} />
+                  <Input placeholder={t("phonePlaceholder")} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -233,9 +236,9 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="contactEmail"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email Contatto</FormLabel>
+                <FormLabel>{t("contactEmail")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="email@fornitore.it" {...field} value={field.value ?? ""} />
+                  <Input placeholder={t("contactEmailPlaceholder")} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -247,9 +250,9 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
             name="notes"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Note</FormLabel>
+                <FormLabel>{tCommon("notes")}</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Note aggiuntive..." rows={3} {...field} value={field.value ?? ""} />
+                  <Textarea placeholder={t("additionalNotes")} rows={3} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -259,10 +262,10 @@ export function SupplierForm({ mode, supplierId, defaultValues }: SupplierFormPr
 
         <div className="flex gap-3">
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Salvataggio..." : isEdit ? "Aggiorna fornitore" : "Salva fornitore"}
+            {isPending ? tCommon("saving") : isEdit ? t("updateSupplier") : t("createSupplier")}
           </Button>
           <Button type="button" variant="ghost" onClick={() => router.back()} disabled={isPending}>
-            Annulla
+            {tCommon("cancel")}
           </Button>
         </div>
       </form>

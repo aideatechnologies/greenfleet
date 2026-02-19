@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   createKmReadingSchema,
@@ -80,6 +81,8 @@ export function KmReadingForm({
   isDriver = false,
 }: KmReadingFormProps) {
   const router = useRouter();
+  const t = useTranslations("kmReadings");
+  const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
   const [vehicles, setVehicles] = useState<VehicleOptionItem[]>([]);
   const [lastOdometer, setLastOdometer] = useState<{
@@ -149,7 +152,7 @@ export function KmReadingForm({
             values as UpdateKmReadingInput
           );
           if (result.success) {
-            toast.success("Rilevazione km aggiornata con successo");
+            toast.success(t("readingUpdated"));
             router.push("/km-readings");
             router.refresh();
           } else {
@@ -160,7 +163,7 @@ export function KmReadingForm({
             values as CreateKmReadingInput
           );
           if (result.success) {
-            toast.success("Rilevazione km registrata con successo");
+            toast.success(t("readingCreated"));
             router.push("/km-readings");
             router.refresh();
           } else {
@@ -168,7 +171,7 @@ export function KmReadingForm({
           }
         }
       } catch {
-        toast.error("Errore nel salvataggio della rilevazione km");
+        toast.error(t("readingSaveError"));
       }
     });
   }
@@ -186,7 +189,7 @@ export function KmReadingForm({
             name="vehicleId"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Veicolo *</FormLabel>
+                <FormLabel>{t("vehicle")}</FormLabel>
                 <FormControl>
                   <VehicleSelector
                     vehicles={vehicles}
@@ -206,7 +209,7 @@ export function KmReadingForm({
             name="date"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Data rilevazione *</FormLabel>
+                <FormLabel>{t("readingDate")}</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -222,7 +225,7 @@ export function KmReadingForm({
                           ? format(new Date(field.value), "dd MMMM yyyy", {
                               locale: it,
                             })
-                          : "Seleziona data"}
+                          : tCommon("selectDate")}
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -249,7 +252,7 @@ export function KmReadingForm({
             name="odometerKm"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Chilometraggio *</FormLabel>
+                <FormLabel>{t("odometer")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
@@ -273,13 +276,13 @@ export function KmReadingForm({
                 </FormControl>
                 {lastOdometer && (
                   <FormDescription>
-                    Ultimo rilevamento:{" "}
-                    {new Intl.NumberFormat("it-IT").format(
-                      lastOdometer.odometerKm
-                    )}{" "}
-                    km del{" "}
-                    {format(new Date(lastOdometer.date), "dd MMM yyyy", {
-                      locale: it,
+                    {t("lastReading", {
+                      km: new Intl.NumberFormat("it-IT").format(
+                        lastOdometer.odometerKm
+                      ),
+                      date: format(new Date(lastOdometer.date), "dd MMM yyyy", {
+                        locale: it,
+                      }),
                     })}
                   </FormDescription>
                 )}
@@ -294,10 +297,10 @@ export function KmReadingForm({
             name="notes"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Note</FormLabel>
+                <FormLabel>{tCommon("notes")}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Note aggiuntive sulla rilevazione..."
+                    placeholder={t("additionalNotes")}
                     rows={3}
                     {...field}
                     value={field.value ?? ""}
@@ -312,10 +315,10 @@ export function KmReadingForm({
         <div className="flex gap-3">
           <Button type="submit" disabled={isPending}>
             {isPending
-              ? "Salvataggio..."
+              ? tCommon("saving")
               : isEdit
-                ? "Aggiorna rilevazione"
-                : "Registra rilevazione"}
+                ? t("updateReading")
+                : t("createReading")}
           </Button>
           <Button
             type="button"
@@ -323,7 +326,7 @@ export function KmReadingForm({
             onClick={() => router.back()}
             disabled={isPending}
           >
-            Annulla
+            {tCommon("cancel")}
           </Button>
         </div>
       </form>

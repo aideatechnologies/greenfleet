@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useReactTable,
   getCoreRowModel,
@@ -53,15 +54,6 @@ import { deleteKmReadingAction } from "../actions/delete-km-reading";
 const kmFmt = new Intl.NumberFormat("it-IT");
 
 // ---------------------------------------------------------------------------
-// Source labels
-// ---------------------------------------------------------------------------
-
-const SOURCE_LABELS: Record<string, string> = {
-  MANUAL: "Manuale",
-  IMPORT_CSV: "Importazione CSV",
-};
-
-// ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
@@ -85,6 +77,8 @@ export function KmReadingTable({
   pagination,
   canEdit,
 }: KmReadingTableProps) {
+  const t = useTranslations("kmReadings");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -143,13 +137,13 @@ export function KmReadingTable({
     try {
       const result = await deleteKmReadingAction(Number(confirmDialog.readingId));
       if (result.success) {
-        toast.success("Rilevazione km eliminata");
+        toast.success(t("readingDeleted"));
         router.refresh();
       } else {
         toast.error(result.error);
       }
     } catch {
-      toast.error("Si e verificato un errore");
+      toast.error(tCommon("errorOccurred"));
     } finally {
       setIsDeleting(false);
       setConfirmDialog({ ...confirmDialog, open: false });
@@ -174,6 +168,11 @@ export function KmReadingTable({
     return map;
   }, [readings]);
 
+  const sourceLabels: Record<string, string> = useMemo(() => ({
+    MANUAL: t("sourceManual"),
+    IMPORT_CSV: t("sourceImportCsv"),
+  }), [t]);
+
   const columns = useMemo<ColumnDef<KmReadingWithDetails>[]>(
     () => [
       {
@@ -186,7 +185,7 @@ export function KmReadingTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Veicolo
+            {t("vehicleColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -214,7 +213,7 @@ export function KmReadingTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Data
+            {t("dateColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -236,7 +235,7 @@ export function KmReadingTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Km
+            {t("kmColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -248,7 +247,7 @@ export function KmReadingTable({
       },
       {
         id: "deltaKm",
-        header: "Delta Km",
+        header: t("deltaKm"),
         cell: ({ row }) => {
           const delta = deltaKmMap.get(Number(row.original.id));
           if (delta === null || delta === undefined) {
@@ -266,7 +265,7 @@ export function KmReadingTable({
       },
       {
         id: "notes",
-        header: "Note",
+        header: t("notesColumn"),
         cell: ({ row }) => (
           <span className="text-muted-foreground text-sm truncate max-w-[200px] inline-block">
             {row.original.notes ?? "-"}
@@ -283,13 +282,13 @@ export function KmReadingTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Sorgente
+            {t("sourceColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
         cell: ({ row }) => (
           <Badge variant="outline" className="text-xs">
-            {SOURCE_LABELS[row.original.source] ?? row.original.source}
+            {sourceLabels[row.original.source] ?? row.original.source}
           </Badge>
         ),
       },
@@ -309,7 +308,7 @@ export function KmReadingTable({
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" className="h-8 w-8">
                         <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Azioni</span>
+                        <span className="sr-only">{tCommon("actions")}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -319,7 +318,7 @@ export function KmReadingTable({
                         }
                       >
                         <Pencil className="mr-2 h-4 w-4" />
-                        Modifica
+                        {tCommon("edit")}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() =>
@@ -332,7 +331,7 @@ export function KmReadingTable({
                         className="text-destructive"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Elimina
+                        {tCommon("delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -342,7 +341,7 @@ export function KmReadingTable({
           ]
         : []),
     ],
-    [canEdit, router, deltaKmMap]
+    [canEdit, router, deltaKmMap, t, tCommon, sourceLabels]
   );
 
   const table = useReactTable({
@@ -363,14 +362,14 @@ export function KmReadingTable({
         <Gauge className="h-12 w-12 text-muted-foreground/50" />
         <div className="text-center">
           <h3 className="text-lg font-semibold">
-            Nessuna rilevazione km
+            {t("noReadings")}
           </h3>
           <p className="text-sm text-muted-foreground">
-            Non sono ancora state registrate rilevazioni chilometriche.
+            {t("noReadingsDescription")}
           </p>
         </div>
         <Button asChild>
-          <Link href="/km-readings/new">Inserisci rilevazione</Link>
+          <Link href="/km-readings/new">{t("insertReading")}</Link>
         </Button>
       </div>
     );
@@ -383,7 +382,7 @@ export function KmReadingTable({
         <div className="relative">
           <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Cerca targa..."
+            placeholder={t("searchPlaceholder")}
             className="w-[200px] pl-9"
             defaultValue={currentSearch}
             onChange={(e) => {
@@ -405,7 +404,7 @@ export function KmReadingTable({
           type="date"
           className="w-[160px]"
           value={currentDateFrom}
-          placeholder="Data da"
+          placeholder={tCommon("dateFrom")}
           onChange={(e) =>
             updateSearchParams({ dateFrom: e.target.value || null })
           }
@@ -414,7 +413,7 @@ export function KmReadingTable({
           type="date"
           className="w-[160px]"
           value={currentDateTo}
-          placeholder="Data a"
+          placeholder={tCommon("dateTo")}
           onChange={(e) =>
             updateSearchParams({ dateTo: e.target.value || null })
           }
@@ -422,7 +421,7 @@ export function KmReadingTable({
         {hasFilters && (
           <Button variant="ghost" size="sm" onClick={clearFilters}>
             <X className="mr-1 h-4 w-4" />
-            Cancella filtri
+            {tCommon("clearFilters")}
           </Button>
         )}
       </div>
@@ -454,8 +453,8 @@ export function KmReadingTable({
                   className="h-24 text-center text-muted-foreground"
                 >
                   {isPending
-                    ? "Caricamento..."
-                    : "Nessuna rilevazione km trovata"}
+                    ? tCommon("loading")
+                    : t("noReadingsFound")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -495,10 +494,7 @@ export function KmReadingTable({
       {pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {pagination.totalCount} rilevazion
-            {pagination.totalCount === 1 ? "e" : "i"} total
-            {pagination.totalCount === 1 ? "e" : "i"} - Pagina{" "}
-            {pagination.page} di {pagination.totalPages}
+            {t("readingsTotal", { count: pagination.totalCount })} - {tCommon("page", { page: pagination.page, totalPages: pagination.totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -508,7 +504,7 @@ export function KmReadingTable({
               disabled={pagination.page <= 1 || isPending}
             >
               <ChevronLeft className="h-4 w-4" />
-              Precedente
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -518,7 +514,7 @@ export function KmReadingTable({
                 pagination.page >= pagination.totalPages || isPending
               }
             >
-              Successiva
+              {tCommon("next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -531,9 +527,9 @@ export function KmReadingTable({
         onOpenChange={(open) =>
           setConfirmDialog({ ...confirmDialog, open })
         }
-        title="Elimina rilevazione km"
-        message={`Stai per eliminare la rilevazione km per "${confirmDialog.vehicleInfo}". Questa azione non puo essere annullata.`}
-        confirmLabel="Elimina"
+        title={t("deleteReadingTitle")}
+        message={t("deleteReadingMessage", { info: confirmDialog.vehicleInfo })}
+        confirmLabel={tCommon("delete")}
         onConfirm={handleConfirmDelete}
         variant="destructive"
         loading={isDeleting}

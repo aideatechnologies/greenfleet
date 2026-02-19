@@ -25,11 +25,7 @@ import {
 import { toast } from "sonner";
 import { Suspense, useEffect, useState } from "react";
 import { Eye, EyeOff, Leaf, Loader2 } from "lucide-react";
-
-const errorMessages: Record<string, string> = {
-  tenant_deactivated:
-    "La tua organizzazione e stata disattivata. Contatta l'amministratore.",
-};
+import { useTranslations } from "next-intl";
 
 function LoginForm() {
   const router = useRouter();
@@ -38,6 +34,12 @@ function LoginForm() {
   const errorParam = searchParams.get("error");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
+
+  const errorMessages: Record<string, string> = {
+    tenant_deactivated: t("tenantDeactivated"),
+  };
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -64,11 +66,11 @@ function LoginForm() {
       if (result.error) {
         const msg = result.error.message ?? result.error.statusText ?? "";
         if (msg.toLowerCase().includes("invalid") || msg.toLowerCase().includes("credential")) {
-          toast.error("Credenziali non valide. Verifica email e password.");
+          toast.error(t("invalidCredentials"));
         } else if (msg.toLowerCase().includes("disattivat")) {
           toast.error(msg);
         } else {
-          toast.error(msg || "Credenziali non valide");
+          toast.error(msg || t("invalidCredentialsGeneric"));
         }
         return;
       }
@@ -82,7 +84,7 @@ function LoginForm() {
       router.push(redirectTo);
       router.refresh();
     } catch {
-      toast.error("Errore durante il login");
+      toast.error(t("loginError"));
     } finally {
       setIsLoading(false);
     }
@@ -98,7 +100,7 @@ function LoginForm() {
         <div className="text-center">
           <span className="text-2xl font-bold tracking-tight">Greenfleet</span>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Monitoraggio emissioni flotta
+            {tCommon("monitoringSubtitle")}
           </p>
         </div>
       </div>
@@ -112,9 +114,9 @@ function LoginForm() {
 
       <Card className="border-border/50 shadow-xl dark:backdrop-blur-2xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-xl font-bold">Accedi</CardTitle>
+          <CardTitle className="text-xl font-bold">{t("login")}</CardTitle>
           <CardDescription>
-            Inserisci le tue credenziali per accedere
+            {t("loginDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -125,11 +127,11 @@ function LoginForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t("email")}</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="nome@azienda.it"
+                        placeholder={t("emailPlaceholder")}
                         autoComplete="email"
                         className="h-10"
                         {...field}
@@ -144,7 +146,7 @@ function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>{t("password")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -179,10 +181,10 @@ function LoginForm() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 size-4 animate-spin" />
-                    Accesso in corso...
+                    {t("loginLoading")}
                   </>
                 ) : (
-                  "Accedi"
+                  t("login")
                 )}
               </Button>
             </form>
@@ -194,6 +196,9 @@ function LoginForm() {
 }
 
 function LoginFormSkeleton() {
+  const t = useTranslations("auth");
+  const tCommon = useTranslations("common");
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col items-center gap-3">
@@ -203,15 +208,15 @@ function LoginFormSkeleton() {
         <div className="text-center">
           <span className="text-2xl font-bold tracking-tight">Greenfleet</span>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            Monitoraggio emissioni flotta
+            {tCommon("monitoringSubtitle")}
           </p>
         </div>
       </div>
       <Card className="border-border/50 shadow-xl dark:backdrop-blur-2xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-xl font-bold">Accedi</CardTitle>
+          <CardTitle className="text-xl font-bold">{t("login")}</CardTitle>
           <CardDescription>
-            Inserisci le tue credenziali per accedere
+            {t("loginDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>

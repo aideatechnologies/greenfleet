@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useReactTable,
   getCoreRowModel,
@@ -110,6 +111,8 @@ interface ContractStatusTableProps {
 // ---------------------------------------------------------------------------
 
 export function ContractStatusTable({ rows }: ContractStatusTableProps) {
+  const t = useTranslations("contracts");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -125,7 +128,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
             className="-ml-3"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Veicolo
+            {t("vehicle")}
             <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
           </Button>
         ),
@@ -150,13 +153,13 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
       {
         id: "contractType",
         accessorFn: (row) => row.activeContract?.type ?? "",
-        header: "Tipo Contratto",
+        header: t("contractTypeColumn"),
         cell: ({ row }) => {
           const contract = row.original.activeContract;
           if (!contract) {
             return (
               <span className="text-sm text-muted-foreground italic">
-                Nessuno
+                {t("none")}
               </span>
             );
           }
@@ -171,7 +174,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
       {
         id: "supplier",
         accessorFn: (row) => getSupplierDisplay(row),
-        header: "Fornitore / Societa",
+        header: t("supplierCompany"),
         cell: ({ row }) => (
           <span className="text-sm">
             {getSupplierDisplay(row.original)}
@@ -191,7 +194,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
             className="-ml-3"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Scadenza
+            {t("expiryColumn")}
             <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
           </Button>
         ),
@@ -219,7 +222,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
             className="-ml-3"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Giorni alla scadenza
+            {t("daysToExpiry")}
             <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
           </Button>
         ),
@@ -232,7 +235,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
           }
           return (
             <span className={`text-sm tabular-nums ${getDaysToExpiryColor(days)}`}>
-              {days < 0 ? `${Math.abs(days)} gg scaduto` : `${days} gg`}
+              {days < 0 ? t("daysExpired", { days: Math.abs(days) }) : t("daysRemaining", { days })}
             </span>
           );
         },
@@ -248,7 +251,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
       {
         id: "expiryStatus",
         accessorFn: (row) => row.expiryStatus,
-        header: "Stato",
+        header: tCommon("status"),
         cell: ({ row }) => (
           <StatusBadge
             label={EXPIRY_STATUS_LABELS[row.original.expiryStatus]}
@@ -257,7 +260,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
         ),
       },
     ],
-    []
+    [t, tCommon]
   );
 
   const table = useReactTable({
@@ -308,9 +311,9 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
                 >
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <FileText className="h-8 w-8" />
-                    <p>Nessun veicolo trovato</p>
+                    <p>{t("noVehiclesFound")}</p>
                     <p className="text-xs">
-                      Prova a modificare i filtri di ricerca.
+                      {t("adjustFilters")}
                     </p>
                   </div>
                 </TableCell>
@@ -343,8 +346,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
       {pageCount > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {rows.length} veicoli totali - Pagina {pageIndex + 1} di{" "}
-            {pageCount}
+            {rows.length} {t("vehiclesTotal")} - {tCommon("page", { page: pageIndex + 1, totalPages: pageCount })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -354,7 +356,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
               disabled={!table.getCanPreviousPage()}
             >
               <ChevronLeft className="h-4 w-4" />
-              Precedente
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -362,7 +364,7 @@ export function ContractStatusTable({ rows }: ContractStatusTableProps) {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              Successiva
+              {tCommon("next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

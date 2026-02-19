@@ -9,6 +9,7 @@ import {
   useTransition,
 } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useReactTable,
   getCoreRowModel,
@@ -157,6 +158,8 @@ export function ContractTable({
   pagination,
   canEdit: _canEdit,
 }: ContractTableProps) {
+  const t = useTranslations("contracts");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -218,7 +221,7 @@ export function ContractTable({
     () => [
       {
         id: "vehicle",
-        header: "Veicolo",
+        header: t("vehicle"),
         cell: ({ row }) => (
           <div>
             <span className="font-mono font-medium uppercase tracking-wider">
@@ -233,7 +236,7 @@ export function ContractTable({
       },
       {
         id: "type",
-        header: "Tipo",
+        header: t("typeColumn"),
         cell: ({ row }) => {
           const type = row.original.type as ContractTypeT;
           return (
@@ -245,7 +248,7 @@ export function ContractTable({
       },
       {
         id: "status",
-        header: "Stato",
+        header: tCommon("status"),
         cell: ({ row }) => {
           const status = row.original.status as ContractStatusT;
           return (
@@ -260,7 +263,7 @@ export function ContractTable({
       },
       {
         id: "supplier",
-        header: "Fornitore",
+        header: t("supplierColumn"),
         cell: ({ row }) => {
           const c = row.original;
           const name = c.supplierRef?.name ?? c.leasingCompany ?? c.supplier;
@@ -273,7 +276,7 @@ export function ContractTable({
       },
       {
         id: "dates",
-        header: "Date",
+        header: t("dates"),
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground">
             {getDateDisplay(row.original)}
@@ -282,7 +285,7 @@ export function ContractTable({
       },
       {
         id: "amount",
-        header: "Importo",
+        header: t("amountColumn"),
         cell: ({ row }) => (
           <span className="text-sm font-medium tabular-nums">
             {getAmountDisplay(row.original)}
@@ -290,7 +293,7 @@ export function ContractTable({
         ),
       },
     ],
-    []
+    [t, tCommon]
   );
 
   const table = useReactTable({
@@ -311,7 +314,7 @@ export function ContractTable({
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Cerca per targa, marca, modello..."
+            placeholder={t("searchPlaceholder")}
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-9"
@@ -319,10 +322,10 @@ export function ContractTable({
         </div>
         <Select value={currentTypeFilter} onValueChange={handleTypeFilter}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Tipo" />
+            <SelectValue placeholder={tCommon("type")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutti i tipi</SelectItem>
+            <SelectItem value="all">{tCommon("allTypes")}</SelectItem>
             {Object.values(ContractType).map((type) => (
               <SelectItem key={type} value={type}>
                 {CONTRACT_TYPE_LABELS[type]}
@@ -335,10 +338,10 @@ export function ContractTable({
           onValueChange={handleStatusFilter}
         >
           <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Stato" />
+            <SelectValue placeholder={tCommon("status")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutti</SelectItem>
+            <SelectItem value="all">{tCommon("all")}</SelectItem>
             {Object.values(ContractStatus).map((status) => (
               <SelectItem key={status} value={status}>
                 {CONTRACT_STATUS_LABELS[status]}
@@ -378,13 +381,13 @@ export function ContractTable({
                     <FileText className="h-8 w-8" />
                     <p>
                       {isPending
-                        ? "Caricamento..."
-                        : "Nessun contratto trovato"}
+                        ? tCommon("loading")
+                        : t("noContractsFound")}
                     </p>
                     <p className="text-xs">
                       {isPending
                         ? ""
-                        : "Crea un nuovo contratto per iniziare."}
+                        : t("createToStart")}
                     </p>
                   </div>
                 </TableCell>
@@ -417,8 +420,7 @@ export function ContractTable({
       {pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {pagination.totalCount} contratti totali - Pagina{" "}
-            {pagination.page} di {pagination.totalPages}
+            {pagination.totalCount} {t("contractsTotal")} - {tCommon("page", { page: pagination.page, totalPages: pagination.totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -428,7 +430,7 @@ export function ContractTable({
               disabled={pagination.page <= 1 || isPending}
             >
               <ChevronLeft className="h-4 w-4" />
-              Precedente
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -438,7 +440,7 @@ export function ContractTable({
                 pagination.page >= pagination.totalPages || isPending
               }
             >
-              Successiva
+              {tCommon("next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

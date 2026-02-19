@@ -3,250 +3,309 @@ import { DEFAULT_PAGE_SIZE } from "@/lib/utils/constants";
 import { CONTRACT_TYPE_VALUES, CONTRACT_STATUS_VALUES } from "@/types/contract";
 
 // ---------------------------------------------------------------------------
+// Factory function for i18n
+// ---------------------------------------------------------------------------
+
+type T = (key: string) => string;
+
+const IT: Record<string, string> = {
+  vehicleRequired: "Il veicolo e obbligatorio",
+  contractNumberRequired: "Il numero contratto e obbligatorio",
+  contractNumberMax: "Il numero contratto non puo superare 100 caratteri",
+  contractKmInt: "I km contratto devono essere un numero intero",
+  contractKmNonnegative: "I km contratto non possono essere negativi",
+  notesMax: "Le note non possono superare 1000 caratteri",
+  purchaseDateRequired: "Data acquisto obbligatoria",
+  purchasePriceRequired: "Prezzo obbligatorio",
+  purchasePricePositive: "Il prezzo deve essere positivo",
+  residualValueNonnegative: "Il valore residuo non puo essere negativo",
+  supplierRequired: "Il fornitore e obbligatorio",
+  startDateRequired: "Data inizio obbligatoria",
+  endDateRequired: "Data fine obbligatoria",
+  dailyRateRequired: "Canone giornaliero obbligatorio",
+  dailyRatePositive: "Il canone giornaliero deve essere positivo",
+  includedKmInt: "I km inclusi devono essere un numero intero",
+  includedKmPositive: "I km inclusi devono essere positivi",
+  monthlyRateRequired: "Canone mensile obbligatorio",
+  monthlyRatePositive: "Il canone mensile deve essere positivo",
+  franchiseKmInt: "I km in franchigia devono essere un numero intero",
+  franchiseKmPositive: "I km in franchigia devono essere positivi",
+  extraKmPenaltyPositive: "La penale extra km deve essere positiva",
+  includedServicesMax: "I servizi inclusi non possono superare 2000 caratteri",
+  buybackValuePositive: "Il valore di riscatto deve essere positivo",
+  maxDiscountNonnegative: "Lo sconto massimo non puo essere negativo",
+  endDateAfterStart: "La data fine deve essere successiva alla data inizio",
+};
+
+const itFallback: T = (k) => IT[k] ?? k;
+
+// ---------------------------------------------------------------------------
 // Base fields shared by all contract types
 // ---------------------------------------------------------------------------
 
-const contractBase = z.object({
-  vehicleId: z.coerce.number({ error: "Il veicolo e obbligatorio" }),
-  contractNumber: z
-    .string()
-    .min(1, { error: "Il numero contratto e obbligatorio" })
-    .max(100, { error: "Il numero contratto non puo superare 100 caratteri" }),
-  contractKm: z
-    .number()
-    .int({ error: "I km contratto devono essere un numero intero" })
-    .nonnegative({ error: "I km contratto non possono essere negativi" })
-    .nullable()
-    .optional(),
-  notes: z
-    .string()
-    .max(1000, { error: "Le note non possono superare 1000 caratteri" })
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-});
+function buildContractBase(t: T) {
+  return z.object({
+    vehicleId: z.coerce.number({ error: t("vehicleRequired") }),
+    contractNumber: z
+      .string()
+      .min(1, { error: t("contractNumberRequired") })
+      .max(100, { error: t("contractNumberMax") }),
+    contractKm: z
+      .number()
+      .int({ error: t("contractKmInt") })
+      .nonnegative({ error: t("contractKmNonnegative") })
+      .nullable()
+      .optional(),
+    notes: z
+      .string()
+      .max(1000, { error: t("notesMax") })
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Type-specific schemas (without refine, for discriminatedUnion)
 // ---------------------------------------------------------------------------
 
-const proprietarioSchema = contractBase.extend({
-  type: z.literal("PROPRIETARIO"),
-  purchaseDate: z.coerce.date({ error: "Data acquisto obbligatoria" }),
-  purchasePrice: z
-    .number({ error: "Prezzo obbligatorio" })
-    .positive({ error: "Il prezzo deve essere positivo" }),
-  residualValue: z
-    .number()
-    .nonnegative({ error: "Il valore residuo non puo essere negativo" })
-    .optional(),
-});
+function buildProprietarioSchema(t: T) {
+  return buildContractBase(t).extend({
+    type: z.literal("PROPRIETARIO"),
+    purchaseDate: z.coerce.date({ error: t("purchaseDateRequired") }),
+    purchasePrice: z
+      .number({ error: t("purchasePriceRequired") })
+      .positive({ error: t("purchasePricePositive") }),
+    residualValue: z
+      .number()
+      .nonnegative({ error: t("residualValueNonnegative") })
+      .optional(),
+  });
+}
 
-const breveTermineSchema = contractBase.extend({
-  type: z.literal("BREVE_TERMINE"),
-  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
-  startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
-  endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
-  dailyRate: z
-    .number({ error: "Canone giornaliero obbligatorio" })
-    .positive({ error: "Il canone giornaliero deve essere positivo" }),
-  includedKm: z
-    .number()
-    .int({ error: "I km inclusi devono essere un numero intero" })
-    .positive({ error: "I km inclusi devono essere positivi" })
-    .optional(),
-});
+function buildBreveTermineSchema(t: T) {
+  return buildContractBase(t).extend({
+    type: z.literal("BREVE_TERMINE"),
+    supplierId: z.coerce.number({ error: t("supplierRequired") }),
+    startDate: z.coerce.date({ error: t("startDateRequired") }),
+    endDate: z.coerce.date({ error: t("endDateRequired") }),
+    dailyRate: z
+      .number({ error: t("dailyRateRequired") })
+      .positive({ error: t("dailyRatePositive") }),
+    includedKm: z
+      .number()
+      .int({ error: t("includedKmInt") })
+      .positive({ error: t("includedKmPositive") })
+      .optional(),
+  });
+}
 
-const lungoTermineSchema = contractBase.extend({
-  type: z.literal("LUNGO_TERMINE"),
-  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
-  startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
-  endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
-  monthlyRate: z
-    .number({ error: "Canone mensile obbligatorio" })
-    .positive({ error: "Il canone mensile deve essere positivo" }),
-  franchiseKm: z
-    .number()
-    .int({ error: "I km in franchigia devono essere un numero intero" })
-    .positive({ error: "I km in franchigia devono essere positivi" })
-    .optional(),
-  extraKmPenalty: z
-    .number()
-    .positive({ error: "La penale extra km deve essere positiva" })
-    .optional(),
-  includedServices: z
-    .string()
-    .max(2000, {
-      error: "I servizi inclusi non possono superare 2000 caratteri",
-    })
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-});
+function buildLungoTermineSchema(t: T) {
+  return buildContractBase(t).extend({
+    type: z.literal("LUNGO_TERMINE"),
+    supplierId: z.coerce.number({ error: t("supplierRequired") }),
+    startDate: z.coerce.date({ error: t("startDateRequired") }),
+    endDate: z.coerce.date({ error: t("endDateRequired") }),
+    monthlyRate: z
+      .number({ error: t("monthlyRateRequired") })
+      .positive({ error: t("monthlyRatePositive") }),
+    franchiseKm: z
+      .number()
+      .int({ error: t("franchiseKmInt") })
+      .positive({ error: t("franchiseKmPositive") })
+      .optional(),
+    extraKmPenalty: z
+      .number()
+      .positive({ error: t("extraKmPenaltyPositive") })
+      .optional(),
+    includedServices: z
+      .string()
+      .max(2000, {
+        error: t("includedServicesMax"),
+      })
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+  });
+}
 
-const leasingFinanziarioSchema = contractBase.extend({
-  type: z.literal("LEASING_FINANZIARIO"),
-  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
-  startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
-  endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
-  monthlyRate: z
-    .number({ error: "Canone mensile obbligatorio" })
-    .positive({ error: "Il canone mensile deve essere positivo" }),
-  buybackValue: z
-    .number()
-    .positive({ error: "Il valore di riscatto deve essere positivo" })
-    .optional(),
-  maxDiscount: z
-    .number()
-    .nonnegative({ error: "Lo sconto massimo non puo essere negativo" })
-    .optional(),
-});
+function buildLeasingFinanziarioSchema(t: T) {
+  return buildContractBase(t).extend({
+    type: z.literal("LEASING_FINANZIARIO"),
+    supplierId: z.coerce.number({ error: t("supplierRequired") }),
+    startDate: z.coerce.date({ error: t("startDateRequired") }),
+    endDate: z.coerce.date({ error: t("endDateRequired") }),
+    monthlyRate: z
+      .number({ error: t("monthlyRateRequired") })
+      .positive({ error: t("monthlyRatePositive") }),
+    buybackValue: z
+      .number()
+      .positive({ error: t("buybackValuePositive") })
+      .optional(),
+    maxDiscount: z
+      .number()
+      .nonnegative({ error: t("maxDiscountNonnegative") })
+      .optional(),
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Discriminated union with date cross-validation
 // ---------------------------------------------------------------------------
 
-export const contractSchema = z
-  .discriminatedUnion("type", [
-    proprietarioSchema,
-    breveTermineSchema,
-    lungoTermineSchema,
-    leasingFinanziarioSchema,
-  ])
-  .superRefine((data, ctx) => {
+function addDateRefinement<S extends z.ZodTypeAny>(schema: S, t: T) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return schema.superRefine((data: any, ctx: z.RefinementCtx) => {
     if (
       "startDate" in data &&
       "endDate" in data &&
       data.startDate &&
       data.endDate
     ) {
-      if (data.endDate <= data.startDate) {
+      if ((data.endDate as Date) <= (data.startDate as Date)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "La data fine deve essere successiva alla data inizio",
+          message: t("endDateAfterStart"),
           path: ["endDate"],
         });
       }
     }
   });
+}
 
-export type ContractInput = z.input<typeof contractSchema>;
+export function buildContractSchema(t: T = itFallback) {
+  return addDateRefinement(
+    z.discriminatedUnion("type", [
+      buildProprietarioSchema(t),
+      buildBreveTermineSchema(t),
+      buildLungoTermineSchema(t),
+      buildLeasingFinanziarioSchema(t),
+    ]),
+    t
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Update schema — same as create but vehicleId and type are not changeable
 // ---------------------------------------------------------------------------
 
-const updateBase = z.object({
-  contractNumber: z
-    .string()
-    .min(1, { error: "Il numero contratto e obbligatorio" })
-    .max(100, { error: "Il numero contratto non puo superare 100 caratteri" }),
-  contractKm: z
-    .number()
-    .int({ error: "I km contratto devono essere un numero intero" })
-    .nonnegative({ error: "I km contratto non possono essere negativi" })
-    .nullable()
-    .optional(),
-  notes: z
-    .string()
-    .max(1000, { error: "Le note non possono superare 1000 caratteri" })
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-});
-
-const updateProprietarioSchema = updateBase.extend({
-  type: z.literal("PROPRIETARIO"),
-  purchaseDate: z.coerce.date({ error: "Data acquisto obbligatoria" }),
-  purchasePrice: z
-    .number({ error: "Prezzo obbligatorio" })
-    .positive({ error: "Il prezzo deve essere positivo" }),
-  residualValue: z
-    .number()
-    .nonnegative({ error: "Il valore residuo non puo essere negativo" })
-    .optional(),
-});
-
-const updateBreveTermineSchema = updateBase.extend({
-  type: z.literal("BREVE_TERMINE"),
-  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
-  startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
-  endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
-  dailyRate: z
-    .number({ error: "Canone giornaliero obbligatorio" })
-    .positive({ error: "Il canone giornaliero deve essere positivo" }),
-  includedKm: z
-    .number()
-    .int({ error: "I km inclusi devono essere un numero intero" })
-    .positive({ error: "I km inclusi devono essere positivi" })
-    .optional(),
-});
-
-const updateLungoTermineSchema = updateBase.extend({
-  type: z.literal("LUNGO_TERMINE"),
-  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
-  startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
-  endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
-  monthlyRate: z
-    .number({ error: "Canone mensile obbligatorio" })
-    .positive({ error: "Il canone mensile deve essere positivo" }),
-  franchiseKm: z
-    .number()
-    .int({ error: "I km in franchigia devono essere un numero intero" })
-    .positive({ error: "I km in franchigia devono essere positivi" })
-    .optional(),
-  extraKmPenalty: z
-    .number()
-    .positive({ error: "La penale extra km deve essere positiva" })
-    .optional(),
-  includedServices: z
-    .string()
-    .max(2000, {
-      error: "I servizi inclusi non possono superare 2000 caratteri",
-    })
-    .optional()
-    .transform((val) => (val === "" ? undefined : val)),
-});
-
-const updateLeasingFinanziarioSchema = updateBase.extend({
-  type: z.literal("LEASING_FINANZIARIO"),
-  supplierId: z.coerce.number({ error: "Il fornitore e obbligatorio" }),
-  startDate: z.coerce.date({ error: "Data inizio obbligatoria" }),
-  endDate: z.coerce.date({ error: "Data fine obbligatoria" }),
-  monthlyRate: z
-    .number({ error: "Canone mensile obbligatorio" })
-    .positive({ error: "Il canone mensile deve essere positivo" }),
-  buybackValue: z
-    .number()
-    .positive({ error: "Il valore di riscatto deve essere positivo" })
-    .optional(),
-  maxDiscount: z
-    .number()
-    .nonnegative({ error: "Lo sconto massimo non puo essere negativo" })
-    .optional(),
-});
-
-export const updateContractSchema = z
-  .discriminatedUnion("type", [
-    updateProprietarioSchema,
-    updateBreveTermineSchema,
-    updateLungoTermineSchema,
-    updateLeasingFinanziarioSchema,
-  ])
-  .superRefine((data, ctx) => {
-    if (
-      "startDate" in data &&
-      "endDate" in data &&
-      data.startDate &&
-      data.endDate
-    ) {
-      if (data.endDate <= data.startDate) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "La data fine deve essere successiva alla data inizio",
-          path: ["endDate"],
-        });
-      }
-    }
+function buildUpdateBase(t: T) {
+  return z.object({
+    contractNumber: z
+      .string()
+      .min(1, { error: t("contractNumberRequired") })
+      .max(100, { error: t("contractNumberMax") }),
+    contractKm: z
+      .number()
+      .int({ error: t("contractKmInt") })
+      .nonnegative({ error: t("contractKmNonnegative") })
+      .nullable()
+      .optional(),
+    notes: z
+      .string()
+      .max(1000, { error: t("notesMax") })
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
   });
+}
 
+function buildUpdateProprietarioSchema(t: T) {
+  return buildUpdateBase(t).extend({
+    type: z.literal("PROPRIETARIO"),
+    purchaseDate: z.coerce.date({ error: t("purchaseDateRequired") }),
+    purchasePrice: z
+      .number({ error: t("purchasePriceRequired") })
+      .positive({ error: t("purchasePricePositive") }),
+    residualValue: z
+      .number()
+      .nonnegative({ error: t("residualValueNonnegative") })
+      .optional(),
+  });
+}
+
+function buildUpdateBreveTermineSchema(t: T) {
+  return buildUpdateBase(t).extend({
+    type: z.literal("BREVE_TERMINE"),
+    supplierId: z.coerce.number({ error: t("supplierRequired") }),
+    startDate: z.coerce.date({ error: t("startDateRequired") }),
+    endDate: z.coerce.date({ error: t("endDateRequired") }),
+    dailyRate: z
+      .number({ error: t("dailyRateRequired") })
+      .positive({ error: t("dailyRatePositive") }),
+    includedKm: z
+      .number()
+      .int({ error: t("includedKmInt") })
+      .positive({ error: t("includedKmPositive") })
+      .optional(),
+  });
+}
+
+function buildUpdateLungoTermineSchema(t: T) {
+  return buildUpdateBase(t).extend({
+    type: z.literal("LUNGO_TERMINE"),
+    supplierId: z.coerce.number({ error: t("supplierRequired") }),
+    startDate: z.coerce.date({ error: t("startDateRequired") }),
+    endDate: z.coerce.date({ error: t("endDateRequired") }),
+    monthlyRate: z
+      .number({ error: t("monthlyRateRequired") })
+      .positive({ error: t("monthlyRatePositive") }),
+    franchiseKm: z
+      .number()
+      .int({ error: t("franchiseKmInt") })
+      .positive({ error: t("franchiseKmPositive") })
+      .optional(),
+    extraKmPenalty: z
+      .number()
+      .positive({ error: t("extraKmPenaltyPositive") })
+      .optional(),
+    includedServices: z
+      .string()
+      .max(2000, {
+        error: t("includedServicesMax"),
+      })
+      .optional()
+      .transform((val) => (val === "" ? undefined : val)),
+  });
+}
+
+function buildUpdateLeasingFinanziarioSchema(t: T) {
+  return buildUpdateBase(t).extend({
+    type: z.literal("LEASING_FINANZIARIO"),
+    supplierId: z.coerce.number({ error: t("supplierRequired") }),
+    startDate: z.coerce.date({ error: t("startDateRequired") }),
+    endDate: z.coerce.date({ error: t("endDateRequired") }),
+    monthlyRate: z
+      .number({ error: t("monthlyRateRequired") })
+      .positive({ error: t("monthlyRatePositive") }),
+    buybackValue: z
+      .number()
+      .positive({ error: t("buybackValuePositive") })
+      .optional(),
+    maxDiscount: z
+      .number()
+      .nonnegative({ error: t("maxDiscountNonnegative") })
+      .optional(),
+  });
+}
+
+export function buildUpdateContractSchema(t: T = itFallback) {
+  return addDateRefinement(
+    z.discriminatedUnion("type", [
+      buildUpdateProprietarioSchema(t),
+      buildUpdateBreveTermineSchema(t),
+      buildUpdateLungoTermineSchema(t),
+      buildUpdateLeasingFinanziarioSchema(t),
+    ]),
+    t
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Default instances (Italian) — backward compatible
+// ---------------------------------------------------------------------------
+
+export const contractSchema = buildContractSchema();
+export type ContractInput = z.input<typeof contractSchema>;
+
+export const updateContractSchema = buildUpdateContractSchema();
 export type UpdateContractInput = z.input<typeof updateContractSchema>;
 
 // ---------------------------------------------------------------------------

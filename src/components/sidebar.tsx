@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Activity,
   ArrowRightLeft,
@@ -39,70 +40,70 @@ type SidebarProps = {
   currentOrgName?: string;
 };
 
-type NavItem = {
-  label: string;
+type NavItemDef = {
+  labelKey: string;
   href: string;
   icon: React.ElementType;
   roles: string[] | "all";
 };
 
-type NavSection = {
-  label: string;
-  items: NavItem[];
+type NavSectionDef = {
+  labelKey: string;
+  items: NavItemDef[];
 };
 
 // ---------------------------------------------------------------------------
-// Navigation sections
+// Navigation sections (translation keys)
 // ---------------------------------------------------------------------------
 
-const navSections: NavSection[] = [
+const navSectionDefs: NavSectionDef[] = [
   {
-    label: "",
+    labelKey: "",
     items: [
-      { label: "Dashboard", href: "/", icon: Home, roles: "all" },
+      { labelKey: "dashboard", href: "/", icon: Home, roles: "all" },
     ],
   },
   {
-    label: "Operativita",
+    labelKey: "operations",
     items: [
-      { label: "Veicoli", href: "/vehicles", icon: Car, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Contratti", href: "/contracts", icon: FileText, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Stato Contrattuale", href: "/contracts/status", icon: FileCheck, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Dipendenti", href: "/dipendenti", icon: Users, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Carte Carburante", href: "/fuel-cards", icon: CreditCard, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Carlist", href: "/carlist", icon: List, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Fornitori", href: "/settings/suppliers", icon: Building2, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "vehicles", href: "/vehicles", icon: Car, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "contracts", href: "/contracts", icon: FileText, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "contractStatus", href: "/contracts/status", icon: FileCheck, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "employees", href: "/dipendenti", icon: Users, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "fuelCards", href: "/fuel-cards", icon: CreditCard, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "carlist", href: "/carlist", icon: List, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "suppliers", href: "/settings/suppliers", icon: Building2, roles: ["owner", "admin", "mobility_manager"] },
     ],
   },
   {
-    label: "Dati",
+    labelKey: "data",
     items: [
-      { label: "Rifornimenti", href: "/fuel-records", icon: Fuel, roles: ["owner", "admin", "mobility_manager", "member"] },
-      { label: "Rilevazioni Km", href: "/km-readings", icon: Gauge, roles: ["owner", "admin", "mobility_manager", "member"] },
-      { label: "Import Fatture", href: "/fuel-records/import-xml", icon: FileUp, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "fuelRecords", href: "/fuel-records", icon: Fuel, roles: ["owner", "admin", "mobility_manager", "member"] },
+      { labelKey: "kmReadings", href: "/km-readings", icon: Gauge, roles: ["owner", "admin", "mobility_manager", "member"] },
+      { labelKey: "invoiceImport", href: "/fuel-records/import-xml", icon: FileUp, roles: ["owner", "admin", "mobility_manager"] },
     ],
   },
   {
-    label: "Analisi",
+    labelKey: "analysis",
     items: [
-      { label: "Stato Flotta", href: "/fleet", icon: ClipboardList, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Emissioni", href: "/emissions", icon: BarChart3, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Target Emissioni", href: "/emissions/targets", icon: Target, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "fleetStatus", href: "/fleet", icon: ClipboardList, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "emissions", href: "/emissions", icon: BarChart3, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "emissionTargets", href: "/emissions/targets", icon: Target, roles: ["owner", "admin", "mobility_manager"] },
     ],
   },
   {
-    label: "Configurazione",
+    labelKey: "configuration",
     items: [
-      { label: "Utenti", href: "/settings/users", icon: UserCog, roles: ["owner", "admin"] },
-      { label: "Conversione WLTP/NEDC", href: "/settings/emission-standards", icon: Calculator, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Macro Tipi", href: "/settings/macro-fuel-types", icon: Fuel, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Mappatura Carburanti", href: "/settings/fuel-type-mappings", icon: ArrowRightLeft, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "GWP", href: "/settings/gwp-config", icon: Atom, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Fattori Emissione", href: "/settings/emission-factors", icon: Leaf, roles: ["owner", "admin", "mobility_manager"] },
-      { label: "Tenant", href: "/settings/tenant", icon: Building2, roles: ["owner"] },
-      { label: "Catalogo InfoCar", href: "/settings/catalog-import", icon: Database, roles: ["owner"] },
-      { label: "Audit Log", href: "/settings/audit-log", icon: ScrollText, roles: ["owner"] },
-      { label: "Metriche", href: "/settings/metrics", icon: Activity, roles: ["owner"] },
+      { labelKey: "users", href: "/settings/users", icon: UserCog, roles: ["owner", "admin"] },
+      { labelKey: "wltpConversion", href: "/settings/emission-standards", icon: Calculator, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "macroTypes", href: "/settings/macro-fuel-types", icon: Fuel, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "fuelMapping", href: "/settings/fuel-type-mappings", icon: ArrowRightLeft, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "gwp", href: "/settings/gwp-config", icon: Atom, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "emissionFactors", href: "/settings/emission-factors", icon: Leaf, roles: ["owner", "admin", "mobility_manager"] },
+      { labelKey: "tenant", href: "/settings/tenant", icon: Building2, roles: ["owner"] },
+      { labelKey: "catalogInfoCar", href: "/settings/catalog-import", icon: Database, roles: ["owner"] },
+      { labelKey: "auditLog", href: "/settings/audit-log", icon: ScrollText, roles: ["owner"] },
+      { labelKey: "metrics", href: "/settings/metrics", icon: Activity, roles: ["owner"] },
     ],
   },
 ];
@@ -111,7 +112,7 @@ const navSections: NavSection[] = [
 // Helpers
 // ---------------------------------------------------------------------------
 
-function isNavItemVisible(item: NavItem, role: string | null, isAdmin: boolean): boolean {
+function isNavItemVisible(item: NavItemDef, role: string | null, isAdmin: boolean): boolean {
   if (isAdmin) return true;
   if (item.roles === "all") return true;
   if (!role) return false;
@@ -129,8 +130,9 @@ function isActive(pathname: string, href: string): boolean {
 
 export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
   const pathname = usePathname();
+  const t = useTranslations("nav");
 
-  const visibleSections = navSections
+  const visibleSections = navSectionDefs
     .map((section) => ({
       ...section,
       items: section.items.filter((item) => isNavItemVisible(item, role, isAdmin)),
@@ -166,17 +168,17 @@ export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
 
       {/* Navigation */}
       <nav
-        aria-label="Navigazione principale"
+        aria-label={t("mainNavigation")}
         className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-4"
       >
         {visibleSections.map((section, sectionIndex) => (
-          <div key={section.label || `section-${sectionIndex}`}>
-            {sectionIndex > 0 && section.label && (
+          <div key={section.labelKey || `section-${sectionIndex}`}>
+            {sectionIndex > 0 && section.labelKey && (
               <>
                 <div className="my-3 h-px bg-gray-200/80 dark:bg-[rgba(255,255,255,0.06)]" />
                 <div className="mb-2 px-3">
                   <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground/60">
-                    {section.label}
+                    {t(section.labelKey as "operations")}
                   </span>
                 </div>
               </>
@@ -209,7 +211,7 @@ export function Sidebar({ user, role, isAdmin, currentOrgName }: SidebarProps) {
                           : "text-foreground/35 group-hover:text-foreground/65 dark:text-[#94A3B8]/60 dark:group-hover:text-white/80"
                       )}
                     />
-                    <span className="truncate">{item.label}</span>
+                    <span className="truncate">{t(item.labelKey as "dashboard")}</span>
                   </Link>
                 );
               })}
@@ -254,8 +256,9 @@ export function SidebarMobileContent({
   onNavigate,
 }: SidebarProps & { onNavigate?: () => void }) {
   const pathname = usePathname();
+  const t = useTranslations("nav");
 
-  const visibleSections = navSections
+  const visibleSections = navSectionDefs
     .map((section) => ({
       ...section,
       items: section.items.filter((item) => isNavItemVisible(item, role, isAdmin)),
@@ -274,17 +277,17 @@ export function SidebarMobileContent({
 
       {/* Navigation */}
       <nav
-        aria-label="Navigazione principale"
+        aria-label={t("mainNavigation")}
         className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-3 py-4"
       >
         {visibleSections.map((section, sectionIndex) => (
-          <div key={section.label || `section-${sectionIndex}`}>
-            {sectionIndex > 0 && section.label && (
+          <div key={section.labelKey || `section-${sectionIndex}`}>
+            {sectionIndex > 0 && section.labelKey && (
               <>
                 <div className="my-3 h-px bg-border dark:bg-[rgba(255,255,255,0.06)]" />
                 <div className="mb-2 px-3">
                   <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground/60">
-                    {section.label}
+                    {t(section.labelKey as "operations")}
                   </span>
                 </div>
               </>
@@ -318,7 +321,7 @@ export function SidebarMobileContent({
                           : "text-foreground/35 group-hover:text-foreground/65"
                       )}
                     />
-                    <span>{item.label}</span>
+                    <span>{t(item.labelKey as "dashboard")}</span>
                   </Link>
                 );
               })}

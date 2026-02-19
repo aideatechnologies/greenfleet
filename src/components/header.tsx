@@ -37,9 +37,11 @@ import {
 } from "@/components/ui/sheet";
 import { SidebarMobileContent } from "@/components/sidebar";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 type HeaderProps = {
   user: { name: string; email: string };
@@ -47,12 +49,6 @@ type HeaderProps = {
   isAdmin: boolean;
   currentOrg?: { id: string; name: string } | null;
   organizations?: { id: string; name: string; slug: string }[];
-};
-
-const roleLabels: Record<string, string> = {
-  owner: "Platform Admin",
-  admin: "Fleet Manager",
-  member: "Autista",
 };
 
 export function Header({
@@ -63,6 +59,8 @@ export function Header({
   organizations,
 }: HeaderProps) {
   const router = useRouter();
+  const t = useTranslations("header");
+  const tCommon = useTranslations("common");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [orgSwitcherOpen, setOrgSwitcherOpen] = useState(false);
@@ -75,7 +73,13 @@ export function Header({
     .toUpperCase()
     .slice(0, 2);
 
-  const roleLabel = role ? roleLabels[role] ?? role : "Nessun ruolo";
+  const roleKeys: Record<string, string> = {
+    owner: t("role.owner"),
+    admin: t("role.admin"),
+    mobility_manager: t("role.mobility_manager"),
+    member: t("role.member"),
+  };
+  const roleLabel = role ? roleKeys[role] ?? role : t("noRole");
 
   async function handleSignOut() {
     setIsLoggingOut(true);
@@ -120,7 +124,7 @@ export function Header({
           size="icon"
           className="md:hidden"
           onClick={() => setIsMobileMenuOpen(true)}
-          aria-label="Apri menu"
+          aria-label={t("openMenu")}
         >
           <Menu className="size-5" />
         </Button>
@@ -150,16 +154,16 @@ export function Header({
                 >
                   <Building2 className="size-4 shrink-0" />
                   <span className="truncate text-sm">
-                    {currentOrg?.name ?? "Seleziona..."}
+                    {currentOrg?.name ?? tCommon("select")}
                   </span>
                   <ChevronsUpDown className="size-3.5 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-[240px] p-0" align="end">
                 <Command>
-                  <CommandInput placeholder="Cerca organizzazione..." />
+                  <CommandInput placeholder={t("searchOrg")} />
                   <CommandList>
-                    <CommandEmpty>Nessuna organizzazione trovata</CommandEmpty>
+                    <CommandEmpty>{t("noOrgFound")}</CommandEmpty>
                     <CommandGroup>
                       {organizations!.map((org) => (
                         <CommandItem
@@ -184,6 +188,9 @@ export function Header({
               </PopoverContent>
             </Popover>
           )}
+
+          {/* Language switcher */}
+          <LanguageSwitcher />
 
           {/* Theme toggle */}
           <ThemeToggle />
@@ -240,7 +247,7 @@ export function Header({
                   onClick={() => router.push("/settings/profile")}
                 >
                   <User className="mr-2 size-4" />
-                  Profilo
+                  {t("profile")}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
@@ -250,7 +257,7 @@ export function Header({
                 disabled={isLoggingOut}
               >
                 <LogOut className="mr-2 size-4" />
-                {isLoggingOut ? "Disconnessione..." : "Esci"}
+                {isLoggingOut ? t("loggingOut") : t("logout")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -260,9 +267,9 @@ export function Header({
       {/* Mobile sidebar sheet */}
       <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
         <SheetContent side="left" className="w-72 p-0" showCloseButton={true}>
-          <SheetTitle className="sr-only">Menu navigazione</SheetTitle>
+          <SheetTitle className="sr-only">{t("navMenu")}</SheetTitle>
           <SheetDescription className="sr-only">
-            Menu di navigazione principale
+            {t("navMenuDescription")}
           </SheetDescription>
           <SidebarMobileContent
             user={user}

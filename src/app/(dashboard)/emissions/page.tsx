@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { getSessionContext } from "@/lib/auth/permissions";
 import { getPrismaForTenant, prisma as globalPrisma } from "@/lib/db/client";
 import { getAggregatedEmissions } from "@/lib/services/report-service";
@@ -112,14 +113,16 @@ async function EmissionContent() {
 // Page
 // ---------------------------------------------------------------------------
 
-export default function EmissionsPage() {
+export default async function EmissionsPage() {
+  const t = await getTranslations("emissions");
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Emissioni</h2>
+        <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
         <p className="text-muted-foreground">
-          Analisi aggregata delle emissioni CO2 della flotta aziendale.
+          {t("description")}
         </p>
       </div>
 

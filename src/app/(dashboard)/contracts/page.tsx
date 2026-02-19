@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { FileCheck, FileUp, Plus } from "lucide-react";
 import { getContracts } from "@/lib/services/contract-service";
@@ -43,20 +44,23 @@ export default async function ContractsPage({
   const prisma = getPrismaForTenant(tenantId);
   const result = await getContracts(prisma, filters);
 
+  const t = await getTranslations("contracts");
+  const tCommon = await getTranslations("common");
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Contratti</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
           <p className="text-muted-foreground">
-            Gestisci i contratti dei veicoli della tua flotta.
+            {t("description")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/contracts/status">
               <FileCheck className="mr-2 h-4 w-4" />
-              Stato contrattuale
+              {t("contractStatus")}
             </Link>
           </Button>
           {canEdit && (
@@ -64,13 +68,13 @@ export default async function ContractsPage({
               <Button variant="outline" asChild>
                 <Link href="/contracts/import">
                   <FileUp className="mr-2 h-4 w-4" />
-                  Importa
+                  {tCommon("import")}
                 </Link>
               </Button>
               <Button asChild>
                 <Link href="/contracts/new">
                   <Plus className="mr-2 h-4 w-4" />
-                  Nuovo contratto
+                  {t("newContract")}
                 </Link>
               </Button>
             </>

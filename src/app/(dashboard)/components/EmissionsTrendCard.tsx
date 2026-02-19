@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import {
   AreaChart,
   Area,
@@ -42,8 +43,9 @@ import type {
 // Chart config
 // ---------------------------------------------------------------------------
 
+// NOTE: Chart config label is overridden below using translations
 const trendChartConfig = {
-  value: { label: "Emissioni CO2e", color: "var(--color-primary)" },
+  value: { label: "CO2e", color: "var(--color-primary)" },
 } satisfies ChartConfig;
 
 // ---------------------------------------------------------------------------
@@ -70,6 +72,8 @@ export function EmissionsTrendCard({
   filterOptions,
   className,
 }: EmissionsTrendCardProps) {
+  const t = useTranslations("dashboard");
+  const tCommon = useTranslations("common");
   const [data, setData] = useState(initialData);
   const [scope, setScope] = useState<string>("");
   const [fuelTypes, setFuelTypes] = useState<string[]>([]);
@@ -111,11 +115,11 @@ export function EmissionsTrendCard({
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle className="text-base">Andamento Emissioni</CardTitle>
+          <CardTitle className="text-base">{t("trendTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="py-8 text-center text-sm italic text-muted-foreground">
-            Dati insufficienti per visualizzare il trend
+            {t("trendInsufficient")}
           </p>
         </CardContent>
       </Card>
@@ -129,9 +133,9 @@ export function EmissionsTrendCard({
       <CardHeader className="pb-2">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <CardTitle className="text-base">Andamento Emissioni</CardTitle>
+            <CardTitle className="text-base">{t("trendTitle")}</CardTitle>
             <CardDescription>
-              Ultimi {data.length} mesi &middot; Totale: {formatEmission(total, true)}
+              {t("trendLastMonths", { length: data.length })} &middot; {tCommon("total")}: {formatEmission(total, true)}
               {isPending && (
                 <Loader2 className="ml-2 inline-block size-3 animate-spin" />
               )}
@@ -143,10 +147,10 @@ export function EmissionsTrendCard({
             {/* Scope filter */}
             <Select value={scope || "all"} onValueChange={handleScopeChange}>
               <SelectTrigger className="h-8 w-[180px] text-xs">
-                <SelectValue placeholder="Tutti gli scope" />
+                <SelectValue placeholder={t("allScopes")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tutti gli scope</SelectItem>
+                <SelectItem value="all">{t("allScopes")}</SelectItem>
                 {filterOptions.scopes.map((s) => (
                   <SelectItem key={s.value} value={s.value}>
                     {s.label}
@@ -176,7 +180,7 @@ export function EmissionsTrendCard({
                 onClick={handleClearFilters}
               >
                 <X className="mr-1 size-3" />
-                Reset
+                {tCommon("reset")}
               </Button>
             )}
           </div>

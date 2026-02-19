@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useReactTable,
   getCoreRowModel,
@@ -74,6 +75,8 @@ export function EmployeeTable({
   pagination,
   canEdit,
 }: EmployeeTableProps) {
+  const t = useTranslations("employees");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -148,15 +151,15 @@ export function EmployeeTable({
       if (result.success) {
         toast.success(
           confirmDialog.action === "deactivate"
-            ? "Dipendente disattivato"
-            : "Dipendente riattivato"
+            ? t("employeeDeactivated")
+            : t("employeeReactivated")
         );
         router.refresh();
       } else {
         toast.error(result.error);
       }
     } catch {
-      toast.error("Si è verificato un errore");
+      toast.error(tCommon("errorOccurred"));
     } finally {
       setIsActionLoading(false);
       setConfirmDialog({ ...confirmDialog, open: false });
@@ -167,7 +170,7 @@ export function EmployeeTable({
     () => [
       {
         id: "fullName",
-        header: "Nome Completo",
+        header: t("fullName"),
         cell: ({ row }) => (
           <span className="font-medium">
             {row.original.firstName} {row.original.lastName}
@@ -176,7 +179,7 @@ export function EmployeeTable({
       },
       {
         accessorKey: "email",
-        header: "Email",
+        header: t("email"),
         cell: ({ getValue }) => (
           <span className="text-muted-foreground">
             {(getValue() as string | null) ?? "-"}
@@ -185,7 +188,7 @@ export function EmployeeTable({
       },
       {
         accessorKey: "phone",
-        header: "Telefono",
+        header: t("phoneColumn"),
         cell: ({ getValue }) => (
           <span className="text-muted-foreground">
             {(getValue() as string | null) ?? "-"}
@@ -194,7 +197,7 @@ export function EmployeeTable({
       },
       {
         accessorKey: "fiscalCode",
-        header: "Codice Fiscale",
+        header: t("fiscalCodeColumn"),
         cell: ({ getValue }) => {
           const value = getValue() as string | null;
           return value ? (
@@ -208,7 +211,7 @@ export function EmployeeTable({
       },
       {
         accessorKey: "isActive",
-        header: "Stato",
+        header: tCommon("status"),
         cell: ({ row }) => {
           const employee = row.original;
           if (employee.isPool) {
@@ -218,7 +221,7 @@ export function EmployeeTable({
                 className="bg-indigo-600 hover:bg-indigo-600/90"
               >
                 <Users className="mr-1 h-3 w-3" />
-                Pool
+                {tCommon("pool")}
               </Badge>
             );
           }
@@ -232,7 +235,7 @@ export function EmployeeTable({
                   : "bg-red-100 text-red-700 hover:bg-red-100/90"
               }
             >
-              {active ? "Attivo" : "Inattivo"}
+              {active ? tCommon("activeSingular") : tCommon("inactiveSingular")}
             </Badge>
           );
         },
@@ -249,7 +252,7 @@ export function EmployeeTable({
                 if (employee.isPool) {
                   return (
                     <Badge variant="outline" className="text-indigo-600 border-indigo-300">
-                      Sistema
+                      {tCommon("system")}
                     </Badge>
                   );
                 }
@@ -268,7 +271,7 @@ export function EmployeeTable({
                         }
                       >
                         <Pencil className="mr-2 h-4 w-4" />
-                        Modifica
+                        {tCommon("edit")}
                       </DropdownMenuItem>
                       {employee.isActive ? (
                         <DropdownMenuItem
@@ -283,7 +286,7 @@ export function EmployeeTable({
                           className="text-destructive"
                         >
                           <Ban className="mr-2 h-4 w-4" />
-                          Disattiva
+                          {tCommon("deactivate")}
                         </DropdownMenuItem>
                       ) : (
                         <DropdownMenuItem
@@ -297,7 +300,7 @@ export function EmployeeTable({
                           }
                         >
                           <RotateCcw className="mr-2 h-4 w-4" />
-                          Riattiva
+                          {tCommon("reactivate")}
                         </DropdownMenuItem>
                       )}
                     </DropdownMenuContent>
@@ -308,7 +311,7 @@ export function EmployeeTable({
           ]
         : []),
     ],
-    [canEdit, router]
+    [canEdit, router, t, tCommon]
   );
 
   const table = useReactTable({
@@ -328,7 +331,7 @@ export function EmployeeTable({
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Cerca dipendenti..."
+            placeholder={t("searchPlaceholder")}
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-9"
@@ -339,12 +342,12 @@ export function EmployeeTable({
           onValueChange={handleStatusFilter}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Stato" />
+            <SelectValue placeholder={tCommon("status")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutti</SelectItem>
-            <SelectItem value="true">Attivi</SelectItem>
-            <SelectItem value="false">Inattivi</SelectItem>
+            <SelectItem value="all">{tCommon("all")}</SelectItem>
+            <SelectItem value="true">{tCommon("active")}</SelectItem>
+            <SelectItem value="false">{tCommon("inactive")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -376,8 +379,8 @@ export function EmployeeTable({
                   className="h-24 text-center text-muted-foreground"
                 >
                   {isPending
-                    ? "Caricamento..."
-                    : "Nessun dipendente trovato"}
+                    ? tCommon("loading")
+                    : t("noEmployeesFound")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -415,8 +418,7 @@ export function EmployeeTable({
       {pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {pagination.totalCount} dipendenti totali - Pagina{" "}
-            {pagination.page} di {pagination.totalPages}
+            {pagination.totalCount} {t("employeesTotal")} - {tCommon("page", { page: pagination.page, totalPages: pagination.totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -426,7 +428,7 @@ export function EmployeeTable({
               disabled={pagination.page <= 1 || isPending}
             >
               <ChevronLeft className="h-4 w-4" />
-              Precedente
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -436,7 +438,7 @@ export function EmployeeTable({
                 pagination.page >= pagination.totalPages || isPending
               }
             >
-              Successiva
+              {tCommon("next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -454,18 +456,18 @@ export function EmployeeTable({
           <AlertDialogHeader>
             <AlertDialogTitle>
               {confirmDialog.action === "deactivate"
-                ? "Disattiva dipendente"
-                : "Riattiva dipendente"}
+                ? t("deactivateEmployee")
+                : t("reactivateEmployee")}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {confirmDialog.action === "deactivate"
-                ? `Stai per disattivare "${confirmDialog.employeeName}". Il dipendente non sarà più visibile nelle selezioni attive.`
-                : `Stai per riattivare "${confirmDialog.employeeName}". Il dipendente tornerà visibile nelle selezioni attive.`}
+                ? t("deactivateDescription", { name: confirmDialog.employeeName })
+                : t("reactivateDescription", { name: confirmDialog.employeeName })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isActionLoading}>
-              Annulla
+              {tCommon("cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleConfirmAction}
@@ -473,11 +475,11 @@ export function EmployeeTable({
             >
               {isActionLoading
                 ? confirmDialog.action === "deactivate"
-                  ? "Disattivazione..."
-                  : "Riattivazione..."
+                  ? tCommon("deactivating")
+                  : tCommon("reactivating")
                 : confirmDialog.action === "deactivate"
-                  ? "Disattiva"
-                  : "Riattiva"}
+                  ? tCommon("deactivate")
+                  : tCommon("reactivate")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

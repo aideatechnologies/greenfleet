@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useReactTable,
   getCoreRowModel,
@@ -92,6 +93,8 @@ function formatDateShort(date: Date | string | null | undefined) {
 }
 
 export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTableProps) {
+  const t = useTranslations("fuelCards");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -135,7 +138,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
   async function handleToggleStatus(id: number, newStatus: string) {
     const result = await toggleFuelCardStatusAction(id, newStatus);
     if (result.success) {
-      toast.success("Stato carta aggiornato");
+      toast.success(t("cardStatusUpdated"));
       router.refresh();
     } else {
       toast.error(result.error);
@@ -146,7 +149,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
     () => [
       {
         id: "cardNumber",
-        header: "Numero Carta",
+        header: tCommon("cardNumber"),
         cell: ({ row }) => (
           <div>
             <span className="font-mono font-medium">{row.original.cardNumber}</span>
@@ -156,7 +159,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
       },
       {
         id: "supplier",
-        header: "Fornitore",
+        header: tCommon("supplier"),
         cell: ({ row }) => (
           <span className="text-sm">
             {row.original.supplier?.name ?? "-"}
@@ -165,7 +168,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
       },
       {
         id: "assignment",
-        header: "Assegnazione",
+        header: tCommon("assignment"),
         cell: ({ row }) => (
           <div className="space-y-1">
             <Badge variant="outline" className={assignmentBadgeClasses(row.original.assignmentType)}>
@@ -186,7 +189,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
       },
       {
         id: "expiry",
-        header: "Scadenza",
+        header: tCommon("expiry"),
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground">
             {formatDateShort(row.original.expiryDate)}
@@ -195,7 +198,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
       },
       {
         id: "status",
-        header: "Stato",
+        header: tCommon("status"),
         cell: ({ row }) => (
           <Badge variant="outline" className={statusBadgeClasses(row.original.status)}>
             {FUEL_CARD_STATUS_LABELS[row.original.status as keyof typeof FUEL_CARD_STATUS_LABELS] ?? row.original.status}
@@ -217,22 +220,22 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
                 onClick={() => router.push(`/fuel-cards/${row.original.id}/edit`)}
               >
                 <Pencil className="mr-2 h-4 w-4" />
-                Modifica
+                {tCommon("edit")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {row.original.status !== "ACTIVE" && (
                 <DropdownMenuItem onClick={() => handleToggleStatus(Number(row.original.id), "ACTIVE")}>
-                  Attiva
+                  {tCommon("activate")}
                 </DropdownMenuItem>
               )}
               {row.original.status !== "SUSPENDED" && (
                 <DropdownMenuItem onClick={() => handleToggleStatus(Number(row.original.id), "SUSPENDED")}>
-                  Sospendi
+                  {tCommon("suspend")}
                 </DropdownMenuItem>
               )}
               {row.original.status !== "EXPIRED" && (
                 <DropdownMenuItem onClick={() => handleToggleStatus(Number(row.original.id), "EXPIRED")}>
-                  Segna Scaduta
+                  {tCommon("markExpired")}
                 </DropdownMenuItem>
               )}
             </DropdownMenuContent>
@@ -240,7 +243,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
         ),
       },
     ],
-    [router]
+    [router, t, tCommon]
   );
 
   const table = useReactTable({
@@ -260,7 +263,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Cerca per numero carta, emittente..."
+            placeholder={t("searchPlaceholder")}
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-9"
@@ -268,10 +271,10 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
         </div>
         <Select value={currentStatusFilter} onValueChange={(v) => updateSearchParams({ status: v === "all" ? null : v })}>
           <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Stato" />
+            <SelectValue placeholder={tCommon("status")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutti</SelectItem>
+            <SelectItem value="all">{tCommon("all")}</SelectItem>
             {Object.values(FuelCardStatus).map((s) => (
               <SelectItem key={s} value={s}>
                 {FUEL_CARD_STATUS_LABELS[s]}
@@ -281,10 +284,10 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
         </Select>
         <Select value={currentAssignmentFilter} onValueChange={(v) => updateSearchParams({ assignmentType: v === "all" ? null : v })}>
           <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="Assegnazione" />
+            <SelectValue placeholder={tCommon("assignment")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutte</SelectItem>
+            <SelectItem value="all">{tCommon("allFeminine")}</SelectItem>
             {Object.values(FuelCardAssignmentType).map((t) => (
               <SelectItem key={t} value={t}>
                 {FUEL_CARD_ASSIGNMENT_TYPE_LABELS[t]}
@@ -313,7 +316,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
                 <TableCell colSpan={columns.length} className="h-24 text-center">
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <CreditCard className="h-8 w-8" />
-                    <p>{isPending ? "Caricamento..." : "Nessuna carta carburante trovata"}</p>
+                    <p>{isPending ? tCommon("loading") : t("noFuelCardsFound")}</p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -335,7 +338,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
       {pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {pagination.totalCount} carte totali - Pagina {pagination.page} di {pagination.totalPages}
+            {pagination.totalCount} {t("cardsTotal")} - {tCommon("page", { page: pagination.page, totalPages: pagination.totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -345,7 +348,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
               disabled={pagination.page <= 1 || isPending}
             >
               <ChevronLeft className="h-4 w-4" />
-              Precedente
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -353,7 +356,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
               onClick={() => updateSearchParams({ page: String(pagination.page + 1) })}
               disabled={pagination.page >= pagination.totalPages || isPending}
             >
-              Successiva
+              {tCommon("next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

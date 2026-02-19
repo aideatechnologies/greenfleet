@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { FileUp, Plus } from "lucide-react";
 import { getSessionContext, isTenantAdmin } from "@/lib/auth/permissions";
@@ -38,26 +39,29 @@ export default async function FuelCardsPage({
     getSuppliersByTypeCode(prisma, "CARBURANTE"),
   ]);
 
+  const t = await getTranslations("fuelCards");
+  const tCommon = await getTranslations("common");
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Carte Carburante</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
           <p className="text-muted-foreground">
-            Gestisci le carte carburante assegnate a veicoli, dipendenti o JOLLY.
+            {t("description")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/fuel-cards/import">
               <FileUp className="mr-2 h-4 w-4" />
-              Importa
+              {tCommon("import")}
             </Link>
           </Button>
           <Button asChild>
             <Link href="/fuel-cards/new">
               <Plus className="mr-2 h-4 w-4" />
-              Nuova Carta
+              {t("newCard")}
             </Link>
           </Button>
         </div>

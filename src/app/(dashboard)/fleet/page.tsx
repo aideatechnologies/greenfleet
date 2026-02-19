@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { getSessionContext } from "@/lib/auth/permissions";
 import { getPrismaForTenant } from "@/lib/db/client";
 import {
@@ -106,13 +107,15 @@ export default async function FleetPage({
   const activeTab =
     typeof rawParams.tab === "string" ? rawParams.tab : "vehicles";
 
+  const t = await getTranslations("fleet");
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Stato Flotta</h2>
+        <h2 className="text-2xl font-bold tracking-tight">{t("title")}</h2>
         <p className="text-muted-foreground">
-          Panoramica complessiva di veicoli, contratti e dipendenti.
+          {t("description")}
         </p>
       </div>
 

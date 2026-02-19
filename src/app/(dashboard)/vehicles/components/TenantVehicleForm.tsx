@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { it } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { createTenantVehicleSchema } from "@/lib/schemas/tenant-vehicle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,6 +65,8 @@ export function TenantVehicleForm({
   catalogVehicleId,
 }: TenantVehicleFormProps) {
   const router = useRouter();
+  const t = useTranslations("vehicles");
+  const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [employeeSearch, setEmployeeSearch] = useState("");
@@ -103,14 +106,14 @@ export function TenantVehicleForm({
       try {
         const result = await createTenantVehicleAction(values);
         if (result.success) {
-          toast.success("Veicolo aggiunto con successo");
+          toast.success(t("vehicleAddedSuccess"));
           router.push("/vehicles");
           router.refresh();
         } else {
           toast.error(result.error);
         }
       } catch {
-        toast.error("Errore nell'aggiunta del veicolo");
+        toast.error(t("vehicleAddedError"));
       }
     });
   }
@@ -141,10 +144,10 @@ export function TenantVehicleForm({
             name="licensePlate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Targa *</FormLabel>
+                <FormLabel>{t("licensePlate")} *</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="AA123BB"
+                    placeholder={t("licensePlatePlaceholder")}
                     {...field}
                     onChange={(e) =>
                       field.onChange(e.target.value.toUpperCase())
@@ -163,7 +166,7 @@ export function TenantVehicleForm({
             name="registrationDate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Data immatricolazione *</FormLabel>
+                <FormLabel>{t("registrationDate")} *</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -179,7 +182,7 @@ export function TenantVehicleForm({
                           ? format(new Date(field.value), "dd MMMM yyyy", {
                               locale: it,
                             })
-                          : "Seleziona data"}
+                          : tCommon("selectDate")}
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -206,14 +209,14 @@ export function TenantVehicleForm({
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Stato</FormLabel>
+                <FormLabel>{tCommon("status")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Seleziona stato" />
+                      <SelectValue placeholder={tCommon("selectStatus")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -235,7 +238,7 @@ export function TenantVehicleForm({
             name="assignedEmployeeId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Dipendente assegnato</FormLabel>
+                <FormLabel>{t("assignedEmployee")}</FormLabel>
                 <Popover open={employeeOpen} onOpenChange={setEmployeeOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -250,7 +253,7 @@ export function TenantVehicleForm({
                       >
                         {selectedEmployee
                           ? `${selectedEmployee.firstName} ${selectedEmployee.lastName}`
-                          : "Seleziona dipendente"}
+                          : t("selectEmployee")}
                         <span className="ml-2 shrink-0 opacity-50">
                           {employeeOpen ? "\u25B2" : "\u25BC"}
                         </span>
@@ -260,12 +263,12 @@ export function TenantVehicleForm({
                   <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
                     <Command>
                       <CommandInput
-                        placeholder="Cerca dipendente..."
+                        placeholder={t("searchEmployee")}
                         value={employeeSearch}
                         onValueChange={setEmployeeSearch}
                       />
                       <CommandList>
-                        <CommandEmpty>Nessun dipendente trovato</CommandEmpty>
+                        <CommandEmpty>{t("noEmployeeFound")}</CommandEmpty>
                         <CommandGroup>
                           <CommandItem
                             value="__none__"
@@ -275,7 +278,7 @@ export function TenantVehicleForm({
                             }}
                           >
                             <span className="text-muted-foreground">
-                              Nessun assegnatario
+                              {t("noAssignee")}
                             </span>
                           </CommandItem>
                           {filteredEmployees.map((emp) => (
@@ -306,10 +309,10 @@ export function TenantVehicleForm({
             name="notes"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Note</FormLabel>
+                <FormLabel>{tCommon("notes")}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Note aggiuntive sul veicolo..."
+                    placeholder={t("additionalNotes")}
                     {...field}
                   />
                 </FormControl>
@@ -321,7 +324,7 @@ export function TenantVehicleForm({
 
         <div className="flex gap-3">
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Salvataggio..." : "Aggiungi veicolo"}
+            {isPending ? tCommon("saving") : t("addVehicle")}
           </Button>
           <Button
             type="button"
@@ -329,7 +332,7 @@ export function TenantVehicleForm({
             onClick={() => router.back()}
             disabled={isPending}
           >
-            Annulla
+            {tCommon("cancel")}
           </Button>
         </div>
       </form>

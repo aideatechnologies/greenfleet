@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useReactTable,
   getCoreRowModel,
@@ -60,15 +61,6 @@ const currencyFmt = new Intl.NumberFormat("it-IT", {
 const kmFmt = new Intl.NumberFormat("it-IT");
 
 // ---------------------------------------------------------------------------
-// Source labels
-// ---------------------------------------------------------------------------
-
-const SOURCE_LABELS: Record<string, string> = {
-  MANUAL: "Manuale",
-  IMPORT_CSV: "Importazione CSV",
-};
-
-// ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
@@ -101,6 +93,8 @@ export function FuelRecordTable({
   fuelTypeLabels = {},
   co2Factors = {},
 }: FuelRecordTableProps) {
+  const t = useTranslations("fuelRecords");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -143,18 +137,23 @@ export function FuelRecordTable({
     try {
       const result = await deleteFuelRecordAction(Number(confirmDialog.recordId));
       if (result.success) {
-        toast.success("Rifornimento eliminato");
+        toast.success(t("fuelRecordDeleted"));
         router.refresh();
       } else {
         toast.error(result.error);
       }
     } catch {
-      toast.error("Si e verificato un errore");
+      toast.error(tCommon("errorOccurred"));
     } finally {
       setIsDeleting(false);
       setConfirmDialog({ ...confirmDialog, open: false });
     }
   }
+
+  const sourceLabels: Record<string, string> = useMemo(() => ({
+    MANUAL: t("sourceManual"),
+    IMPORT_CSV: t("sourceImportCsv"),
+  }), [t]);
 
   const columns = useMemo<ColumnDef<FuelRecordWithDetails>[]>(
     () => [
@@ -168,7 +167,7 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Veicolo
+            {t("vehicleColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -196,7 +195,7 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Data
+            {t("dateColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -218,7 +217,7 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Carburante
+            {t("fuelTypeColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -239,7 +238,7 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Quantita (L)
+            {t("quantityLitersColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -261,7 +260,7 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Quantita (kWh)
+            {t("quantityKwhColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -283,7 +282,7 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Importo
+            {t("amountColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -303,7 +302,7 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Km
+            {t("kmColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -324,7 +323,7 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            CO2 (kg)
+            {t("co2Column")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
@@ -343,7 +342,7 @@ export function FuelRecordTable({
       {
         id: "fuelCard",
         accessorFn: (row) => row.fuelCard?.cardNumber ?? "",
-        header: "N. Carta",
+        header: t("cardNumberColumn"),
         cell: ({ row }) => {
           const card = row.original.fuelCard;
           return card ? (
@@ -363,13 +362,13 @@ export function FuelRecordTable({
             className="-ml-3 h-8"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Sorgente
+            {t("sourceColumn")}
             <ArrowUpDown className="ml-2 h-3 w-3" />
           </Button>
         ),
         cell: ({ row }) => (
           <Badge variant="outline" className="text-xs">
-            {SOURCE_LABELS[row.original.source] ?? row.original.source}
+            {sourceLabels[row.original.source] ?? row.original.source}
           </Badge>
         ),
       },
@@ -389,7 +388,7 @@ export function FuelRecordTable({
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon" className="h-8 w-8">
                         <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Azioni</span>
+                        <span className="sr-only">{tCommon("actions")}</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -399,7 +398,7 @@ export function FuelRecordTable({
                         }
                       >
                         <Pencil className="mr-2 h-4 w-4" />
-                        Modifica
+                        {tCommon("edit")}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => {
@@ -415,7 +414,7 @@ export function FuelRecordTable({
                         className="text-destructive"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Elimina
+                        {tCommon("delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -425,7 +424,7 @@ export function FuelRecordTable({
           ]
         : []),
     ],
-    [canEdit, router]
+    [canEdit, router, t, tCommon, fuelTypeLabels, co2Factors, sourceLabels]
   );
 
   const table = useReactTable({
@@ -445,13 +444,13 @@ export function FuelRecordTable({
       <div className="flex flex-col items-center justify-center gap-4 rounded-lg border border-dashed py-12">
         <Fuel className="h-12 w-12 text-muted-foreground/50" />
         <div className="text-center">
-          <h3 className="text-lg font-semibold">Nessun rifornimento</h3>
+          <h3 className="text-lg font-semibold">{t("noFuelRecords")}</h3>
           <p className="text-sm text-muted-foreground">
-            Non sono ancora stati registrati rifornimenti.
+            {t("noFuelRecordsDescription")}
           </p>
         </div>
         <Button asChild>
-          <Link href="/fuel-records/new">Nuovo rifornimento</Link>
+          <Link href="/fuel-records/new">{t("newFuelRecordButton")}</Link>
         </Button>
       </div>
     );
@@ -486,8 +485,8 @@ export function FuelRecordTable({
                   className="h-24 text-center text-muted-foreground"
                 >
                   {isPending
-                    ? "Caricamento..."
-                    : "Nessun rifornimento trovato"}
+                    ? tCommon("loading")
+                    : t("noFuelRecordsFound")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -519,10 +518,7 @@ export function FuelRecordTable({
       {pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {pagination.totalCount} riforniment
-            {pagination.totalCount === 1 ? "o" : "i"} total
-            {pagination.totalCount === 1 ? "e" : "i"} - Pagina{" "}
-            {pagination.page} di {pagination.totalPages}
+            {t("totalCount", { count: pagination.totalCount })} - {tCommon("page", { page: pagination.page, totalPages: pagination.totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -532,7 +528,7 @@ export function FuelRecordTable({
               disabled={pagination.page <= 1 || isPending}
             >
               <ChevronLeft className="h-4 w-4" />
-              Precedente
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -542,7 +538,7 @@ export function FuelRecordTable({
                 pagination.page >= pagination.totalPages || isPending
               }
             >
-              Successiva
+              {tCommon("next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -555,9 +551,9 @@ export function FuelRecordTable({
         onOpenChange={(open) =>
           setConfirmDialog({ ...confirmDialog, open })
         }
-        title="Eliminare il rifornimento?"
-        message={`Il rifornimento "${confirmDialog.recordInfo}" verra eliminato permanentemente. Questa azione non e reversibile.`}
-        confirmLabel="Elimina"
+        title={t("deleteFuelRecordTitle")}
+        message={t("deleteFuelRecordMessage", { info: confirmDialog.recordInfo })}
+        confirmLabel={tCommon("delete")}
         onConfirm={handleConfirmDelete}
         variant="destructive"
         loading={isDeleting}

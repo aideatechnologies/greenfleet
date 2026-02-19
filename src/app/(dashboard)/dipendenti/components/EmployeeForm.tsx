@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import {
   createEmployeeSchema,
   type CreateEmployeeInput,
@@ -44,6 +45,8 @@ type CarlistOption = { id: string; name: string };
 
 export function EmployeeForm(props: EmployeeFormProps) {
   const router = useRouter();
+  const t = useTranslations("employees");
+  const tCommon = useTranslations("common");
   const [isPending, startTransition] = useTransition();
   const [carlists, setCarlists] = useState<CarlistOption[]>([]);
   const isEdit = props.mode === "edit";
@@ -85,8 +88,8 @@ export function EmployeeForm(props: EmployeeFormProps) {
         if (result.success) {
           toast.success(
             isEdit
-              ? "Dipendente aggiornato con successo"
-              : "Dipendente creato con successo"
+              ? t("employeeUpdated")
+              : t("employeeCreated")
           );
           if (isEdit) {
             router.push(`/dipendenti/${props.employeeId}`);
@@ -100,8 +103,8 @@ export function EmployeeForm(props: EmployeeFormProps) {
       } catch {
         toast.error(
           isEdit
-            ? "Errore nell'aggiornamento del dipendente"
-            : "Errore nella creazione del dipendente"
+            ? t("employeeUpdateError")
+            : t("employeeCreateError")
         );
       }
     });
@@ -119,9 +122,9 @@ export function EmployeeForm(props: EmployeeFormProps) {
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome *</FormLabel>
+                <FormLabel>{t("firstName")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Mario" {...field} />
+                  <Input placeholder={t("firstNamePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -133,9 +136,9 @@ export function EmployeeForm(props: EmployeeFormProps) {
             name="lastName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cognome *</FormLabel>
+                <FormLabel>{t("lastName")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Rossi" {...field} />
+                  <Input placeholder={t("lastNamePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -147,11 +150,11 @@ export function EmployeeForm(props: EmployeeFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
-                    placeholder="mario.rossi@azienda.it"
+                    placeholder={t("emailPlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -165,11 +168,11 @@ export function EmployeeForm(props: EmployeeFormProps) {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Telefono</FormLabel>
+                <FormLabel>{t("phone")}</FormLabel>
                 <FormControl>
                   <Input
                     type="tel"
-                    placeholder="+39 333 1234567"
+                    placeholder={t("phonePlaceholder")}
                     {...field}
                   />
                 </FormControl>
@@ -183,10 +186,10 @@ export function EmployeeForm(props: EmployeeFormProps) {
             name="fiscalCode"
             render={({ field }) => (
               <FormItem className="sm:col-span-2">
-                <FormLabel>Codice Fiscale</FormLabel>
+                <FormLabel>{t("fiscalCode")}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="RSSMRA85M01H501Z"
+                    placeholder={t("fiscalCodePlaceholder")}
                     {...field}
                     onChange={(e) =>
                       field.onChange(e.target.value.toUpperCase())
@@ -204,10 +207,10 @@ export function EmployeeForm(props: EmployeeFormProps) {
             name="matricola"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Matricola</FormLabel>
+                <FormLabel>{t("matricola")}</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="MAT-001"
+                    placeholder={t("matricolaPlaceholder")}
                     {...field}
                     value={field.value ?? ""}
                   />
@@ -222,7 +225,7 @@ export function EmployeeForm(props: EmployeeFormProps) {
             name="avgMonthlyKm"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Km medi mensili</FormLabel>
+                <FormLabel>{t("avgMonthlyKm")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
@@ -255,7 +258,7 @@ export function EmployeeForm(props: EmployeeFormProps) {
               name="carlistId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Parco Auto (Carlist)</FormLabel>
+                  <FormLabel>{t("carlist")}</FormLabel>
                   <Select
                     onValueChange={(val) =>
                       field.onChange(val === "__none__" ? undefined : val)
@@ -264,11 +267,11 @@ export function EmployeeForm(props: EmployeeFormProps) {
                   >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Nessun parco auto" />
+                        <SelectValue placeholder={t("noCarlist")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="__none__">Nessun parco auto</SelectItem>
+                      <SelectItem value="__none__">{t("noCarlist")}</SelectItem>
                       {carlists.map((c) => (
                         <SelectItem key={c.id} value={c.id}>
                           {c.name}
@@ -287,11 +290,11 @@ export function EmployeeForm(props: EmployeeFormProps) {
           <Button type="submit" disabled={isPending}>
             {isPending
               ? isEdit
-                ? "Salvataggio..."
-                : "Creazione..."
+                ? tCommon("saving")
+                : t("creating")
               : isEdit
-                ? "Salva modifiche"
-                : "Crea dipendente"}
+                ? t("saveChanges")
+                : t("createEmployee")}
           </Button>
           <Button
             type="button"
@@ -299,7 +302,7 @@ export function EmployeeForm(props: EmployeeFormProps) {
             onClick={() => router.back()}
             disabled={isPending}
           >
-            Annulla
+            {tCommon("cancel")}
           </Button>
         </div>
       </form>

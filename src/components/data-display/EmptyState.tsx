@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Lock, PackageOpen, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -37,6 +38,7 @@ export function EmptyState({
   actions,
   className,
 }: EmptyStateProps) {
+  const t = useTranslations("common");
   const Icon =
     icon ?? (variant === "permission" ? Lock : PackageOpen);
 
@@ -92,7 +94,7 @@ export function EmptyState({
 
       {variant === "permission" && (
         <p className="mt-4 text-small text-muted-foreground">
-          Non hai accesso a questa sezione. Contatta il tuo amministratore.
+          {t("permissionDenied")}
         </p>
       )}
     </div>

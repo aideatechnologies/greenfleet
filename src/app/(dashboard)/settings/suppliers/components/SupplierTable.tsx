@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useReactTable,
   getCoreRowModel,
@@ -63,6 +64,8 @@ function typeBadgeClasses(code: string): string {
 }
 
 export function SupplierTable({ suppliers, pagination, supplierTypes }: SupplierTableProps) {
+  const t = useTranslations("settings.suppliers");
+  const tCommon = useTranslations("common");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -118,7 +121,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
   async function handleToggleActive(id: number, currentlyActive: boolean) {
     const result = await toggleSupplierActiveAction(id, !currentlyActive);
     if (result.success) {
-      toast.success(currentlyActive ? "Fornitore disattivato" : "Fornitore riattivato");
+      toast.success(currentlyActive ? t("supplierDeactivated") : t("supplierReactivated"));
       router.refresh();
     } else {
       toast.error(result.error);
@@ -129,7 +132,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
     () => [
       {
         id: "name",
-        header: "Nome",
+        header: t("nameColumn"),
         cell: ({ row }) => (
           <div>
             <span className="font-medium">{row.original.name}</span>
@@ -143,7 +146,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
       },
       {
         id: "type",
-        header: "Tipo",
+        header: t("typeColumn"),
         cell: ({ row }) => (
           <Badge
             variant="outline"
@@ -155,7 +158,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
       },
       {
         id: "contact",
-        header: "Contatto",
+        header: t("contactColumn"),
         cell: ({ row }) => (
           <div className="text-sm">
             {row.original.contactName && (
@@ -175,7 +178,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
       },
       {
         id: "pec",
-        header: "PEC",
+        header: t("pecColumn"),
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground">
             {row.original.pec || "-"}
@@ -184,10 +187,10 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
       },
       {
         id: "status",
-        header: "Stato",
+        header: tCommon("status"),
         cell: ({ row }) => (
           <Badge variant={row.original.isActive ? "default" : "secondary"}>
-            {row.original.isActive ? "Attivo" : "Inattivo"}
+            {row.original.isActive ? tCommon("activeSingular") : tCommon("inactiveSingular")}
           </Badge>
         ),
       },
@@ -208,7 +211,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
                 }
               >
                 <Pencil className="mr-2 h-4 w-4" />
-                Modifica
+                {tCommon("edit")}
               </DropdownMenuItem>
               {row.original.supplierType.code === "CARBURANTE" && (
                 <DropdownMenuItem
@@ -217,7 +220,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
                   }
                 >
                   <FileCode className="mr-2 h-4 w-4" />
-                  Template XML
+                  {tCommon("xmlTemplate")}
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem
@@ -228,12 +231,12 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
                 {row.original.isActive ? (
                   <>
                     <ToggleLeft className="mr-2 h-4 w-4" />
-                    Disattiva
+                    {tCommon("deactivate")}
                   </>
                 ) : (
                   <>
                     <ToggleRight className="mr-2 h-4 w-4" />
-                    Riattiva
+                    {tCommon("reactivate")}
                   </>
                 )}
               </DropdownMenuItem>
@@ -242,7 +245,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
         ),
       },
     ],
-    [router]
+    [router, t, tCommon]
   );
 
   const table = useReactTable({
@@ -262,7 +265,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Cerca per nome, P.IVA, PEC..."
+            placeholder={t("searchPlaceholder")}
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-9"
@@ -270,10 +273,10 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
         </div>
         <Select value={currentTypeFilter} onValueChange={handleTypeFilter}>
           <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder="Tipo" />
+            <SelectValue placeholder={tCommon("type")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutti i tipi</SelectItem>
+            <SelectItem value="all">{tCommon("allTypes")}</SelectItem>
             {supplierTypes.map((type) => (
               <SelectItem key={type.id} value={String(type.id)}>
                 {type.label}
@@ -283,12 +286,12 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
         </Select>
         <Select value={currentActiveFilter} onValueChange={handleActiveFilter}>
           <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Stato" />
+            <SelectValue placeholder={tCommon("status")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tutti</SelectItem>
-            <SelectItem value="true">Attivi</SelectItem>
-            <SelectItem value="false">Inattivi</SelectItem>
+            <SelectItem value="all">{tCommon("all")}</SelectItem>
+            <SelectItem value="true">{tCommon("active")}</SelectItem>
+            <SelectItem value="false">{tCommon("inactive")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -314,7 +317,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
                 <TableCell colSpan={columns.length} className="h-24 text-center">
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <Building2 className="h-8 w-8" />
-                    <p>{isPending ? "Caricamento..." : "Nessun fornitore trovato"}</p>
+                    <p>{isPending ? tCommon("loading") : t("noSuppliersFound")}</p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -336,8 +339,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
       {pagination.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            {pagination.totalCount} fornitori totali - Pagina {pagination.page} di{" "}
-            {pagination.totalPages}
+            {pagination.totalCount} {t("suppliersTotal")} - {tCommon("page", { page: pagination.page, totalPages: pagination.totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -347,7 +349,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
               disabled={pagination.page <= 1 || isPending}
             >
               <ChevronLeft className="h-4 w-4" />
-              Precedente
+              {tCommon("previous")}
             </Button>
             <Button
               variant="outline"
@@ -355,7 +357,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
               onClick={() => handlePageChange(pagination.page + 1)}
               disabled={pagination.page >= pagination.totalPages || isPending}
             >
-              Successiva
+              {tCommon("next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
