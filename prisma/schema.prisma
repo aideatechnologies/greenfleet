@@ -449,8 +449,7 @@ model FuelCard {
   id                 BigInt       @id @default(autoincrement())
   tenantId           String    @map("tenant_id")
   cardNumber         String    @map("card_number") @db.NVarChar(50)
-  issuer             String    @db.NVarChar(100)
-  supplierId         BigInt?      @map("supplier_id")
+  supplierId         BigInt       @map("supplier_id")
   expiryDate         DateTime? @map("expiry_date")
   status             String    @default("ACTIVE")
   assignmentType     String    @map("assignment_type")
@@ -460,7 +459,7 @@ model FuelCard {
   createdAt          DateTime  @default(now()) @map("created_at")
   updatedAt          DateTime  @updatedAt @map("updated_at")
 
-  supplier         Supplier?      @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  supplier         Supplier       @relation(fields: [supplierId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   assignedVehicle  TenantVehicle? @relation(fields: [assignedVehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   assignedEmployee Employee?      @relation(fields: [assignedEmployeeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   fuelRecords      FuelRecord[]

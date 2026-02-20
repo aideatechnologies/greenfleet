@@ -43,7 +43,7 @@ import {
   type SupplierOptionItem,
 } from "@/components/forms/SupplierSelector";
 import { getTenantVehiclesAction } from "../actions/get-tenant-vehicles";
-import { getNltSuppliersAction } from "../actions/get-nlt-suppliers";
+import { getContractSuppliersAction } from "../actions/get-contract-suppliers";
 import { createContractAction } from "../actions/create-contract";
 import { updateContractAction } from "../actions/update-contract";
 import { SuccessionConfirmDialog } from "./SuccessionConfirmDialog";
@@ -207,6 +207,7 @@ export function ContractForm({
   const [isPending, startTransition] = useTransition();
   const [vehicles, setVehicles] = useState<VehicleOptionItem[]>([]);
   const [nltSuppliers, setNltSuppliers] = useState<SupplierOptionItem[]>([]);
+  const [leasingSuppliers, setLeasingSuppliers] = useState<SupplierOptionItem[]>([]);
   const [successionDialogOpen, setSuccessionDialogOpen] = useState(false);
   const [successionInfo, setSuccessionInfo] = useState("");
   const [pendingValues, setPendingValues] = useState<FormValues | null>(null);
@@ -225,10 +226,13 @@ export function ContractForm({
     async function loadOptions() {
       const [vehiclesResult, suppliersResult] = await Promise.all([
         getTenantVehiclesAction(),
-        getNltSuppliersAction(),
+        getContractSuppliersAction(),
       ]);
       if (vehiclesResult.success) setVehicles(vehiclesResult.data);
-      if (suppliersResult.success) setNltSuppliers(suppliersResult.data);
+      if (suppliersResult.success) {
+        setNltSuppliers(suppliersResult.data.nlt);
+        setLeasingSuppliers(suppliersResult.data.leasing);
+      }
     }
     loadOptions();
   }, []);
@@ -367,7 +371,7 @@ export function ContractForm({
             <LungoTermineFields form={form} suppliers={nltSuppliers} />
           )}
           {contractType === "LEASING_FINANZIARIO" && (
-            <LeasingFinanziarioFields form={form} suppliers={nltSuppliers} />
+            <LeasingFinanziarioFields form={form} suppliers={leasingSuppliers} />
           )}
 
           {/* Notes (all types) */}

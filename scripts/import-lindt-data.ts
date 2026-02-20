@@ -1607,9 +1607,9 @@ async function phase8(
     }
 
     // Resolve supplier from issuer name
-    let supplierId: number | null = null;
+    let supplierId: number | undefined = undefined;
     if (!DRY_RUN) {
-      supplierId = supplierByName.get(normalizeSupplierName(issuer)) ?? null;
+      supplierId = supplierByName.get(normalizeSupplierName(issuer)) ?? undefined;
     }
 
     if (DRY_RUN) {
@@ -1629,7 +1629,6 @@ async function phase8(
           },
         },
         update: {
-          issuer,
           supplierId,
           expiryDate,
           status: "ACTIVE",
@@ -1640,8 +1639,7 @@ async function phase8(
         create: {
           tenantId: orgId,
           cardNumber,
-          issuer,
-          supplierId,
+          supplierId: supplierId ?? 0,
           expiryDate,
           status: "ACTIVE",
           assignmentType,

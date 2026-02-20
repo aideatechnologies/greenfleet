@@ -15,14 +15,9 @@ export const createFuelCardSchema = z
       .string()
       .min(1, { error: "Il numero carta e obbligatorio" })
       .max(50, { error: "Il numero carta non puo superare 50 caratteri" }),
-    issuer: z
-      .string()
-      .min(1, { error: "La societa emittente e obbligatoria" })
-      .max(100, { error: "La societa emittente non puo superare 100 caratteri" }),
     supplierId: z
-      .coerce.number()
-      .optional()
-      .transform((val) => (val === 0 ? undefined : val)),
+      .coerce.number({ error: "Il fornitore e obbligatorio" })
+      .min(1, { error: "Il fornitore e obbligatorio" }),
     expiryDate: z.coerce
       .date({ error: "Data scadenza non valida" })
       .optional(),

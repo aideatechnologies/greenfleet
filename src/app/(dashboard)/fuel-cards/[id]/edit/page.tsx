@@ -28,8 +28,7 @@ export default async function EditFuelCardPage({
 
   const defaultValues = {
     cardNumber: fuelCard.cardNumber,
-    issuer: fuelCard.issuer,
-    supplierId: fuelCard.supplierId != null ? String(fuelCard.supplierId) : "",
+    supplierId: String(fuelCard.supplierId),
     expiryDate: fuelCard.expiryDate ? new Date(fuelCard.expiryDate) : undefined,
     status: fuelCard.status as "ACTIVE" | "EXPIRED" | "SUSPENDED",
     assignmentType: fuelCard.assignmentType as "VEHICLE" | "EMPLOYEE" | "JOLLY",

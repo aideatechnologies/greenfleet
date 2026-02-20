@@ -99,7 +99,7 @@ export async function updateEmissionFactorAction(
       };
     }
     logger.error(
-      { error, userId: ctx.userId, id },
+      { err: error, userId: ctx.userId, id },
       "Failed to update emission factor"
     );
     return {

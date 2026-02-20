@@ -52,8 +52,7 @@ export async function createFuelCard(
     data: {
       tenantId: "", // Overwritten by tenant extension
       cardNumber: data.cardNumber,
-      issuer: data.issuer,
-      supplierId: data.supplierId ?? null,
+      supplierId: data.supplierId,
       expiryDate: data.expiryDate ?? null,
       status: data.status,
       assignmentType: data.assignmentType,
@@ -78,8 +77,7 @@ export async function updateFuelCard(
     where: { id },
     data: {
       cardNumber: data.cardNumber,
-      issuer: data.issuer,
-      supplierId: data.supplierId ?? null,
+      supplierId: data.supplierId,
       expiryDate: data.expiryDate ?? null,
       status: data.status,
       assignmentType: data.assignmentType,
@@ -127,7 +125,7 @@ export async function getFuelCards(
     const term = search.trim();
     where.OR = [
       { cardNumber: { contains: term } },
-      { issuer: { contains: term } },
+      { supplier: { name: { contains: term } } },
       { notes: { contains: term } },
     ];
   }

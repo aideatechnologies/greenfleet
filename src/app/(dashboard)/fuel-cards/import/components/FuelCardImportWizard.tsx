@@ -212,7 +212,6 @@ export function FuelCardImportWizard() {
     try {
       const rows = validResults.map((r) => ({
         cardNumber: r.resolved!.cardNumber,
-        issuer: r.resolved!.issuer,
         supplierId: r.resolved!.supplierId,
         expiryDate: r.resolved!.expiryDate ? r.resolved!.expiryDate.toISOString() : null,
         assignedVehicleId: r.resolved!.assignedVehicleId,
@@ -338,7 +337,7 @@ export function FuelCardImportWizard() {
 
         {currentStep === "mapping" && parsedData && (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">Associa le colonne del file ai campi. <span className="font-medium text-foreground">Numero Carta e Emittente</span> sono obbligatori.</p>
+            <p className="text-sm text-muted-foreground">Associa le colonne del file ai campi. <span className="font-medium text-foreground">Numero Carta e Fornitore</span> sono obbligatori.</p>
             <div className="rounded-md border"><Table><TableHeader><TableRow><TableHead className="w-[200px]">Colonna file</TableHead><TableHead className="w-[200px]">Valore anteprima</TableHead><TableHead className="w-[250px]">Campo Greenfleet</TableHead></TableRow></TableHeader><TableBody>
               {parsedData.headers.map((header, colIndex) => {
                 const currentField = getFieldForColumn(colIndex);
@@ -363,7 +362,7 @@ export function FuelCardImportWizard() {
               {warningCount > 0 && <div className="rounded-md border px-4 py-3 border-amber-200 dark:border-amber-800"><p className="text-xs text-muted-foreground">Con avvisi</p><p className="text-2xl font-bold text-amber-600">{warningCount}</p></div>}
             </div>
             {errorRowCount > 0 && <div className="flex items-center gap-3"><Switch id="showOnlyErrors" checked={showOnlyErrors} onCheckedChange={setShowOnlyErrors} /><Label htmlFor="showOnlyErrors">Mostra solo righe con errori</Label></div>}
-            <div className="rounded-md border overflow-auto max-h-[500px]"><Table><TableHeader><TableRow><TableHead className="w-[60px] text-center">Riga</TableHead><TableHead className="w-[80px]">Stato</TableHead><TableHead>N. Carta</TableHead><TableHead>Emittente</TableHead><TableHead>Tipo Asseg.</TableHead><TableHead>Dettagli</TableHead></TableRow></TableHeader><TableBody>
+            <div className="rounded-md border overflow-auto max-h-[500px]"><Table><TableHeader><TableRow><TableHead className="w-[60px] text-center">Riga</TableHead><TableHead className="w-[80px]">Stato</TableHead><TableHead>N. Carta</TableHead><TableHead>Fornitore</TableHead><TableHead>Tipo Asseg.</TableHead><TableHead>Dettagli</TableHead></TableRow></TableHeader><TableBody>
               {filteredResults.length === 0 ? (
                 <TableRow><TableCell colSpan={6} className="h-24 text-center text-muted-foreground">{showOnlyErrors ? "Nessuna riga con errori" : "Nessun risultato"}</TableCell></TableRow>
               ) : filteredResults.map((result) => (
@@ -371,7 +370,7 @@ export function FuelCardImportWizard() {
                   <TableCell className="text-center text-muted-foreground text-xs">{result.rowIndex + 1}</TableCell>
                   <TableCell><Badge variant={result.isValid ? "default" : "destructive"} className={result.isValid ? (result.warnings.length > 0 ? "bg-amber-600 hover:bg-amber-600/90" : "bg-green-600 hover:bg-green-600/90") : ""}>{result.isValid ? (result.warnings.length > 0 ? "Avviso" : "OK") : "Errore"}</Badge></TableCell>
                   <TableCell><code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">{result.data.cardNumber || "-"}</code></TableCell>
-                  <TableCell>{result.data.issuer || "-"}</TableCell>
+                  <TableCell>{result.data.supplier || "-"}</TableCell>
                   <TableCell>{result.data.assignmentType || "-"}</TableCell>
                   <TableCell>
                     {result.errors.length > 0 ? (<ul className="list-disc pl-4 text-xs text-red-600 dark:text-red-400 space-y-0.5">{result.errors.map((err, i) => (<li key={i}><span className="font-medium">{FUEL_CARD_FIELD_LABELS[err.field] ?? err.field}:</span> {err.message}</li>))}</ul>)

@@ -61,7 +61,6 @@ import { getFuelCardOptionsAction } from "../actions/get-fuel-card-options";
 
 type FuelCardFormValues = {
   cardNumber: string;
-  issuer: string;
   supplierId: string;
   expiryDate?: Date;
   status: string;
@@ -90,7 +89,6 @@ export function FuelCardForm({ mode, fuelCardId, defaultValues }: FuelCardFormPr
     resolver: zodResolver(createFuelCardSchema) as unknown as Resolver<FuelCardFormValues>,
     defaultValues: defaultValues ?? {
       cardNumber: "",
-      issuer: "",
       supplierId: "",
       expiryDate: undefined,
       status: "ACTIVE",
@@ -164,24 +162,10 @@ export function FuelCardForm({ mode, fuelCardId, defaultValues }: FuelCardFormPr
 
           <FormField
             control={form.control}
-            name="issuer"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Societa Emittente *</FormLabel>
-                <FormControl>
-                  <Input placeholder="Q8, ENI, IP..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="supplierId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Fornitore Carburante</FormLabel>
+                <FormLabel>Fornitore *</FormLabel>
                 <FormControl>
                   <SupplierSelector
                     suppliers={suppliers}

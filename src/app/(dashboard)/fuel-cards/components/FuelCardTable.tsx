@@ -151,10 +151,7 @@ export function FuelCardTable({ fuelCards, pagination, suppliers }: FuelCardTabl
         id: "cardNumber",
         header: tCommon("cardNumber"),
         cell: ({ row }) => (
-          <div>
-            <span className="font-mono font-medium">{row.original.cardNumber}</span>
-            <p className="text-xs text-muted-foreground">{row.original.issuer}</p>
-          </div>
+          <span className="font-mono font-medium">{row.original.cardNumber}</span>
         ),
       },
       {

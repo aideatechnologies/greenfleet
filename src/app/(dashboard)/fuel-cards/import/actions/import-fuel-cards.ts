@@ -13,8 +13,7 @@ const BATCH_SIZE = 100;
 
 type ImportRowInput = {
   cardNumber: string;
-  issuer: string;
-  supplierId: number | null;
+  supplierId: number;
   expiryDate: string | null; // ISO string
   assignedVehicleId: number | null;
   assignedEmployeeId: number | null;
@@ -70,7 +69,6 @@ export async function importFuelCardsAction(
             data: {
               tenantId: "", // Overwritten by tenant extension
               cardNumber: row.cardNumber,
-              issuer: row.issuer,
               supplierId: row.supplierId,
               expiryDate: row.expiryDate ? new Date(row.expiryDate) : null,
               status: "ACTIVE",

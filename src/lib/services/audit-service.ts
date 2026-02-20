@@ -41,17 +41,17 @@ export function calculateChanges(
     const oldVal = oldValues[field];
     const newVal = newValues[field];
 
-    // Compare dates by their ISO string representation
+    // Compare dates by their ISO string, BigInt by Number coercion
     const oldStr =
-      oldVal instanceof Date ? oldVal.toISOString() : JSON.stringify(oldVal);
+      oldVal instanceof Date ? oldVal.toISOString() : safeStringify(oldVal);
     const newStr =
-      newVal instanceof Date ? newVal.toISOString() : JSON.stringify(newVal);
+      newVal instanceof Date ? newVal.toISOString() : safeStringify(newVal);
 
     if (oldStr !== newStr) {
       changes.push({
         field,
-        old: oldVal instanceof Date ? oldVal.toISOString() : oldVal,
-        new: newVal instanceof Date ? newVal.toISOString() : newVal,
+        old: oldVal instanceof Date ? oldVal.toISOString() : toBigIntSafe(oldVal),
+        new: newVal instanceof Date ? newVal.toISOString() : toBigIntSafe(newVal),
       });
     }
   }
@@ -77,15 +77,15 @@ export function diffObjects(
     const newVal = newObj[key];
 
     const oldStr =
-      oldVal instanceof Date ? oldVal.toISOString() : JSON.stringify(oldVal);
+      oldVal instanceof Date ? oldVal.toISOString() : safeStringify(oldVal);
     const newStr =
-      newVal instanceof Date ? newVal.toISOString() : JSON.stringify(newVal);
+      newVal instanceof Date ? newVal.toISOString() : safeStringify(newVal);
 
     if (oldStr !== newStr) {
       changes.push({
         field: key,
-        old: oldVal instanceof Date ? oldVal.toISOString() : oldVal,
-        new: newVal instanceof Date ? newVal.toISOString() : newVal,
+        old: oldVal instanceof Date ? oldVal.toISOString() : toBigIntSafe(oldVal),
+        new: newVal instanceof Date ? newVal.toISOString() : toBigIntSafe(newVal),
       });
     }
   }
@@ -336,6 +336,25 @@ export async function getAuditEntries(
       totalPages: Math.ceil(totalCount / pageSize),
     },
   };
+}
+
+// ---------------------------------------------------------------------------
+// Helper: BigInt-safe JSON.stringify (BigInt → Number for serialization)
+// ---------------------------------------------------------------------------
+
+function safeStringify(val: unknown): string {
+  if (typeof val === "bigint") return String(val);
+  try {
+    return JSON.stringify(val, (_k, v) =>
+      typeof v === "bigint" ? Number(v) : v
+    );
+  } catch {
+    return String(val);
+  }
+}
+
+function toBigIntSafe(val: unknown): unknown {
+  return typeof val === "bigint" ? Number(val) : val;
 }
 
 // ---------------------------------------------------------------------------

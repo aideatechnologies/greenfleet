@@ -1,12 +1,14 @@
 // Default supplier type codes (seeded per tenant, but extensible)
 export const DEFAULT_SUPPLIER_TYPE_CODES = {
   NLT: "NLT",
+  LEASING: "LEASING",
   CARBURANTE: "CARBURANTE",
   ALTRO: "ALTRO",
 } as const;
 
 export const DEFAULT_SUPPLIER_TYPE_LABELS: Record<string, string> = {
   NLT: "Noleggio Lungo Termine",
+  LEASING: "Leasing",
   CARBURANTE: "Carburante",
   ALTRO: "Altro",
 };

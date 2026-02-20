@@ -22,18 +22,16 @@ const COLUMN_ALIASES: Record<string, string[]> = {
     "codice carta",
     "carta",
   ],
-  issuer: [
-    "emittente",
-    "issuer",
-    "circuito",
-    "ente emittente",
-    "societa emittente",
-  ],
   supplier: [
     "fornitore",
     "supplier",
     "societa",
     "compagnia",
+    "emittente",
+    "issuer",
+    "circuito",
+    "ente emittente",
+    "societa emittente",
   ],
   expiryDate: [
     "data scadenza",
@@ -312,14 +310,22 @@ export function validateImportRows(
       }
     }
 
-    // Step 6: Resolve supplier (optional)
+    // Step 6: Resolve supplier (required)
     let supplierId: number | null = null;
     if (data.supplier?.trim()) {
       const normalizedSupplier = data.supplier.trim().toLowerCase();
       supplierId = supplierNameMap.get(normalizedSupplier) ?? null;
       if (!supplierId) {
-        warnings.push(`Fornitore "${data.supplier}" non trovato nel sistema`);
+        errors.push({
+          field: "supplier",
+          message: `Fornitore "${data.supplier}" non trovato nel sistema`,
+        });
       }
+    } else {
+      errors.push({
+        field: "supplier",
+        message: "Il fornitore e obbligatorio",
+      });
     }
 
     // Step 7: Map assignment type
@@ -336,8 +342,7 @@ export function validateImportRows(
     const resolved: ValidatedFuelCardRow | undefined = isValid
       ? {
           cardNumber: data.cardNumber?.trim() || "",
-          issuer: data.issuer?.trim() || "",
-          supplierId,
+          supplierId: supplierId!,
           expiryDate,
           assignedVehicleId,
           assignedEmployeeId,

@@ -54,6 +54,10 @@ import {
 } from "../actions/get-fuel-cards";
 import { createFuelRecordAction } from "../actions/create-fuel-record";
 import { updateFuelRecordAction } from "../actions/update-fuel-record";
+import {
+  getFuelTypeOptionsAction,
+  type FuelTypeOption,
+} from "../actions/get-fuel-type-options";
 
 // ---------------------------------------------------------------------------
 // Form values type
@@ -81,7 +85,6 @@ type FuelRecordFormProps = {
   defaultValues?: FormValues;
   defaultVehicleId?: string;
   isDriver?: boolean;
-  fuelTypeOptions?: Array<{ value: string; label: string }>;
 };
 
 // ---------------------------------------------------------------------------
@@ -94,7 +97,6 @@ export function FuelRecordForm({
   defaultValues: initialDefaults,
   defaultVehicleId,
   isDriver = false,
-  fuelTypeOptions = [],
 }: FuelRecordFormProps) {
   const router = useRouter();
   const t = useTranslations("fuelRecords");
@@ -102,6 +104,7 @@ export function FuelRecordForm({
   const [isPending, startTransition] = useTransition();
   const [vehicles, setVehicles] = useState<VehicleOptionItem[]>([]);
   const [fuelCards, setFuelCards] = useState<FuelCardOptionItem[]>([]);
+  const [fuelTypeOptions, setFuelTypeOptions] = useState<FuelTypeOption[]>([]);
 
   const isEdit = mode === "edit";
   const schema = isEdit ? updateFuelRecordSchema : createFuelRecordSchema;
@@ -122,13 +125,15 @@ export function FuelRecordForm({
     mode: "onBlur",
   });
 
-  // Load vehicles and fuel cards for selectors
+  // Load vehicles, fuel cards and fuel types for selectors
   useEffect(() => {
     async function loadOptions() {
-      const [vehiclesResult, fuelCardsResult] = await Promise.all([
-        getTenantVehiclesForFuelAction(),
-        getFuelCardsForFuelRecordAction(),
-      ]);
+      const [vehiclesResult, fuelCardsResult, fuelTypesResult] =
+        await Promise.all([
+          getTenantVehiclesForFuelAction(),
+          getFuelCardsForFuelRecordAction(),
+          getFuelTypeOptionsAction(),
+        ]);
       if (vehiclesResult.success) {
         setVehicles(vehiclesResult.data);
         // If driver has only one vehicle, auto-select it
@@ -138,6 +143,9 @@ export function FuelRecordForm({
       }
       if (fuelCardsResult.success) {
         setFuelCards(fuelCardsResult.data);
+      }
+      if (fuelTypesResult.success) {
+        setFuelTypeOptions(fuelTypesResult.data);
       }
     }
     loadOptions();
@@ -437,7 +445,7 @@ export function FuelRecordForm({
                     <SelectContent>
                       {fuelCards.map((fc) => (
                         <SelectItem key={fc.id} value={fc.id}>
-                          {fc.cardNumber} ({fc.issuer})
+                          {fc.cardNumber} ({fc.supplierName})
                         </SelectItem>
                       ))}
                     </SelectContent>

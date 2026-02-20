@@ -8,7 +8,7 @@ import { getPrismaForTenant } from "@/lib/db/client";
 export type FuelCardOptionItem = {
   id: string;
   cardNumber: string;
-  issuer: string;
+  supplierName: string;
 };
 
 /**
@@ -38,7 +38,7 @@ export async function getFuelCardsForFuelRecordAction(): Promise<
       select: {
         id: true,
         cardNumber: true,
-        issuer: true,
+        supplier: { select: { name: true } },
       },
     });
 
@@ -47,7 +47,7 @@ export async function getFuelCardsForFuelRecordAction(): Promise<
       data: fuelCards.map((fc) => ({
         id: String(fc.id),
         cardNumber: fc.cardNumber,
-        issuer: fc.issuer,
+        supplierName: fc.supplier.name,
       })),
     };
   } catch {

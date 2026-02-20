@@ -21,10 +21,9 @@ export const fuelCardImportRowSchema = z.object({
   cardNumber: z
     .string()
     .min(1, { error: "Il numero carta e obbligatorio" }),
-  issuer: z
+  supplier: z
     .string()
-    .min(1, { error: "L'emittente e obbligatorio" }),
-  supplier: z.string().optional(),
+    .min(1, { error: "Il fornitore e obbligatorio" }),
   expiryDate: z.string().optional(),
   licensePlate: z.string().optional(),
   employeeName: z.string().optional(),
@@ -39,8 +38,7 @@ export type FuelCardImportRow = z.infer<typeof fuelCardImportRowSchema>;
 
 export type ValidatedFuelCardRow = {
   cardNumber: string;
-  issuer: string;
-  supplierId: number | null;
+  supplierId: number;
   expiryDate: Date | null;
   assignedVehicleId: number | null;
   assignedEmployeeId: number | null;
@@ -77,8 +75,7 @@ export type FuelCardImportResult = {
 
 export const FUEL_CARD_IMPORT_FIELDS = [
   { field: "cardNumber", label: "Numero Carta", required: true },
-  { field: "issuer", label: "Emittente", required: true },
-  { field: "supplier", label: "Fornitore", required: false },
+  { field: "supplier", label: "Fornitore", required: true },
   { field: "expiryDate", label: "Data Scadenza", required: false },
   { field: "licensePlate", label: "Targa Assegnata", required: false },
   { field: "employeeName", label: "Dipendente Assegnato", required: false },
@@ -87,7 +84,6 @@ export const FUEL_CARD_IMPORT_FIELDS = [
 
 export const FUEL_CARD_FIELD_LABELS: Record<string, string> = {
   cardNumber: "Numero Carta",
-  issuer: "Emittente",
   supplier: "Fornitore",
   expiryDate: "Data Scadenza",
   licensePlate: "Targa Assegnata",
