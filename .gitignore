@@ -46,3 +46,9 @@ next-env.d.ts
 
 # Local file storage
 /storage/
+
+# Documentation (Infocar manuals, design assets)
+/InfocarData_Manuale_it_*/
+InfocarData_Colori.pdf
+/Design Examples/
+/design-system/
