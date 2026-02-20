@@ -244,7 +244,7 @@ export function FuelRecordTable({
         ),
         cell: ({ row }) => (
           <span className="font-medium tabular-nums">
-            {row.original.quantityLiters > 0
+            {row.original.quantityLiters != null && row.original.quantityLiters > 0
               ? `${numberFmt.format(row.original.quantityLiters)} L`
               : "\u2014"}
           </span>
@@ -315,7 +315,7 @@ export function FuelRecordTable({
       {
         id: "co2Emissions",
         accessorFn: (row) =>
-          row.quantityLiters * (co2Factors[row.fuelType] ?? 0),
+          (row.quantityLiters ?? 0) * (co2Factors[row.fuelType] ?? 0),
         header: ({ column }) => (
           <Button
             variant="ghost"
@@ -329,7 +329,7 @@ export function FuelRecordTable({
         ),
         cell: ({ row }) => {
           const factor = co2Factors[row.original.fuelType] ?? 0;
-          const co2 = row.original.quantityLiters * factor;
+          const co2 = (row.original.quantityLiters ?? 0) * factor;
           return co2 > 0 ? (
             <span className="font-medium tabular-nums">
               {co2Fmt.format(co2)} kg
@@ -403,7 +403,7 @@ export function FuelRecordTable({
                       <DropdownMenuItem
                         onClick={() => {
                           const qtyParts: string[] = [];
-                          if (record.quantityLiters > 0) qtyParts.push(`${numberFmt.format(record.quantityLiters)} L`);
+                          if (record.quantityLiters != null && record.quantityLiters > 0) qtyParts.push(`${numberFmt.format(record.quantityLiters)} L`);
                           if (record.quantityKwh != null) qtyParts.push(`${numberFmt.format(record.quantityKwh)} kWh`);
                           setConfirmDialog({
                             open: true,

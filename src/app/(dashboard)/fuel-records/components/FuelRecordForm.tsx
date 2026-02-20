@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,13 +49,13 @@ import {
 } from "@/components/forms/VehicleSelector";
 import { getTenantVehiclesForFuelAction } from "../actions/get-tenant-vehicles";
 import {
-  getFuelCardsForFuelRecordAction,
+  getFuelCardsForVehicleAction,
   type FuelCardOptionItem,
 } from "../actions/get-fuel-cards";
 import { createFuelRecordAction } from "../actions/create-fuel-record";
 import { updateFuelRecordAction } from "../actions/update-fuel-record";
 import {
-  getFuelTypeOptionsAction,
+  getFuelTypesForVehicleAction,
   type FuelTypeOption,
 } from "../actions/get-fuel-type-options";
 
@@ -67,7 +67,7 @@ type FormValues = {
   vehicleId: string;
   date: Date;
   fuelType: string;
-  quantityLiters: number;
+  quantityLiters?: number | null;
   quantityKwh?: number | null;
   amountEur: number;
   odometerKm: number;
@@ -125,32 +125,72 @@ export function FuelRecordForm({
     mode: "onBlur",
   });
 
-  // Load vehicles, fuel cards and fuel types for selectors
+  // Load fuel types and cards for a specific vehicle (data only, no form changes)
+  const loadVehicleOptions = useCallback(async (vehicleId: string) => {
+    const vid = Number(vehicleId);
+    const [fuelTypesResult, fuelCardsResult] = await Promise.all([
+      getFuelTypesForVehicleAction(vid),
+      getFuelCardsForVehicleAction(vid),
+    ]);
+    let types: FuelTypeOption[] = [];
+    let cards: FuelCardOptionItem[] = [];
+    if (fuelTypesResult.success) {
+      types = fuelTypesResult.data;
+      setFuelTypeOptions(types);
+    }
+    if (fuelCardsResult.success) {
+      cards = fuelCardsResult.data;
+      setFuelCards(cards);
+    }
+    return { types, cards };
+  }, []);
+
+  // Handle vehicle change from user interaction: reset dependents and reload
+  const handleVehicleChange = useCallback(
+    async (vehicleId: string) => {
+      form.setValue("vehicleId", vehicleId);
+      form.setValue("fuelType", "");
+      form.setValue("fuelCardId", undefined);
+      setFuelTypeOptions([]);
+      setFuelCards([]);
+      if (vehicleId) {
+        const { types, cards } = await loadVehicleOptions(vehicleId);
+        if (types.length === 1) form.setValue("fuelType", types[0].value);
+        if (cards.length === 1) form.setValue("fuelCardId", cards[0].id);
+      }
+    },
+    [form, loadVehicleOptions]
+  );
+
+  // Load vehicles on mount; load fuel types/cards for pre-selected vehicle
   useEffect(() => {
-    async function loadOptions() {
-      const [vehiclesResult, fuelCardsResult, fuelTypesResult] =
-        await Promise.all([
-          getTenantVehiclesForFuelAction(),
-          getFuelCardsForFuelRecordAction(),
-          getFuelTypeOptionsAction(),
-        ]);
-      if (vehiclesResult.success) {
-        setVehicles(vehiclesResult.data);
-        // If driver has only one vehicle, auto-select it
-        if (isDriver && vehiclesResult.data.length === 1 && !initialDefaults) {
-          form.setValue("vehicleId", vehiclesResult.data[0].id);
+    async function load() {
+      const vehiclesResult = await getTenantVehiclesForFuelAction();
+      if (!vehiclesResult.success) return;
+      setVehicles(vehiclesResult.data);
+
+      let vehicleIdToLoad: string | undefined;
+
+      if (isDriver && vehiclesResult.data.length === 1 && !initialDefaults) {
+        vehicleIdToLoad = vehiclesResult.data[0].id;
+        form.setValue("vehicleId", vehicleIdToLoad);
+      } else {
+        vehicleIdToLoad = initialDefaults?.vehicleId || defaultVehicleId;
+      }
+
+      if (vehicleIdToLoad) {
+        const { types, cards } = await loadVehicleOptions(vehicleIdToLoad);
+        // Auto-select only for new records (edit already has values)
+        if (!initialDefaults) {
+          if (types.length === 1) form.setValue("fuelType", types[0].value);
+          if (cards.length === 1) form.setValue("fuelCardId", cards[0].id);
         }
       }
-      if (fuelCardsResult.success) {
-        setFuelCards(fuelCardsResult.data);
-      }
-      if (fuelTypesResult.success) {
-        setFuelTypeOptions(fuelTypesResult.data);
-      }
     }
-    loadOptions();
-  }, [isDriver, form, initialDefaults]);
+    load();
+  }, [isDriver, form, initialDefaults, defaultVehicleId, loadVehicleOptions]);
 
+  const watchedVehicleId = form.watch("vehicleId");
   const watchedFuelType = form.watch("fuelType");
 
   function handleSubmit(values: FormValues) {
@@ -204,7 +244,7 @@ export function FuelRecordForm({
                   <VehicleSelector
                     vehicles={vehicles}
                     defaultVehicleId={defaultVehicleId ?? field.value}
-                    onSelect={(id) => field.onChange(id)}
+                    onSelect={(id) => handleVehicleChange(id)}
                     disabled={isEdit || (isDriver && vehicles.length === 1)}
                   />
                 </FormControl>
@@ -266,6 +306,7 @@ export function FuelRecordForm({
                 <Select
                   onValueChange={field.onChange}
                   value={field.value}
+                  disabled={!watchedVehicleId}
                 >
                   <FormControl>
                     <SelectTrigger
@@ -428,10 +469,11 @@ export function FuelRecordForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>{t("fuelCard")}</FormLabel>
-                {fuelCards.length > 0 ? (
+                {!watchedVehicleId || fuelCards.length > 0 ? (
                   <Select
                     onValueChange={field.onChange}
                     value={field.value ?? ""}
+                    disabled={!watchedVehicleId}
                   >
                     <FormControl>
                       <SelectTrigger
@@ -451,8 +493,8 @@ export function FuelRecordForm({
                     </SelectContent>
                   </Select>
                 ) : (
-                  <p className="text-sm text-destructive">
-                    {t("noFuelCardConfigured")}
+                  <p className="text-sm text-muted-foreground">
+                    {t("noFuelCardForVehicle")}
                   </p>
                 )}
                 <FormMessage />

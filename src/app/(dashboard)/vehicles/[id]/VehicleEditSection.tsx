@@ -66,10 +66,7 @@ const editFormSchema = z.object({
     error: "Stato non valido",
   }),
   assignedEmployeeId: z
-    .coerce.number()
-    .nullable()
-    .optional()
-    .transform((val) => (val === 0 ? null : val)),
+    .coerce.number({ error: "L'assegnatario è obbligatorio" }),
   notes: z
     .string()
     .max(500, { error: "Le note non possono superare 500 caratteri" })
@@ -83,7 +80,7 @@ type FormValues = {
   licensePlate: string;
   registrationDate: Date;
   status: string;
-  assignedEmployeeId: number | null | undefined;
+  assignedEmployeeId: number;
   notes: string | null | undefined;
 };
 
@@ -130,7 +127,7 @@ export function VehicleEditSection({
       licensePlate: vehicle.licensePlate,
       registrationDate: new Date(vehicle.registrationDate),
       status: vehicle.status,
-      assignedEmployeeId: vehicle.assignedEmployeeId ?? null,
+      assignedEmployeeId: vehicle.assignedEmployeeId != null ? Number(vehicle.assignedEmployeeId) : undefined as unknown as number,
       notes: vehicle.notes ?? "",
     } as FormValues,
     mode: "onBlur",
@@ -174,7 +171,7 @@ export function VehicleEditSection({
       licensePlate: vehicle.licensePlate,
       registrationDate: new Date(vehicle.registrationDate),
       status: vehicle.status,
-      assignedEmployeeId: vehicle.assignedEmployeeId ?? null,
+      assignedEmployeeId: vehicle.assignedEmployeeId != null ? Number(vehicle.assignedEmployeeId) : undefined as unknown as number,
       notes: vehicle.notes ?? "",
     } as FormValues);
     setIsEditing(false);
@@ -353,7 +350,7 @@ export function VehicleEditSection({
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Stato</FormLabel>
+                  <FormLabel>Stato *</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -382,7 +379,7 @@ export function VehicleEditSection({
               name="assignedEmployeeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Dipendente assegnato</FormLabel>
+                  <FormLabel>Dipendente assegnato *</FormLabel>
                   <Popover open={employeeOpen} onOpenChange={setEmployeeOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -419,17 +416,6 @@ export function VehicleEditSection({
                             Nessun dipendente trovato
                           </CommandEmpty>
                           <CommandGroup>
-                            <CommandItem
-                              value="__none__"
-                              onSelect={() => {
-                                field.onChange(null);
-                                setEmployeeOpen(false);
-                              }}
-                            >
-                              <span className="text-muted-foreground">
-                                Nessun assegnatario
-                              </span>
-                            </CommandItem>
                             {filteredEmployees.map((emp) => (
                               <CommandItem
                                 key={emp.id}

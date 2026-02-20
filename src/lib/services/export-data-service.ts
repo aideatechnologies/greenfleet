@@ -243,7 +243,7 @@ async function buildVehicleDetails(
       kmTravelled = allOdometer[allOdometer.length - 1].km - allOdometer[0].km;
     }
 
-    const fuelLitres = vFuel.reduce((sum, r) => sum + r.quantityLiters, 0);
+    const fuelLitres = vFuel.reduce((sum, r) => sum + (r.quantityLiters ?? 0), 0);
 
     // Get emission factor at midpoint of period
     const midDate = new Date(

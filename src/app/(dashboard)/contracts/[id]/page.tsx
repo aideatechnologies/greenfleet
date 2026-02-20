@@ -195,6 +195,12 @@ export default async function ContractDetailPage({
           </CardHeader>
           <CardContent>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+              {contract.contractNumber && (
+                <>
+                  <dt className="text-muted-foreground">Numero contratto</dt>
+                  <dd className="font-medium">{contract.contractNumber}</dd>
+                </>
+              )}
               {contractType === "PROPRIETARIO" && (
                 <>
                   <dt className="text-muted-foreground">Data acquisto</dt>

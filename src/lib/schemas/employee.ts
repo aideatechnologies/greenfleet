@@ -14,11 +14,14 @@ const IT: Record<string, string> = {
   firstNameMax: "Il nome non può superare 100 caratteri",
   lastNameRequired: "Il cognome è obbligatorio",
   lastNameMax: "Il cognome non può superare 100 caratteri",
+  emailRequired: "L'email è obbligatoria",
   emailInvalid: "Email non valida",
   phoneMax: "Il telefono non può superare 50 caratteri",
   fiscalCodeInvalid: "Codice fiscale non valido (formato: RSSMRA85M01H501Z)",
   matricolaMax: "La matricola non puo superare 50 caratteri",
+  avgMonthlyKmRequired: "I km medi mensili sono obbligatori",
   avgMonthlyKmNegative: "I km medi mensili non possono essere negativi",
+  carlistRequired: "La selezione della car list è obbligatoria",
   idRequired: "ID dipendente obbligatorio",
 };
 
@@ -36,14 +39,8 @@ export function buildCreateEmployeeSchema(t: T = itFallback) {
       .max(100, { error: t("lastNameMax") }),
     email: z
       .string()
-      .transform((val) => val.trim())
-      .pipe(
-        z.union([
-          z.literal(""),
-          z.string().email({ error: t("emailInvalid") }),
-        ])
-      )
-      .optional(),
+      .min(1, { error: t("emailRequired") })
+      .email({ error: t("emailInvalid") }),
     phone: z
       .string()
       .max(50, { error: t("phoneMax") })
@@ -69,11 +66,9 @@ export function buildCreateEmployeeSchema(t: T = itFallback) {
       .optional()
       .transform((val) => (val === "" ? null : val)),
     avgMonthlyKm: z
-      .number()
-      .nonnegative({ error: t("avgMonthlyKmNegative") })
-      .nullable()
-      .optional(),
-    carlistId: z.coerce.number().nullable().optional(),
+      .number({ error: t("avgMonthlyKmRequired") })
+      .nonnegative({ error: t("avgMonthlyKmNegative") }),
+    carlistId: z.coerce.number({ error: t("carlistRequired") }),
   });
 }
 

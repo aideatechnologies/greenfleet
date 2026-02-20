@@ -223,7 +223,7 @@ export async function getDriverDashboardData(
     const fuelByType = new Map<string, { litres: number; kwh: number }>();
     for (const record of fuelRecordsMonth) {
       const current = fuelByType.get(record.fuelType) ?? { litres: 0, kwh: 0 };
-      current.litres += record.quantityLiters;
+      current.litres += record.quantityLiters ?? 0;
       current.kwh += record.quantityKwh ?? 0;
       fuelByType.set(record.fuelType, current);
     }
@@ -320,7 +320,7 @@ export async function getDriverDashboardData(
       lastFuelRecord: lastFuelRecord
         ? {
             date: lastFuelRecord.date,
-            quantityLiters: lastFuelRecord.quantityLiters,
+            quantityLiters: lastFuelRecord.quantityLiters ?? 0,
             amountEur: lastFuelRecord.amountEur,
           }
         : null,

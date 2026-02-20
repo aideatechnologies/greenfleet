@@ -122,19 +122,6 @@ function getAmountDisplay(contract: ContractWithDetails): string {
 }
 
 // ---------------------------------------------------------------------------
-// Date display
-// ---------------------------------------------------------------------------
-
-function getDateDisplay(contract: ContractWithDetails): string {
-  if (contract.type === "PROPRIETARIO") {
-    return formatDateShort(contract.purchaseDate);
-  }
-  const start = formatDateShort(contract.startDate);
-  const end = formatDateShort(contract.endDate);
-  return `${start} - ${end}`;
-}
-
-// ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
 
@@ -235,6 +222,15 @@ export function ContractTable({
         ),
       },
       {
+        id: "contractNumber",
+        header: t("contractNumberColumn"),
+        cell: ({ row }) => (
+          <span className="text-sm text-muted-foreground">
+            {row.original.contractNumber || "-"}
+          </span>
+        ),
+      },
+      {
         id: "type",
         header: t("typeColumn"),
         cell: ({ row }) => {
@@ -275,11 +271,24 @@ export function ContractTable({
         },
       },
       {
-        id: "dates",
-        header: t("dates"),
+        id: "startDate",
+        header: t("startDate"),
+        cell: ({ row }) => {
+          const c = row.original;
+          const date = c.type === "PROPRIETARIO" ? c.purchaseDate : c.startDate;
+          return (
+            <span className="text-sm text-muted-foreground">
+              {formatDateShort(date)}
+            </span>
+          );
+        },
+      },
+      {
+        id: "endDate",
+        header: t("endDate"),
         cell: ({ row }) => (
           <span className="text-sm text-muted-foreground">
-            {getDateDisplay(row.original)}
+            {row.original.type === "PROPRIETARIO" ? "-" : formatDateShort(row.original.endDate)}
           </span>
         ),
       },

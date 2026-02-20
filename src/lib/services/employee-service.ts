@@ -1,7 +1,11 @@
-import type { Employee } from "@/generated/prisma/client";
+import type { Employee, Carlist } from "@/generated/prisma/client";
 import type { PrismaClientWithTenant } from "@/lib/db/client";
 import type { PaginatedResult } from "@/types/pagination";
 import type { CreateEmployeeInput, EmployeeFilterInput } from "@/lib/schemas/employee";
+
+export type EmployeeWithCarlist = Employee & {
+  carlist: Carlist | null;
+};
 
 /**
  * Get paginated and filtered employees.
@@ -10,7 +14,7 @@ import type { CreateEmployeeInput, EmployeeFilterInput } from "@/lib/schemas/emp
 export async function getEmployees(
   prisma: PrismaClientWithTenant,
   filters: EmployeeFilterInput
-): Promise<PaginatedResult<Employee>> {
+): Promise<PaginatedResult<EmployeeWithCarlist>> {
   const { search, isActive, page, pageSize, sortBy, sortOrder } = filters;
 
   const where: Record<string, unknown> = {};
@@ -39,6 +43,7 @@ export async function getEmployees(
   const [data, totalCount] = await Promise.all([
     prisma.employee.findMany({
       where,
+      include: { carlist: true },
       orderBy,
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -47,7 +52,7 @@ export async function getEmployees(
   ]);
 
   return {
-    data,
+    data: data as unknown as EmployeeWithCarlist[],
     pagination: {
       page,
       pageSize,
@@ -63,10 +68,11 @@ export async function getEmployees(
 export async function getEmployeeById(
   prisma: PrismaClientWithTenant,
   id: number
-): Promise<Employee | null> {
+): Promise<EmployeeWithCarlist | null> {
   return prisma.employee.findFirst({
     where: { id },
-  });
+    include: { carlist: true },
+  }) as Promise<EmployeeWithCarlist | null>;
 }
 
 /**
@@ -83,12 +89,12 @@ export async function createEmployee(
       tenantId: "", // Overwritten by tenant extension
       firstName: data.firstName,
       lastName: data.lastName,
-      email: data.email || null,
+      email: data.email,
       phone: data.phone || null,
       fiscalCode: data.fiscalCode || null,
       matricola: (data as Record<string, unknown>).matricola as string | undefined ?? null,
-      avgMonthlyKm: (data as Record<string, unknown>).avgMonthlyKm as number | undefined ?? null,
-      carlistId: (data as Record<string, unknown>).carlistId as number | undefined ?? null,
+      avgMonthlyKm: data.avgMonthlyKm,
+      carlistId: data.carlistId,
     },
   });
 }
@@ -113,12 +119,12 @@ export async function updateEmployee(
     data: {
       firstName: data.firstName,
       lastName: data.lastName,
-      email: data.email || null,
+      email: data.email,
       phone: data.phone || null,
       fiscalCode: data.fiscalCode || null,
       matricola: (data as Record<string, unknown>).matricola as string | undefined ?? null,
-      avgMonthlyKm: (data as Record<string, unknown>).avgMonthlyKm as number | undefined ?? null,
-      carlistId: (data as Record<string, unknown>).carlistId as number | undefined ?? null,
+      avgMonthlyKm: data.avgMonthlyKm,
+      carlistId: data.carlistId,
     },
   });
 }

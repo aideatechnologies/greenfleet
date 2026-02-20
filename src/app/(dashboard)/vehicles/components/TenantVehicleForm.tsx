@@ -53,7 +53,7 @@ type FormValues = {
   licensePlate: string;
   registrationDate: Date;
   status: string;
-  assignedEmployeeId: number | undefined;
+  assignedEmployeeId: number;
   notes: string | undefined;
 };
 
@@ -209,7 +209,7 @@ export function TenantVehicleForm({
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{tCommon("status")}</FormLabel>
+                <FormLabel>{tCommon("status")} *</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -238,7 +238,7 @@ export function TenantVehicleForm({
             name="assignedEmployeeId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("assignedEmployee")}</FormLabel>
+                <FormLabel>{t("assignedEmployee")} *</FormLabel>
                 <Popover open={employeeOpen} onOpenChange={setEmployeeOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -270,17 +270,6 @@ export function TenantVehicleForm({
                       <CommandList>
                         <CommandEmpty>{t("noEmployeeFound")}</CommandEmpty>
                         <CommandGroup>
-                          <CommandItem
-                            value="__none__"
-                            onSelect={() => {
-                              field.onChange(undefined);
-                              setEmployeeOpen(false);
-                            }}
-                          >
-                            <span className="text-muted-foreground">
-                              {t("noAssignee")}
-                            </span>
-                          </CommandItem>
                           {filteredEmployees.map((emp) => (
                             <CommandItem
                               key={emp.id}

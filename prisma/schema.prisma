@@ -500,7 +500,7 @@ model FuelRecord {
   fuelCardId     BigInt      @map("fuel_card_id")
   date           DateTime
   fuelType       String   @map("fuel_type")
-  quantityLiters Float    @map("quantity_liters")
+  quantityLiters Float?   @map("quantity_liters")
   quantityKwh    Float?   @map("quantity_kwh")
   amountEur      Float    @map("amount_eur")
   odometerKm     Int      @map("odometer_km")

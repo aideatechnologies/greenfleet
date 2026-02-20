@@ -80,7 +80,7 @@ export async function createFuelRecordAction(
       };
     }
     logger.error(
-      { error, userId: ctx.userId, tenantId },
+      { err: error, userId: ctx.userId, tenantId, errorMessage: error instanceof Error ? error.message : String(error) },
       "Failed to create fuel record"
     );
     return {

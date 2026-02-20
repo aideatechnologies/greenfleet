@@ -252,38 +252,33 @@ export function EmployeeForm(props: EmployeeFormProps) {
             )}
           />
 
-          {carlists.length > 0 && (
-            <FormField
-              control={form.control}
-              name="carlistId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("carlist")}</FormLabel>
-                  <Select
-                    onValueChange={(val) =>
-                      field.onChange(val === "__none__" ? undefined : val)
-                    }
-                    value={field.value != null ? String(field.value) : "__none__"}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder={t("noCarlist")} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="__none__">{t("noCarlist")}</SelectItem>
-                      {carlists.map((c) => (
-                        <SelectItem key={c.id} value={c.id}>
-                          {c.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
+          <FormField
+            control={form.control}
+            name="carlistId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("carlist")}</FormLabel>
+                <Select
+                  onValueChange={(val) => field.onChange(val)}
+                  value={field.value != null ? String(field.value) : ""}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("selectCarlist")} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {carlists.map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <div className="flex gap-3">

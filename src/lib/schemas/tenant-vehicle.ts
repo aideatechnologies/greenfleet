@@ -16,13 +16,10 @@ export const createTenantVehicleSchema = z.object({
   }),
   status: z
     .enum(VEHICLE_STATUS_VALUES as unknown as [string, ...string[]], {
-      error: "Stato non valido",
-    })
-    .default("ACTIVE"),
+      error: "Lo stato è obbligatorio",
+    }),
   assignedEmployeeId: z
-    .coerce.number()
-    .optional()
-    .transform((val) => (val === 0 ? undefined : val)),
+    .coerce.number({ error: "L'assegnatario è obbligatorio" }),
   notes: z
     .string()
     .max(500, { error: "Le note non possono superare 500 caratteri" })

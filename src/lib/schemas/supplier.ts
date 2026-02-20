@@ -18,6 +18,7 @@ const IT: Record<string, string> = {
   nameMax: "Il nome non puo superare 200 caratteri",
   vatFormat: "Partita IVA: 11 cifre numeriche",
   addressMax: "L'indirizzo non puo superare 500 caratteri",
+  pecRequired: "La PEC e obbligatoria",
   pecMax: "La PEC non puo superare 100 caratteri",
   contactNameMax: "Il nome contatto non puo superare 100 caratteri",
   contactPhoneMax: "Il telefono contatto non puo superare 50 caratteri",
@@ -88,9 +89,8 @@ export function buildCreateSupplierSchema(t: T = itFallback) {
       .transform((val) => (val === "" ? undefined : val)),
     pec: z
       .string()
-      .max(100, { error: t("pecMax") })
-      .optional()
-      .transform((val) => (val === "" ? undefined : val)),
+      .min(1, { error: t("pecRequired") })
+      .max(100, { error: t("pecMax") }),
     contactName: z
       .string()
       .max(100, { error: t("contactNameMax") })

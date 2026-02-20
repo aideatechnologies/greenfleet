@@ -131,7 +131,7 @@ export async function createFuelRecord(
       fuelCardId: (input as Record<string, unknown>).fuelCardId as number,
       date: input.date,
       fuelType: input.fuelType,
-      quantityLiters: input.quantityLiters,
+      quantityLiters: input.quantityLiters ?? null,
       quantityKwh: input.quantityKwh ?? null,
       amountEur: input.amountEur,
       odometerKm: input.odometerKm,
@@ -151,7 +151,7 @@ export async function createFuelRecord(
       vehicleId: input.vehicleId,
       date: input.date,
       fuelType: input.fuelType,
-      quantityLiters: input.quantityLiters,
+      quantityLiters: input.quantityLiters ?? null,
       quantityKwh: input.quantityKwh ?? null,
       amountEur: input.amountEur,
       odometerKm: input.odometerKm,
@@ -206,7 +206,7 @@ export async function updateFuelRecord(
     data: {
       date: input.date,
       fuelType: input.fuelType,
-      quantityLiters: input.quantityLiters,
+      quantityLiters: input.quantityLiters ?? null,
       quantityKwh: input.quantityKwh ?? null,
       amountEur: input.amountEur,
       odometerKm: input.odometerKm,
@@ -379,7 +379,7 @@ export type FuelFeedItem =
       date: Date;
       odometerKm: number;
       fuelType: string;
-      quantityLiters: number;
+      quantityLiters: number | null;
       quantityKwh: number | null;
       amountEur: number;
       notes: string | null;

@@ -134,14 +134,7 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
         id: "name",
         header: t("nameColumn"),
         cell: ({ row }) => (
-          <div>
-            <span className="font-medium">{row.original.name}</span>
-            {row.original.vatNumber && (
-              <p className="text-xs text-muted-foreground">
-                P.IVA: {row.original.vatNumber}
-              </p>
-            )}
-          </div>
+          <span className="font-medium">{row.original.name}</span>
         ),
       },
       {
@@ -157,23 +150,12 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
         ),
       },
       {
-        id: "contact",
-        header: t("contactColumn"),
+        id: "vatNumber",
+        header: t("vatNumberColumn"),
         cell: ({ row }) => (
-          <div className="text-sm">
-            {row.original.contactName && (
-              <p>{row.original.contactName}</p>
-            )}
-            {row.original.contactEmail && (
-              <p className="text-muted-foreground">{row.original.contactEmail}</p>
-            )}
-            {row.original.contactPhone && (
-              <p className="text-muted-foreground">{row.original.contactPhone}</p>
-            )}
-            {!row.original.contactName && !row.original.contactEmail && !row.original.contactPhone && (
-              <span className="text-muted-foreground">-</span>
-            )}
-          </div>
+          <span className="text-sm text-muted-foreground">
+            {row.original.vatNumber || "-"}
+          </span>
         ),
       },
       {
@@ -183,15 +165,6 @@ export function SupplierTable({ suppliers, pagination, supplierTypes }: Supplier
           <span className="text-sm text-muted-foreground">
             {row.original.pec || "-"}
           </span>
-        ),
-      },
-      {
-        id: "status",
-        header: tCommon("status"),
-        cell: ({ row }) => (
-          <Badge variant={row.original.isActive ? "default" : "secondary"}>
-            {row.original.isActive ? tCommon("activeSingular") : tCommon("inactiveSingular")}
-          </Badge>
         ),
       },
       {

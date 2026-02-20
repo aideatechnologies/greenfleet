@@ -1301,7 +1301,7 @@ export async function getVehicleDetail(
     fuelRecords: fullFuelRecords.map((r) => ({
       date: r.date,
       fuelType: r.fuelType,
-      quantityLiters: r.quantityLiters,
+      quantityLiters: r.quantityLiters ?? 0,
       amount: r.amountEur,
       odometerKm: r.odometerKm,
     })),

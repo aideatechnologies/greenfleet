@@ -13,6 +13,7 @@ const IT: Record<string, string> = {
   fuelTypeRequired: "Il tipo carburante e obbligatorio",
   quantityRequired: "La quantita e obbligatoria",
   quantityPositive: "La quantita deve essere positiva",
+  quantityKwhRequired: "La quantita kWh e obbligatoria",
   quantityKwhPositive: "La quantita kWh deve essere positiva",
   amountRequired: "L'importo e obbligatorio",
   amountPositive: "L'importo deve essere positivo",
@@ -25,20 +26,22 @@ const IT: Record<string, string> = {
 
 const itFallback: T = (k) => IT[k] ?? k;
 
-export function buildCreateFuelRecordSchema(t: T = itFallback) {
-  return z.object({
-    vehicleId: z.coerce.number({ error: t("vehicleRequired") }),
+function buildBaseFields(t: T) {
+  return {
     date: z.coerce.date({ error: t("dateRequired") }),
     fuelType: z.string().min(1, { error: t("fuelTypeRequired") }),
     quantityLiters: z
-      .number({ error: t("quantityRequired") })
-      .positive({ error: t("quantityPositive") }),
+      .number()
+      .positive({ error: t("quantityPositive") })
+      .nullable()
+      .optional()
+      .transform((val) => (val === 0 ? null : val ?? null)),
     quantityKwh: z
       .number()
       .positive({ error: t("quantityKwhPositive") })
       .nullable()
       .optional()
-      .transform((val) => (val === 0 ? undefined : val)),
+      .transform((val) => (val === 0 ? null : val ?? null)),
     amountEur: z
       .number({ error: t("amountRequired") })
       .positive({ error: t("amountPositive") }),
@@ -52,36 +55,42 @@ export function buildCreateFuelRecordSchema(t: T = itFallback) {
       .max(1000, { error: t("notesMax") })
       .optional()
       .transform((val) => (val === "" ? undefined : val)),
-  });
+  };
+}
+
+function addQuantityRefinement(t: T) {
+  return (data: { fuelType: string; quantityLiters?: number | null; quantityKwh?: number | null }, ctx: z.RefinementCtx) => {
+    const isElettrico = data.fuelType === "ELETTRICO";
+
+    if (!isElettrico && (data.quantityLiters == null || data.quantityLiters <= 0)) {
+      ctx.addIssue({
+        code: "custom",
+        message: t("quantityRequired"),
+        path: ["quantityLiters"],
+      });
+    }
+
+    if (isElettrico && (data.quantityKwh == null || data.quantityKwh <= 0)) {
+      ctx.addIssue({
+        code: "custom",
+        message: t("quantityKwhRequired"),
+        path: ["quantityKwh"],
+      });
+    }
+  };
+}
+
+export function buildCreateFuelRecordSchema(t: T = itFallback) {
+  return z.object({
+    vehicleId: z.coerce.number({ error: t("vehicleRequired") }),
+    ...buildBaseFields(t),
+  }).superRefine(addQuantityRefinement(t));
 }
 
 export function buildUpdateFuelRecordSchema(t: T = itFallback) {
   return z.object({
-    date: z.coerce.date({ error: t("dateRequired") }),
-    fuelType: z.string().min(1, { error: t("fuelTypeRequired") }),
-    quantityLiters: z
-      .number({ error: t("quantityRequired") })
-      .positive({ error: t("quantityPositive") }),
-    quantityKwh: z
-      .number()
-      .positive({ error: t("quantityKwhPositive") })
-      .nullable()
-      .optional()
-      .transform((val) => (val === 0 ? undefined : val)),
-    amountEur: z
-      .number({ error: t("amountRequired") })
-      .positive({ error: t("amountPositive") }),
-    odometerKm: z
-      .number({ error: t("odometerRequired") })
-      .int({ error: t("odometerInt") })
-      .nonnegative({ error: t("odometerNonnegative") }),
-    fuelCardId: z.coerce.number({ error: t("fuelCardRequired") }),
-    notes: z
-      .string()
-      .max(1000, { error: t("notesMax") })
-      .optional()
-      .transform((val) => (val === "" ? undefined : val)),
-  });
+    ...buildBaseFields(t),
+  }).superRefine(addQuantityRefinement(t));
 }
 
 // ---------------------------------------------------------------------------

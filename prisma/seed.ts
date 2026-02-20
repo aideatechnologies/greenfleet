@@ -289,6 +289,7 @@ async function main() {
     { vehicleFuelType: "IBRIDO_BENZINA", macroFuelTypeId: Number(elettricita.id), scope: 2, description: "Ibrido Benzina" },
     { vehicleFuelType: "IBRIDO_DIESEL", macroFuelTypeId: Number(gasolio.id), scope: 1, description: "Ibrido Diesel" },
     { vehicleFuelType: "IBRIDO_DIESEL", macroFuelTypeId: Number(elettricita.id), scope: 2, description: "Ibrido Diesel" },
+    { vehicleFuelType: "ELETTRICO", macroFuelTypeId: Number(elettricita.id), scope: 2, description: "Elettrico" },
     { vehicleFuelType: "IDROGENO", macroFuelTypeId: Number(idrogeno.id), scope: 1, description: "Idrogeno" },
     { vehicleFuelType: "BIFUEL_BENZINA_GPL", macroFuelTypeId: Number(benzina.id), scope: 1, description: "Bifuel Benzina/GPL" },
     { vehicleFuelType: "BIFUEL_BENZINA_METANO", macroFuelTypeId: Number(benzina.id), scope: 1, description: "Bifuel Benzina/Metano" },

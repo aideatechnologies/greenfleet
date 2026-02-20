@@ -9,7 +9,7 @@ import {
   type ColumnDef,
   flexRender,
 } from "@tanstack/react-table";
-import type { Employee } from "@/generated/prisma/client";
+import type { EmployeeWithCarlist } from "@/lib/services/employee-service";
 import {
   Table,
   TableBody,
@@ -60,7 +60,7 @@ import { reactivateEmployeeAction } from "../actions/reactivate-employee";
 import { SEARCH_DEBOUNCE_MS } from "@/lib/utils/constants";
 
 type EmployeeTableProps = {
-  employees: Employee[];
+  employees: EmployeeWithCarlist[];
   pagination: {
     page: number;
     pageSize: number;
@@ -166,14 +166,23 @@ export function EmployeeTable({
     }
   }
 
-  const columns = useMemo<ColumnDef<Employee>[]>(
+  const columns = useMemo<ColumnDef<EmployeeWithCarlist>[]>(
     () => [
       {
-        id: "fullName",
-        header: t("fullName"),
-        cell: ({ row }) => (
+        accessorKey: "firstName",
+        header: t("firstNameColumn"),
+        cell: ({ getValue }) => (
           <span className="font-medium">
-            {row.original.firstName} {row.original.lastName}
+            {getValue() as string}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "lastName",
+        header: t("lastNameColumn"),
+        cell: ({ getValue }) => (
+          <span className="font-medium">
+            {getValue() as string}
           </span>
         ),
       },
@@ -185,29 +194,6 @@ export function EmployeeTable({
             {(getValue() as string | null) ?? "-"}
           </span>
         ),
-      },
-      {
-        accessorKey: "phone",
-        header: t("phoneColumn"),
-        cell: ({ getValue }) => (
-          <span className="text-muted-foreground">
-            {(getValue() as string | null) ?? "-"}
-          </span>
-        ),
-      },
-      {
-        accessorKey: "fiscalCode",
-        header: t("fiscalCodeColumn"),
-        cell: ({ getValue }) => {
-          const value = getValue() as string | null;
-          return value ? (
-            <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
-              {value}
-            </code>
-          ) : (
-            <span className="text-muted-foreground">-</span>
-          );
-        },
       },
       {
         accessorKey: "isActive",
@@ -240,12 +226,24 @@ export function EmployeeTable({
           );
         },
       },
+      {
+        id: "carlist",
+        header: t("carlistColumn"),
+        cell: ({ row }) => {
+          const carlist = row.original.carlist;
+          return carlist ? (
+            <span className="text-sm">{carlist.name}</span>
+          ) : (
+            <span className="text-muted-foreground">-</span>
+          );
+        },
+      },
       ...(canEdit
         ? [
             {
               id: "actions",
               header: "",
-              cell: ({ row }: { row: { original: Employee } }) => {
+              cell: ({ row }: { row: { original: EmployeeWithCarlist } }) => {
                 const employee = row.original;
 
                 // Pool pseudo-employees cannot be edited or deactivated
@@ -307,7 +305,7 @@ export function EmployeeTable({
                   </DropdownMenu>
                 );
               },
-            } satisfies ColumnDef<Employee>,
+            } satisfies ColumnDef<EmployeeWithCarlist>,
           ]
         : []),
     ],

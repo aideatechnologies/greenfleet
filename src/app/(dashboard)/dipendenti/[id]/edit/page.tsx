@@ -73,7 +73,8 @@ export default async function EditEmployeePage({
           phone: employee.phone ?? "",
           fiscalCode: employee.fiscalCode ?? "",
           matricola: employee.matricola ?? "",
-          avgMonthlyKm: employee.avgMonthlyKm ?? undefined,
+          avgMonthlyKm: employee.avgMonthlyKm ?? 0,
+          carlistId: employee.carlistId != null ? Number(employee.carlistId) : undefined as unknown as number,
         }}
       />
     </div>

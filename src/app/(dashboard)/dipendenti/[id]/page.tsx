@@ -170,6 +170,38 @@ export default async function EmployeeDetailPage({
               </div>
               <div>
                 <dt className="text-sm font-medium text-muted-foreground">
+                  Matricola
+                </dt>
+                <dd className="mt-1 text-sm">
+                  {employee.matricola || (
+                    <span className="text-muted-foreground">-</span>
+                  )}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-muted-foreground">
+                  Km medi mensili
+                </dt>
+                <dd className="mt-1 text-sm">
+                  {employee.avgMonthlyKm != null
+                    ? employee.avgMonthlyKm.toLocaleString("it-IT")
+                    : <span className="text-muted-foreground">-</span>}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-muted-foreground">
+                  Car List
+                </dt>
+                <dd className="mt-1 text-sm">
+                  {employee.carlist ? (
+                    employee.carlist.name
+                  ) : (
+                    <span className="text-muted-foreground">-</span>
+                  )}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-muted-foreground">
                   Data creazione
                 </dt>
                 <dd className="mt-1 text-sm">

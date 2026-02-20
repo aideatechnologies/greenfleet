@@ -126,7 +126,7 @@ export async function getVehicleEmissionData(
 
   // 4. Sum fuel litres and kWh
   const fuelLitres = fuelRecords.reduce(
-    (sum, fr) => sum + fr.quantityLiters,
+    (sum, fr) => sum + (fr.quantityLiters ?? 0),
     0
   );
   const fuelKwh = fuelRecords.reduce(

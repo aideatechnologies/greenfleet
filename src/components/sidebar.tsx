@@ -64,7 +64,7 @@ const navSectionDefs: NavSectionDef[] = [
     ],
   },
   {
-    labelKey: "operations",
+    labelKey: "data",
     items: [
       { labelKey: "vehicles", href: "/vehicles", icon: Car, roles: ["owner", "admin", "mobility_manager"] },
       { labelKey: "contracts", href: "/contracts", icon: FileText, roles: ["owner", "admin", "mobility_manager"] },
@@ -76,7 +76,7 @@ const navSectionDefs: NavSectionDef[] = [
     ],
   },
   {
-    labelKey: "data",
+    labelKey: "operations",
     items: [
       { labelKey: "fuelRecords", href: "/fuel-records", icon: Fuel, roles: ["owner", "admin", "mobility_manager", "member"] },
       { labelKey: "kmReadings", href: "/km-readings", icon: Gauge, roles: ["owner", "admin", "mobility_manager", "member"] },

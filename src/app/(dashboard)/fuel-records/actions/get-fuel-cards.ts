@@ -58,3 +58,51 @@ export async function getFuelCardsForFuelRecordAction(): Promise<
     };
   }
 }
+
+/**
+ * Get active fuel cards assigned to a specific vehicle.
+ */
+export async function getFuelCardsForVehicleAction(
+  vehicleId: number
+): Promise<ActionResult<FuelCardOptionItem[]>> {
+  const authResult = await requireAuth();
+  if (!authResult.success) return authResult;
+  const { ctx } = authResult;
+
+  const tenantId = ctx.organizationId;
+  if (!tenantId) {
+    return {
+      success: false,
+      error: "Nessun tenant attivo nella sessione",
+      code: ErrorCode.FORBIDDEN,
+    };
+  }
+
+  try {
+    const prisma = getPrismaForTenant(tenantId);
+    const fuelCards = await prisma.fuelCard.findMany({
+      where: { status: "ACTIVE", assignedVehicleId: vehicleId },
+      orderBy: { cardNumber: "asc" },
+      select: {
+        id: true,
+        cardNumber: true,
+        supplier: { select: { name: true } },
+      },
+    });
+
+    return {
+      success: true,
+      data: fuelCards.map((fc) => ({
+        id: String(fc.id),
+        cardNumber: fc.cardNumber,
+        supplierName: fc.supplier.name,
+      })),
+    };
+  } catch {
+    return {
+      success: false,
+      error: "Errore nel caricamento delle carte carburante per il veicolo",
+      code: ErrorCode.INTERNAL,
+    };
+  }
+}

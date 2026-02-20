@@ -141,7 +141,7 @@ async function calculatePeriodEmissions(
   const fuelByType = new Map<string, { litres: number; kwh: number }>();
   for (const record of fuelRecords) {
     const current = fuelByType.get(record.fuelType) ?? { litres: 0, kwh: 0 };
-    current.litres += record.quantityLiters;
+    current.litres += record.quantityLiters ?? 0;
     current.kwh += record.quantityKwh ?? 0;
     fuelByType.set(record.fuelType, current);
   }
@@ -239,7 +239,7 @@ export async function getDashboardKPIs(
 
   // Total fuel this month (litres + kWh)
   const totalFuelThisMonth = round2(
-    fuelThisMonth.reduce((sum, fr) => sum + fr.quantityLiters, 0)
+    fuelThisMonth.reduce((sum, fr) => sum + (fr.quantityLiters ?? 0), 0)
   );
   const totalKwhThisMonth = round2(
     fuelThisMonth.reduce((sum, fr) => sum + (fr.quantityKwh ?? 0), 0)
@@ -410,7 +410,7 @@ async function calculateFilteredPeriodEmissions(
   const fuelByType = new Map<string, { litres: number; kwh: number }>();
   for (const record of fuelRecords) {
     const current = fuelByType.get(record.fuelType) ?? { litres: 0, kwh: 0 };
-    current.litres += record.quantityLiters;
+    current.litres += record.quantityLiters ?? 0;
     current.kwh += record.quantityKwh ?? 0;
     fuelByType.set(record.fuelType, current);
   }
@@ -580,7 +580,7 @@ export async function getFleetDelta(
     if (!contexts || contexts.length === 0) continue;
 
     const totalLitres = fuelRecords.reduce(
-      (sum, fr) => sum + fr.quantityLiters,
+      (sum, fr) => sum + (fr.quantityLiters ?? 0),
       0
     );
     const totalKwh = fuelRecords.reduce(
@@ -899,28 +899,33 @@ export async function getFleetBreakdownByFuelType(
     }
   }
 
-  // Index fuel records by vehicleId
+  // Index fuel records by vehicleId (aggregated + raw list for fuel-type resolution)
   const fuelByVehicle = new Map<
     number,
     { litres: number; kwh: number; fuelType: string; minOdo: number; maxOdo: number }
   >();
+  const fuelRecordsByVehicle = new Map<number, Array<{ fuelType: string }>>();
   for (const fr of fuelRecords) {
     const vid = Number(fr.vehicleId);
     const existing = fuelByVehicle.get(vid);
     if (!existing) {
       fuelByVehicle.set(vid, {
-        litres: fr.quantityLiters,
+        litres: fr.quantityLiters ?? 0,
         kwh: fr.quantityKwh ?? 0,
         fuelType: fr.fuelType,
         minOdo: fr.odometerKm,
         maxOdo: fr.odometerKm,
       });
     } else {
-      existing.litres += fr.quantityLiters;
+      existing.litres += fr.quantityLiters ?? 0;
       existing.kwh += fr.quantityKwh ?? 0;
       if (fr.odometerKm < existing.minOdo) existing.minOdo = fr.odometerKm;
       if (fr.odometerKm > existing.maxOdo) existing.maxOdo = fr.odometerKm;
     }
+    // Keep raw list for getEffectiveFuelType fallback
+    const arr = fuelRecordsByVehicle.get(vid) ?? [];
+    arr.push({ fuelType: fr.fuelType });
+    fuelRecordsByVehicle.set(vid, arr);
   }
 
   // Bulk-resolve emission contexts for emission calculation
@@ -946,22 +951,27 @@ export async function getFleetBreakdownByFuelType(
   const groups = new Map<string, MacroGroup>();
 
   for (const vehicle of vehicles) {
-    if (!vehicle.catalogVehicle?.engines?.length) continue;
+    const vid = Number(vehicle.id);
+    const vehicleRecords = fuelRecordsByVehicle.get(vid);
 
-    const effectiveFuelType = getEffectiveFuelType(vehicle.catalogVehicle);
+    // Resolve fuel type from catalog engines + fuel records fallback
+    const effectiveFuelType = getEffectiveFuelType(
+      vehicle.catalogVehicle ?? { isHybrid: false, engines: [] },
+      vehicleRecords
+    );
     if (!effectiveFuelType) continue;
 
     // Resolve to MacroFuelType for grouping
     const macro = fuelTypeToMacro.get(effectiveFuelType);
     if (!macro) {
       logger.warn(
-        { effectiveFuelType },
+        { effectiveFuelType, vehicleId: vid },
         "Dashboard: no MacroFuelType mapping found for vehicle fuel type"
       );
       continue;
     }
 
-    const vehicleFuel = fuelByVehicle.get(Number(vehicle.id));
+    const vehicleFuel = fuelByVehicle.get(vid);
     const litres = vehicleFuel?.litres ?? 0;
     const kwh = vehicleFuel?.kwh ?? 0;
     const km = vehicleFuel ? Math.max(0, vehicleFuel.maxOdo - vehicleFuel.minOdo) : 0;
@@ -1156,28 +1166,32 @@ export async function getFleetBreakdownByCarlist(
     catalogToCarlist.set(catId, list);
   }
 
-  // Index fuel records by vehicleId
+  // Index fuel records by vehicleId (aggregated + raw list for fuel-type resolution)
   const fuelByVehicle = new Map<
     number,
     { litres: number; kwh: number; fuelType: string; minOdo: number; maxOdo: number }
   >();
+  const fuelRecordsByVehicle2 = new Map<number, Array<{ fuelType: string }>>();
   for (const fr of fuelRecords) {
     const vid = Number(fr.vehicleId);
     const existing = fuelByVehicle.get(vid);
     if (!existing) {
       fuelByVehicle.set(vid, {
-        litres: fr.quantityLiters,
+        litres: fr.quantityLiters ?? 0,
         kwh: fr.quantityKwh ?? 0,
         fuelType: fr.fuelType,
         minOdo: fr.odometerKm,
         maxOdo: fr.odometerKm,
       });
     } else {
-      existing.litres += fr.quantityLiters;
+      existing.litres += fr.quantityLiters ?? 0;
       existing.kwh += fr.quantityKwh ?? 0;
       if (fr.odometerKm < existing.minOdo) existing.minOdo = fr.odometerKm;
       if (fr.odometerKm > existing.maxOdo) existing.maxOdo = fr.odometerKm;
     }
+    const arr = fuelRecordsByVehicle2.get(vid) ?? [];
+    arr.push({ fuelType: fr.fuelType });
+    fuelRecordsByVehicle2.set(vid, arr);
   }
 
   // Bulk-resolve emission contexts
@@ -1203,7 +1217,10 @@ export async function getFleetBreakdownByCarlist(
       return 0;
     }
 
-    const fuelType = getEffectiveFuelType(vehicle.catalogVehicle);
+    const fuelType = getEffectiveFuelType(
+      vehicle.catalogVehicle ?? { isHybrid: false, engines: [] },
+      fuelRecordsByVehicle2.get(vehicleId)
+    );
     if (!fuelType) {
       vehicleEmissionsCache.set(vehicleId, 0);
       return 0;
@@ -1249,7 +1266,6 @@ export async function getFleetBreakdownByCarlist(
   for (const vehicle of vehicles) {
     const vehicleIdNum = Number(vehicle.id);
     allVehicleIds.add(vehicleIdNum);
-    if (!vehicle.catalogVehicle?.engines?.length) continue;
 
     const vehicleFuel = fuelByVehicle.get(vehicleIdNum);
     const km = vehicleFuel ? Math.max(0, vehicleFuel.maxOdo - vehicleFuel.minOdo) : 0;

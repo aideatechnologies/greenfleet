@@ -41,7 +41,7 @@ type SupplierFormValues = {
   name: string;
   vatNumber: string;
   address?: string;
-  pec?: string;
+  pec: string;
   contactName?: string;
   contactPhone?: string;
   contactEmail?: string;

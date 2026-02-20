@@ -84,7 +84,7 @@ export async function getTargetCurrentEmissions(
     const fuelByType = new Map<string, number>();
     for (const record of fuelRecords) {
       const current = fuelByType.get(record.fuelType) ?? 0;
-      fuelByType.set(record.fuelType, current + record.quantityLiters);
+      fuelByType.set(record.fuelType, current + (record.quantityLiters ?? 0));
     }
 
     // Calculate emissions per fuel type using median date for emission factor

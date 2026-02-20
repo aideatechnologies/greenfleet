@@ -448,7 +448,11 @@ function FuelFeedItemCard({
         <div className="flex min-w-0 flex-1 items-center justify-between">
           <div className="min-w-0">
             <p className="truncate text-sm font-medium">
-              {numberFmt.format(record.quantityLiters)} L
+              {record.quantityLiters != null
+                ? `${numberFmt.format(record.quantityLiters)} L`
+                : record.quantityKwh != null
+                  ? `${numberFmt.format(record.quantityKwh)} kWh`
+                  : "\u2014"}
             </p>
             <p className="text-xs text-muted-foreground">
               {shortDateFmt.format(new Date(record.date))} -{" "}
@@ -477,7 +481,12 @@ function FuelFeedItemCard({
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">
-              {numberFmt.format(record.quantityLiters)} L {fuelLabel}
+              {record.quantityLiters != null
+                ? `${numberFmt.format(record.quantityLiters)} L`
+                : record.quantityKwh != null
+                  ? `${numberFmt.format(record.quantityKwh)} kWh`
+                  : "\u2014"}{" "}
+              {fuelLabel}
             </span>
             <Badge variant="outline" className="text-xs">
               {kmFmt.format(record.odometerKm)} km
@@ -534,7 +543,11 @@ function FuelFeedItemCard({
                   {fuelLabel}
                 </Badge>
                 <span>
-                  {numberFmt.format(record.quantityLiters)} L
+                  {record.quantityLiters != null
+                    ? `${numberFmt.format(record.quantityLiters)} L`
+                    : record.quantityKwh != null
+                      ? `${numberFmt.format(record.quantityKwh)} kWh`
+                      : "\u2014"}
                 </span>
                 <span className="text-muted-foreground/50">|</span>
                 <span>
@@ -542,7 +555,7 @@ function FuelFeedItemCard({
                 </span>
                 {(() => {
                   const factor = co2Factors[record.fuelType] ?? 0;
-                  const co2 = record.quantityLiters * factor;
+                  const co2 = (record.quantityLiters ?? 0) * factor;
                   return co2 > 0 ? (
                     <>
                       <span className="text-muted-foreground/50">|</span>
@@ -636,7 +649,7 @@ function FuelFeedItemCard({
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminare il rifornimento?</AlertDialogTitle>
             <AlertDialogDescription>
-              Il rifornimento di {numberFmt.format(record.quantityLiters)} L del{" "}
+              Il rifornimento di {record.quantityLiters != null ? `${numberFmt.format(record.quantityLiters)} L` : record.quantityKwh != null ? `${numberFmt.format(record.quantityKwh)} kWh` : "\u2014"} del{" "}
               {dateFmt.format(new Date(record.date))} verra eliminato
               permanentemente. Questa azione non e reversibile.
             </AlertDialogDescription>
